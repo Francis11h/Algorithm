@@ -1,5 +1,4 @@
-# Algorithm-
-
+# Algorithm
 
 leetcode lintcode
 JAVA版
