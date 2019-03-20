@@ -1,23 +1,40 @@
-/**
- * Definition for Directed graph.
- * class DirectedGraphNode {
- *     int label;
- *     ArrayList<DirectedGraphNode> neighbors;
- *     DirectedGraphNode(int x) { 
- *      label = x; 
- *      neighbors = new ArrayList<DirectedGraphNode>(); }
- * };
- */
+拓扑排序 Topological Sorting
+三步走
+
+1 要知道每个点的入度为多少
+    Map<节点, 入度>
+2 从 DAG中选出入度为0的点, 入队
+    入度为0的点 : 不在 Map中的点
+3 删除该点, 及从该点出发指向其他点的边, 再把新的 入度为0的点加入队列
+    新的点 : Map中 value为0的点
+
+
+
+
+拓扑排序 是针对 有向无环图的 = Directed Acyclic Graph (DAG)
+
+有向图(节点) 定义 :
+class DirectedGraphNode {
+    int label;
+    ArrayList<DirectedGraphNode> neighbors; //每个节点用一个ArrayList来存它指向的节点
+    DirectedGraphNode(int x) {
+        label = x;
+        neighbors = new ArrayList<>();
+    }
+}
+
+
+
 
 public class Solution {
     
     public ArrayList<DirectedGraphNode> topSort(ArrayList<DirectedGraphNode> graph) {
         
-        ArrayList<DirectedGraphNode> result = new ArrayList<DirectedGraphNode>();
+        ArrayList<DirectedGraphNode> result = new ArrayList<>();
         // 第一部分
         //需要知道一个点 对应的 入度 是多少. 建 哈希存储
         //Map 里 存的是入度
-        Map<DirectedGraphNode, Integer> map = new HashMap<DirectedGraphNode, Integer>();
+        Map<DirectedGraphNode, Integer> map = new HashMap<>();
         
         for (DirectedGraphNode node : graph) { //取出图中所有点
             for(DirectedGraphNode nei : node.neighbors) { //取每一个点指向的其他点
@@ -31,7 +48,7 @@ public class Solution {
         }
         
         //第二部分 加入天然的大哥，即入度为0的
-        Queue<DirectedGraphNode> queue = new LinkedList<DirectedGraphNode>();
+        Queue<DirectedGraphNode> queue = new LinkedList<>();
         for (DirectedGraphNode node : graph) {
             if (!map.containsKey(node)) { //这里是 入度为0的点
                 queue.offer(node);  //入队
