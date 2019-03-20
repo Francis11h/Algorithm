@@ -24,11 +24,12 @@ BFS(s) {
 		u = dequeue();
 		for all edges u -> j													total to E
 			if j is white(not discovered)
-				color j to gray
+				color j to gray 		(标记已经走过！！！这很重要)
+				
 				set j.dist 	to 	u.dist + 1
 				make u the predecessor of j
 				enqueue(j);
-		#color u to black;
+		color u to black;
 	}
 }
 
