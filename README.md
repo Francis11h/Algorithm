@@ -1,6 +1,6 @@
 # Algorithm
 
-leetcode lintcode
+leetcode lintcode tips
 -----------------
 
 JAVA
