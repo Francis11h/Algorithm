@@ -23,9 +23,8 @@ Ingredients :
 	you can compute an optimal solution to a larger problem instance by 
 	composing optimal solutions to one or more smaller instances.
 
-4. subproblem independence	
-	
-
+4. subproblem independence	子问题独立 (不可互相干扰)
+	using an optimal solution to one should not prevent using optimal solutions to other subproblems.
 
 
 
