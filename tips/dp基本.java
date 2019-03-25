@@ -14,9 +14,27 @@ Ingredients :
 1. overlapping subproblems
 	 一些 子问题 出现多于一次
 
-2. small space of subproblems
+2. small (polynomial-sized) space of subproblems
 	处理这些子问题不会花太长时间
 	通常是多项式规模的	polynomial int the problem size
+
+3. optimal substructure	最优子结构
+	一个问题的最优解 包含其子问题的最优解
+	you can compute an optimal solution to a larger problem instance by 
+	composing optimal solutions to one or more smaller instances.
+
+4. subproblem independence	
+	
+
+
+
+
+
+
+
+
+
+
 
 
 
