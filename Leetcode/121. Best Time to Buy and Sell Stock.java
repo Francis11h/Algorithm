@@ -54,7 +54,7 @@ O(1)
 若之后有更低的 valley, 更新 valley 再找 新valley 之后的peek 再计算 profit 看会不会 是maxProfit
 
 就遍历一遍prices[], 若prices[i] < minPrice(valley), 则把改值赋值给minPrice,
-                   否则计算 profit即可.
+                   否则计算 profit 看用不用更新.
 
 
 
