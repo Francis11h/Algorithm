@@ -23,9 +23,9 @@ Prim()
 	choose some root vertex r
 	r.cost = 0
 
-	while Q is non-empty									O( V ) iterations
+	while Q is non-empty							O( V ) iterations
 	    u = remove lowest-cost vertex from Q 				O(log V) for each remove.
-      	add u to the tree via its predecessor
+      	    add u to the tree via its predecessor
 		for each u -> j edge
 		If j is in Q and weight[u][j] < j.cost
 		    make u the predecessor of j
@@ -35,10 +35,10 @@ Prim()
 T: O( V ) + O( V log V ) + O( E ) + O( E log V )
 
 
-O(VlogV+ElogV)=O(ElogV)
+O(VlogV + ElogV) = O(ElogV)
 
 fibnoacci heap
-O( E + V log V )
+O(E + VlogV)
 
 
 
@@ -52,8 +52,8 @@ Kruskal()
 		union( u, j )
 		add u <-->edge to the tree
 
-O( V ) + O( E log E ) + O( E α( V ) )
-simplified: O( E log E )
+O(V) + O(ElogE) + O(Eα(V))
+simplified: O(ElogE)
 logE ≤ V^2
-So O(ElogE)=O(ElogV2 )=O(ElogV) (Same as prim’s without the Fibonacci heap refinement)
+So O(ElogE) = O(ElogV^2) = O(ElogV) (Same as prim’s without the Fibonacci heap refinement)
 
