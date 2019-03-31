@@ -1,13 +1,13 @@
 JAVA 国内面试 基础知识点
 
 什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？
-static关键字是什么意思？Java中是否可以覆盖(override)一个private或者是static的方法？-baidu 1point3acres
+static关键字是什么意思？Java中是否可以覆盖(override)一个private或者是static的方法？ 
 是否可以在static环境中访问非static变量？
 Java中的方法覆盖(Overriding)和方法重载(Overloading)是什么意思？
 Java中，什么是构造函数？什么是构造函数重载？什么是复制构造函数？
 Java支持多继承么？
 接口和抽象类的区别是什么？
-什么是值传递和引用传递？. check 1point3acres for more.
+什么是值传递和引用传递？.  
 java创建线程有几种不同的方式？你喜欢哪一种？为什么？
 概括的解释下线程的几种可用状态。
 同步方法和同步代码块的区别是什么？
@@ -34,5 +34,12 @@ Java中Exception和Error有什么区别？
 throw和throws有什么区别？
 异常处理完成以后，Exception对象会发生什么变化？
 异常处理的时候，finally代码块的重要性是什么？
+	Finally一般与try一起使用，在程序进入try块之后，无论程序是因为异常而中止或其它方式返回终止的, finally块的内容 一定会被执.
+	finally在return语句之后，跳转到上一级程序之前执行.
+	
+
+
+
+
 finally代码块和finalize()方法有什么区别？
 java类是如何被虚拟机加载的？生命周期又是怎样的？
