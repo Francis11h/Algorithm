@@ -1,3 +1,14 @@
+dfs : 求所有可能情况的组合
+1. 画 dfs recursion tree                     画树
+
+2. How many levels of recursion tree?       树有几层
+    n levels, n is string.length() / n is nums.length
+
+3. What does each level represent?          每层代表什么意思
+    each level represents the corresponding possible character of s[level]
+
+
+
 
 排列型 dfs 的模板
 
