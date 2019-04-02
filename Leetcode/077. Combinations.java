@@ -13,6 +13,33 @@ Output:
   [1,4],
 ]
 
+方法一 : 连续搜索
+
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> cur = new ArrayList<>();
+        dfs(0, k, n, cur, ans);
+        return ans;
+    }
+    
+    private void dfs(int level, int k, int n, List<Integer> cur, List<List<Integer>> ans) {
+        if (level == n) {
+            if (cur.size() == k) {
+               ans.add(new ArrayList<>(cur));
+            }
+            return;
+        }
+        
+        cur.add(level + 1);                         //取 nums[level] 元素
+        dfs(level + 1, k, n, cur, ans);             // dfs 下一层
+        cur.remove(cur.size() - 1);                 //不取, 回溯 nums[level] 元素
+        dfs(level + 1, k, n, cur, ans);             // dfs 下一层
+    }
+}
+
+
+方法二 : 跳跃搜索
 
 class Solution {
     public List<List<Integer>> combine(int n, int k) {
