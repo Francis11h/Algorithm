@@ -25,9 +25,6 @@ dummy  cur
 dummy                              cur
 
 
-
-
-
 public class ListNode {
     int val;
     ListNode next;
