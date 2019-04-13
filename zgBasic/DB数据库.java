@@ -130,6 +130,30 @@ Mysql存储引擎是？(多存储引擎机制)
 
 
 Mysql 事务的 隔离级别 有哪些？
+        //transaction-isolation = {READ-UNCOMMITTED | READ-COMMITTED | REPEATABLE-READ | SERIALIZABLE}
+        //SET [SESSION | GLOBAL] TRANSACTION ISOLATION LEVEL {READ UNCOMMITTED | READ COMMITTED | REPEATABLE READ | SERIALIZABLE}
+
+        隔离级别                    脏读（Dirty Read）          不可重复读（NonRepeatable Read）     幻读（Phantom Read） 
+        未提交读（Read uncommitted）        可能                            可能                       可能
+
+        已提交读（Read committed）          不可能                          可能                        可能
+
+        可重复读（Repeatable read）          不可能                          不可能                     可能
+
+        可串行化（Serializable ）            不可能                          不可能                     不可能
+
+
+        ·未提交读(Read Uncommitted): 允许脏读，也就是可能读取到 其他会话中 未提交事务 修改的数据.
+        ·提交读(Read Committed):    只能读取到已经提交的数据。  Oracle等多数数据库默认都是该级别 (不重复读)
+        ·可重复读(Repeated Read):   可重复读。在同一个事务内的查询都是事务开始时刻一致的，InnoDB默认级别。在SQL标准中，该隔离级别消除了不可重复读，但是还存在幻象读
+        ·串行读(Serializable):     完全串行化的读，每次读都需要 获得表级 共享锁，读写 相互都会阻塞.
+
+        ① 脏读: 脏读就是指当一个事务正在访问数据，并且对数据进行了修改write，而这种修改还没有提交 not commit 到数据库中，
+                这时，另外一个事务也访问这个数据，然后使用read了这个数据。
+        ② 不可重复读: 是指在一个事务内，多次读同一数据。在这个事务还没有结束时，另外一个事务也访问该同一数据。
+                那么，在第一个事务中的两次读数据之间，由于第二个事务的修改，那么第一个事务两次读到的的数据可能是不一样的。
+        ④ 幻读: 第一个事务对一个表中的数据进行了修改，这种修改涉及到表中的全部数据行。同时，第二个事务也修改这个表中的数据，这种修改是向表中插入一行新数据。
+                那么，以后就会发生操作第一个事务的用户发现表中 还有没有修改的数据行，就好象发生了幻觉一样。
 
 
 数据库完整性
@@ -162,24 +186,69 @@ Mysql 事务的 隔离级别 有哪些？
             DBMS通常需要 维护事务日志 以追踪事务中所有影响数据库数据的操作, 看是否需要回滚
 
 
-
-什么是锁？
 数据库的乐观锁和悲观锁是什么？数据库的悲观锁和乐观锁是啥有什么区别
+        乐观并发控制(乐观锁)和悲观并发控制 Pessimistic Concurrency Control（悲观锁）是并发控制主要采用的技术手段。
+
+        悲观:
+            如果一个事务执行的操作都某行数据应用了锁，那只有当这个事务把锁释放，其他事务才能够执行与该锁冲突的操作。
+            悲观并发控制主要用于 数据争用激烈的环境 + 以及 发生并发冲突时 使用锁保护数据的成本 < 回滚事务的成本 的环境中。
+            往往依靠数据库提供的锁机制 
+
+            用 select…for update 来实现的
+
+                //0.开始事务
+                begin;/begin work;/start transaction; (三者选一就可以)
+                //1.查询出商品信息
+                select status from t_goods where id=1 for update;
+                //2.根据商品信息生成订单
+                insert into t_orders (id,goods_id) values (null,1);
+                //3.修改商品status为2
+                update t_goods set status=2;
+                //4.提交事务
+                commit;/commit work;
+
+        乐观:    
+            乐观锁假设认为数据一般情况下不会造成冲突，所以在数据进行 提交更新 的时候，才会正式对数据的冲突与否进行检测，
+            如果发现冲突了，则让返回用户错误的信息，让用户决定如何去做。
+
+            实现数据版本有两种方式，第一种是使用版本号，第二种是使用时间戳。
+                使用版本号时，可以在数据初始化时指定一个版本号，每次对数据的更新操作都对 版本号执行+1 version=version+1 操作。
+                并判断当前版本号是不是该数据的最新的版本号。
 
 
 
+对一个投入使用的在线事务处理表格有过多索引需要有什么样的性能考虑?
+            对一个表格的索引越多，数据库引擎用来更新、插入或者删除数据所需要的时间就越多，
+            因为在数据操控发生的时候索引也必须要维护。
+            要求的存储空间越多
 
 
+什么是数据模型？什么是规范化？
+        数据模型是一种标识实体类型及其实体间联系的模型。典
+            型的数据模型有网状模型、层次模型和关系模型。
+        从关系数据库的表中，除去冗余数据的过程称为规范化。
+            包括：精简数据库的结构，从表中删除冗余的列，标识所有依赖于其它数据的数据
+
+谈谈数据库设计的三范式
+        1NF  : 强调的是列的原子性，即列 不能够再分成其他几列
+        2NF  : 一是表必须有一个主键,
+               二是没有包含在主键中的列必须完全依赖于主键, 而不能只依赖于主键的一部分。 
+                如果存在 不完全依赖（只依赖一部分），那么这个属性和主关键字的这一部分应该分离出来形成一个新的实体，新实体与原实体之间是一对多的关系。
+
+                e.g. 
+                【OrderDetail】（OrderID，ProductID，UnitPrice，Discount，Quantity，ProductName） 
+                    因为我们知道在一个订单中可以订购多种产品，所以单单一个 OrderID 是不足以成为主键的，主键应该是（OrderID，ProductID）。
+                        显而易见 Discount（折扣），Quantity（数量）完全依赖（取决）于主键（OderID，ProductID）
+                        而 UnitPrice，ProductName 只依赖于 ProductID。所以 OrderDetail 表不符合 2NF。不符合 2NF 的设计容易产生冗余数据。 
+                    可以把【OrderDetail】表拆分为【OrderDetail】（OrderID，ProductID，Discount，Quantity）
+                                            和【Product】（ProductID，UnitPrice，ProductName）来消除原订单表中UnitPrice，ProductName多次重复的情况。
+        3NF  : 任何非主属性不依赖于其它非主属性[在2NF基础上消除传递依赖]
+
+            考虑一个订单表【Order】（OrderID，OrderDate，CustomerID，CustomerName，CustomerAddr，CustomerCity）主键是（OrderID）。 
+            其中 OrderDate，CustomerID，CustomerName，CustomerAddr，CustomerCity 等非主键列都完全依赖于主键（OrderID），所以符合 2NF。
+            不过问题是 CustomerName，CustomerAddr，CustomerCity 直接依赖的是 CustomerID（非主键列），而不是直接依赖于主键，它是通过传递才依赖于主键，所以不符合 3NF。 
+            通过拆分【Order】为【Order】（OrderID，OrderDate，CustomerID）和【Customer】（CustomerID，CustomerName，CustomerAddr，CustomerCity）从而达到 3NF。
 
 
-
-
-
-
-7.对一个投入使用的在线事务处理表格有过多索引需要有什么样的性能考虑?
-  
-8.什么是数据模型？什么是规范化？
-9.谈谈数据库设计的三范式
-
-
+ 
 
