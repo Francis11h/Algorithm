@@ -21,8 +21,42 @@
 19. 分段分页方式的比较各自优缺点。
 20. 几种页面置换算法，会算所需换页数。(LRU用程序如何实现？)
 21. 虚拟内存的定义及实现方式。
-22.操作系统的四个特性。
+22. 操作系统的四个特性。
 23. DMA。
 24. Spooling。
 25. 外存分配的几种方式，及各种优劣。
+26. 大端存储 vs 小端存储
+    1) Big-Endian   就是高位字节排放在内存的低地址端，低位字节排放在内存的高地址端。
+        PowerPC、IBM、Sun
+    2) Little-Endian    就是低位字节排放在内存的低地址端，高位字节排放在内存的高地址端。
+        X86、DEC
+
+    一般 操作系统都是小端，而通讯协议是大端的.
+
+    e.g.
+    16bit宽的数 0x1234
+           内存地址        小端       大端 
+        低 0x4000      低 0x34    高 0x12
+        高 0x4001      高 0x12    低 0x34
+
+    小端模式 ：强制转换数据不需要调整字节内容，1、2、4 字节的存储方式一样。
+    大端模式 ：符号位的判定固定为第一个字节，容易判断正负。
+
+    如何判断 :
+        BOOL IsBigEndian()
+        {
+            int a = 0x1234;
+            char b =  *(char *)&a;  //通过将int强制类型转换成char单字节，通过判断起始存储位置。即等于 取b等于a的低地址部分
+            if( b == 0x12)
+            {
+                return TRUE;
+            }
+            return FALSE;
+        }
+
+        Java(Java隐藏了 不允许依赖于大小端的代码,但是可以查)
+            if(ByteOrder.nativeOrder()== ByteOrder.BIG_ENDIAN)
+                System.out.println("big endian");
+            else System.out.println("little endian");
+ 
 
