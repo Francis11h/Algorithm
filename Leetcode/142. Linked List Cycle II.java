@@ -39,3 +39,29 @@ public class Solution {
         return head;
     }
 }
+
+
+
+slow 和 fast 都从 head开始
+
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        if (head == null) return null;
+        ListNode slow = head, fast = head;
+        while (true) {
+            if (fast == null || fast.next == null)
+                return null;
+            fast = fast.next.next;
+            slow = slow.next;
+            
+            if (slow == fast)
+                break;
+        }
+        
+        while (slow != head) {
+            head = head.next;
+            slow = slow.next;
+        }
+        return head;
+    }
+}
