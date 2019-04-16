@@ -13,6 +13,9 @@ class ListNode {
 }
 
 
+
+slow 从 head 开始 fast从 head.next 开始
+
 public class Solution {
     public ListNode detectCycle(ListNode head) {
         if (head == null || head.next == null) return null;
@@ -39,6 +42,7 @@ public class Solution {
         return head;
     }
 }
+
 
 
 
