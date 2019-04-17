@@ -147,5 +147,10 @@ Cookie Session 区别
 
 
 
+Http GET 与 POST 的区别
+
+    GET把参数包含在URL中, POST通过 request body 传递参数.
+    GET产生一个TCP数据包, 浏览器会把http header和data一并发送出去, 
+    POST产生两个TCP数据包, 浏览器先发送header，服务器响应100 continue，浏览器再发送data，服务器响应200 ok（返回数据).
 
 
