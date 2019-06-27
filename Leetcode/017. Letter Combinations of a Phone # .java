@@ -24,20 +24,22 @@ class Solution {
         return ans;
     }
 
+    //需要的参数: level--->digits第几位, dict--->digits和letter的映射字典, digits字符串, tmp用来添加删除的stringBuilder, ans
     private void dfs(int level, Map<Character, String> dict, String digits, StringBuilder tmp, List<String> ans) {
         if (level == digits.length()) {
             ans.add(tmp.toString());
             return;
         }
+        //这里的 level 很关键     level的意义是digits的哪一位
         char ch = digits.charAt(level);
-        String letter = dict.get(ch);
+        String letter = dict.get(ch);                           //再根据这一位 取出其对应的String 然后再遍历下面的
 
         //遍历 当前层的 letter 字符串, 把其中每个字符 都取出来一次
 
         for (int i = 0; i < letter.length(); i++) {
             tmp.append(letter.charAt(i));
             dfs(level + 1, dict, digits, tmp, ans);
-            tmp.deleteCharAt(tmp.length() - 1);
+            tmp.deleteCharAt(tmp.length() - 1);                 //这的 stringBuffer函数, 没有remove
         }
     }
 
