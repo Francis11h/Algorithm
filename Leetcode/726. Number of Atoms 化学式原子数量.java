@@ -108,14 +108,14 @@ class Solution {
         //仅处理 英文大写 or 左括号, 因为只有这两个才可能作为某个元素的开头
         while (i < formula.length()) {
             ////左括号开头, 要递归 一层套一层, 后写
-            if (String.valueOf(formula.charAt(i)).equals("(")) {
+            if (formula.charAt(i) == '(') {
                 //balance 表示余着几个左括号
                 int balance = 1;
                 int j = i + 1;
                 while (j < formula.length() && balance > 0) {
-                    if (String.valueOf(formula.charAt(j)).equals("(")) {
+                    if (formula.charAt(j) == '(') {
                         balance++;
-                    } else if (String.valueOf(formula.charAt(j)).equals(")")) {
+                    } else if (formula.charAt(j) == ')') {
                         balance--;
                     }
                     j++;
@@ -192,9 +192,63 @@ class Solution {
 
 Stack 实现递归 
 
+Stack里存一个map, map里<String, Integer>
 
-
-
+class Solution {
+    public static String countOfAtoms(String formula) {
+        Stack<TreeMap<String, Integer>> stack = new Stack<>();
+        //curMap 对字符串进行遍历
+        TreeMap<String, Integer> curMap = new TreeMap<>();
+        // int len = formula.length();
+        int i = 0;
+        while (i < formula.length()) {
+            char ch = formula.charAt(i);
+            if (ch == '(') {
+                stack.push(curMap);
+                // 新建map, 也叫cueMap,(老的curMap被复制了一份入栈了) 对括号里面的字符串进行操作
+                curMap = new TreeMap<>();
+                i++;
+            } else if (ch == ')') {
+                //将两个treemap合并, 当前的treemap保存下来
+                TreeMap<String, Integer> temp = curMap;
+                curMap = stack.pop();
+                i++;
+                int start = i;
+                int multipler = 1;
+                while (i < formula.length() && Character.isDigit(formula.charAt(i))) i++;
+                if (start < i) {
+                    multipler = Integer.valueOf(formula.substring(start, i));
+                }
+                for (String name : temp.keySet()) {
+                    curMap.put(name, curMap.getOrDefault(name, 0) + multipler * temp.get(name));
+                }
+            } else {
+                //atom start
+                int start = i;
+                i++;
+                while (i < formula.length() && Character.isLowerCase(formula.charAt(i))) i++;
+                String atom = formula.substring(start, i);
+                //count start
+                start = i;
+                int quantity = 1;
+                while (i < formula.length() && Character.isDigit(formula.charAt(i))) i++;
+                if (start < i) {
+                    quantity = Integer.valueOf(formula.substring(start, i));
+                }
+                curMap.put(atom, curMap.getOrDefault(atom, 0) + quantity);
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String name : curMap.keySet()) {
+            int quantity = curMap.get(name);
+            sb.append(name);
+            if (quantity > 1) {
+                sb.append(quantity);
+            }
+        }
+        return sb.toString();
+    }
+}
 
 
 
