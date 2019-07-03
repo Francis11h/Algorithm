@@ -250,5 +250,29 @@ Mysql 事务的 隔离级别 有哪些？
             通过拆分【Order】为【Order】（OrderID，OrderDate，CustomerID）和【Customer】（CustomerID，CustomerName，CustomerAddr，CustomerCity）从而达到 3NF。
 
 
+
+
+
+
+
+Redis
+        
+        https://www.jianshu.com/p/36a646cef11a
+        
+        为什么要用Redis缓存 : 因为普通的关系型数据库 支持不了瞬间大量的查询, 比如 购物网站秒杀, 可能1s 20w条数据 DB就崩了
+        key-value 型数据库  就可以支持 快速的查询
+
+
+
+MangoDB
+
+
+
+
+
+
+
+
+
  
 
