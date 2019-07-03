@@ -1,4 +1,4 @@
-3. 最长无重复子串 Longest Substring Without Repeating Characters
+3. 最长无重复字符子串 Longest Substring Without Repeating Characters
 
 Input: "pwwkew"
 Output: 3
@@ -8,7 +8,7 @@ Explanation: The answer is "wke", with the length of 3.
 
 
 
-外层while右指针先动, 某个个数超过1了,内层while左指针再动
+外层while右指针先动, 某个字符个数超过1了,内层while左指针再动
 
 
 class Solution {
