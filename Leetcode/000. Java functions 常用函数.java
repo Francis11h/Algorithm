@@ -50,7 +50,17 @@ Map
 					map.remove(key);
 					map.isEmpty();
 					map.size();
+					map.clear();
 
+
+
+
+
+
+
+
+
+					
 Stack
 
 Queue
