@@ -45,6 +45,11 @@ Map
 
 取值没有默认			map.getOrDefault(keyName, 0);
 
+增删改				map.put(key, value);
+					map.get(key);
+					map.remove(key);
+					map.isEmpty();
+					map.size();
 
 Stack
 
