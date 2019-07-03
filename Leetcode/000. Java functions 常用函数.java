@@ -3,6 +3,9 @@
 String & Character
 
 子串					str.substring(beginIndex, endIndex);	含begin不含end
+删除头尾空白符     	str.trim();
+
+
 
 判单字符是	大写	 	Character.isUpperCase('char');			单个字符的判断是 Character类的方法
 			小写		Character.isLowerCase('char');
