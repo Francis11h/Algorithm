@@ -29,6 +29,10 @@ String & Character
 					})
 
 
+ASCII	A:65 a:97
+
+
+
 
 
 
