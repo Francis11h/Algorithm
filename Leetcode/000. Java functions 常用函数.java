@@ -70,6 +70,18 @@ Queue
 
 
 Heap
+					PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+					PriorityQueue<Integer> maxHeap = new PriorityQueue<>(new Comparator<Integer>(){
+						@Override
+						public int compare(Integer a, Integer b) {
+							return b - a;
+						}
+					});
+
+
+
+
+
 
 
 
