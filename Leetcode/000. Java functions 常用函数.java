@@ -5,7 +5,7 @@ String & Character
 子串					str.substring(beginIndex, endIndex);	含begin不含end
 删除头尾空白符     	str.trim();
 
-
+ASCII				A:65 a:97
 
 判单字符是	大写	 	Character.isUpperCase('char');			单个字符的判断是 Character类的方法
 			小写		Character.isLowerCase('char');
@@ -24,6 +24,7 @@ String & Character
 
 
 把字符串按降序排列	重写Collections类sort方法 Comparator后的<String> 类型不可少
+
 					Collections.sort(ans, new Comparator<String>(){
 						@Override
 						public int compare(String o1, String o2) {
@@ -32,7 +33,27 @@ String & Character
 					})
 
 
-ASCII	A:65 a:97
+
+
+
+
+
+Array 
+
+自定义排序			Arrays.sort(intervals, new Comparator<int[]>(){
+			            @Override
+			            public int compare(int[] a, int[] b) {
+			                return a[0] - b[0];
+			            }
+			        });
+
+
+
+
+
+
+
+
 
 
 
