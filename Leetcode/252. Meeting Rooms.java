@@ -31,6 +31,9 @@ class Solution {
         		return a.start - b.start;
         	}
         });
+	
+	//lambda 表达式
+	//Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
 
         for (int i = 0; i < intervals.length - 1; i++) {
         	if (intervals[i].end > intervals[i + 1].start) return false;
