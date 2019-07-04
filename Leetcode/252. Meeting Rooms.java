@@ -41,7 +41,7 @@ class Solution {
 
 一个是 Collections.sort
 一个是 Arrays.sort
-
+    Collection.sort是给List<T>进行排序，而Arrays.sort是给数组进行排序。
 
 
 
