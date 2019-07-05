@@ -3,6 +3,7 @@
 String & Character
 
 子串					str.substring(beginIndex, endIndex);	含begin不含end
+					str.substring(beginIndex);				//只有一个参数, 就是开始参数到结束
 删除头尾空白符     	str.trim();
 
 ASCII				A:65 a:97
