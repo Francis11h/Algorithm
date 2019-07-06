@@ -21,6 +21,9 @@ ASCII				A:65 a:97
 					sb.length();
 					sb.toString();
 
+字符串转字符数组		str.toCharArray();
+字符数组转字符串		String.valueOf(charArrayName);
+
 取出字符串中数字		Integer.valueOf(str.substring(begin, end));			Integer类方法
 
 
