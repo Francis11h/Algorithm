@@ -10,6 +10,7 @@ Explanation: The answer is "wke", with the length of 3.
 
 外层while右指针先动, 某个字符个数超过1了,内层while左指针再动
 
+直接用 数组计数 比 HashMap 更快
 
 class Solution {
     public int lengthOfLongestSubstring(String s) {
@@ -65,6 +66,8 @@ class Solution {
     }
 }
 
+T : O(N)
+S : O(26)    
 
 
 
