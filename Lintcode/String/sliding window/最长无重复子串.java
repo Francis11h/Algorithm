@@ -34,3 +34,53 @@ class Solution {
 
 T:O(N)
 S:O(256)
+
+
+
+
+
+
+HashMap 版
+
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        if (s == null || s.length() == 0) return 0;
+        Map<Character, Integer> map = new HashMap<>();
+        int count = 0, start = 0, ans = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i); 
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+            if (map.get(ch) > 1) count++;
+            
+            while (count >= 1) {
+                char rmv = s.charAt(start);
+                map.put(rmv, map.get(rmv) - 1);
+                if (map.get(ch) == 1) count--;
+                start++;
+            }
+            ans = Math.max(ans, i - start + 1);
+        }
+        return ans;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
