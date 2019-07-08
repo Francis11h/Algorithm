@@ -38,3 +38,28 @@ class Solution {
 
 T:O(N)
 S:O(256)
+
+
+
+
+class Solution {
+    public int lengthOfLongestSubstringTwoDistinct(String s) {
+        if (s == null || s.length() == 0) return 0;
+        int start = 0, count = 0, ans = 0;
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+            if (map.get(ch) == 1) count++;
+            
+            while (count > 2) {
+                char rmv = s.charAt(start);
+                map.put(rmv, map.get(rmv) - 1);
+                if (map.get(rmv) == 0) count--;
+                start++;
+            }
+            ans = Math.max(ans, i - start + 1);
+        }
+        return ans;
+    }
+}
