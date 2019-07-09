@@ -58,3 +58,45 @@ N is the number of columns.
 
 
 Space O(MN)  visited[][] 大小
+
+
+
+
+
+class Solution {
+    public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) return 0;
+        int m = grid.length, n = grid[0].length;
+        boolean[][] visited = new boolean[m][n];
+        int ans = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '1' && !visited[i][j]) {
+                    ans++;
+                    bfs(grid, i, j, m, n, visited);
+                }
+            }
+        }
+        return ans;
+    }
+    
+    public void bfs (char[][] grid, int i, int j, int m, int n, boolean[][] visited) {
+        
+        Queue<int[]> queue = new LinkedList<>();
+        int[] dirs = new int[] {1, 0, -1, 0, 1};
+        
+        queue.offer(new int[] {i, j});
+        
+        while (!queue.isEmpty()) {
+            int[] temp = queue.poll();
+            int x = temp[0], y = temp[1];
+            for (int k = 0; k < 4; k++) {
+                int nx = x + dirs[k], ny = y + dirs[k + 1];
+                if (nx < 0 || nx >= m || ny < 0 || ny >= n || grid[nx][ny] != '1' || visited[nx][ny])
+                    continue;
+                visited[nx][ny] = true;
+                queue.offer(new int[]{nx, ny});
+            }
+        }
+    }
+}
