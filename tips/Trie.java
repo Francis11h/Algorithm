@@ -36,9 +36,9 @@ searchNode():
 
 class TrieNode {
     char c;
-    HashMap<Character, TrieNode> children = new HashMap<>();
+    HashMap<Character, TrieNode> children = new HashMap<>();        //这里直接要定义出来是 HashMap, 否则 后头两个constructor里都要写
     boolean isWord;
-    public TrieNode() {
+    public TrieNode() {                                  //这是 root 节点的 constructor 必须得有
 
     }
     public TrieNode(char c) {
@@ -82,6 +82,7 @@ class Trie {
         return false;
     }
 
+    //为什么需要这个？？ 因为我需要把最后的那个TireNode找到, 因为我后面要知道最后一个字符对应Node的isWord属性, 所以必须返回一个word最后那个字符的Node
     public TrieNode searchNode(String word) {
         TrieNode cur = root;
         for (int i = 0; i < word.length(); i++) {
