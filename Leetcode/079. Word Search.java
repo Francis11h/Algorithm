@@ -33,7 +33,8 @@ class Solution {
         return false;
 
     }
-
+  
+    //判断index位是否和board[i][j] 相等
     private boolean backtrack(int i, int j, int idx, String word, boolean[][] visited, char[][] board) {
         //先写 dfs 递归出口
         if (idx == word.length()) return true;
