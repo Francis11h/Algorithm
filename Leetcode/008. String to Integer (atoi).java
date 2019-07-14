@@ -99,9 +99,45 @@ class Solution {
 
 
 
+//优雅一点的代码
 
+class Solution {
+    public int myAtoi(String str) {
+        int i = 0, j = 0;
+        boolean negative = false;
 
--2147483648
+        for (i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (ch >= '0' && ch <= '9') {
+                break;
+            } else if (ch == '-' || ch == '+') {
+                negative = ch == '-';
+                i++;
+                break;
+            } else if (ch != ' ') return 0;
+        }
+        
+        for (j = i; j < str.length(); j++) {
+            char ch = str.charAt(j);
+            if (ch < '0' || ch > '9') break;
+        }
+
+        String num = str.substring(i, j);
+        int ans = 0;
+        for (int k = 0; k < num.length(); k++) {
+            int digit = num.charAt(k) - '0';
+            if (negative) {
+                if (ans < Integer.MIN_VALUE / 10 || ans == Integer.MIN_VALUE / 10 && digit > 8) return Integer.MIN_VALUE;
+                ans = ans * 10 - digit;
+            } else {
+                if (ans > Integer.MAX_VALUE / 10 || ans == Integer.MAX_VALUE/ 10 && digit > 7) return Integer.MAX_VALUE;
+                ans = ans * 10 + digit;
+            }
+        }
+        return ans;
+    }
+}
+
 
 
 
