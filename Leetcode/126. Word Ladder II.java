@@ -181,7 +181,100 @@ Arrays.asList() 是把数组转为 List
 
 
 
+public class Solution {
+    
+    //图
+    Map<String, List<String>> graph = new HashMap<>();
+    List<List<String>> ans = new ArrayList<>();
+    //至少需要多少步，其下限
+    Map<String, Integer> lb = new HashMap<>();
+    
+    // limit 层数限制是多少, x:即将做第几次变换，word ：当前即将要做变换的词
+    private void dfs(int limit, int x, String word, String end, List<String> path) {
+        //退出条件
+        if (x == limit + 1) { //+1是因为 x是我即将要做的那一次变换，即前面limit次变换已经做完
+            if (word.equals(end)) {
+                //要深拷贝，因为原path值会不断变化
+                ans.add(new ArrayList<>(path));
+            }
+            return;
+        }
+        
+        //前面已经做了x-1步
+        //再加上剩余的至少步数，还大于limit 直接剪枝
+        if (x - 1 + lb.get(word) > limit) {
+            return;
+        }
+        
+        for (String next : graph.get(word)) {
+            path.add(next);
+            dfs(limit, x + 1, next, end, path);
+            path.remove(path.size() - 1);
+        }
+        
+        //让 lb动态更新。走到这里时，从word出发的所有的路已经试完了且还没找到结果的话
+            // ans 是空 表示 从word出发还没没到达终点, word 已经走了 limit-(x-1) 步
 
+        if (ans.isEmpty()) {
+            // 已经走了limit-(x-1) 步 还没到终点，那么至少要走limit - (x - 1) + 1步
+            //动态更新lb，下界不断提高！
+            lb.put(word, Math.max(lb.get(word), limit - (x - 1) + 1));
+        }
+        
+    }
+    
+    //找与每个word 连接的 且在字典中的所有边
+    private List<String> getNext(String word, Set<String> dict) {
+        List<String> res = new ArrayList<>();
+        
+        //改变单词每一位的个数
+        for (int i = 0; i < word.length(); i++) {
+            char[] sc = word.toCharArray();
+            for (char c = 'a'; c <= 'z'; c++) {
+                sc[i] = c;
+                String next = String.valueOf(sc);
+                if (dict.contains(next) && !word.equals(next)) {
+                    res.add(next);
+                }
+            }
+        }
+        return res;
+    }
+    
+    private int getDiff(String a, String b) {
+        int ret = 0;
+        for (int i = 0; i < a.length(); i++) {
+            if (a.charAt(i) != b.charAt(i)) {
+                ret++;
+            }
+        }
+        return ret;
+    }
+    
+    public List<List<String>> findLadders(String start, String end, Set<String> dict) {
+        
+        //建图的过程
+        dict.add(start);
+        dict.add(end);
+        for (String word : dict) {
+            graph.put(word, getNext(word, dict));
+            lb.put(word, getDiff(word, end));
+        }
+        
+        //加深，深度
+        int limit = 0; 
+        //path声明
+        List<String> path = new ArrayList<>();
+        path.add(start);
+        
+        
+        while (ans.isEmpty()) {
+            dfs(limit, 1, start, end, path); //即将做第一次变换
+            limit++;
+        }
+        return ans;
+    }
+}
 
 
 
