@@ -89,7 +89,7 @@ public class Codec {
         if (data.equals("[]")) return null;
 
         String[] nodeList = data.substring(1, data.length() - 1).split(",");
-        ArrayList<TreeNode> queue = new ArrayList<>();
+        ArrayList<TreeNode> queue = new ArrayList<>();              //也需要数组！！！
 
         TreeNode root = new TreeNode(Integer.parseInt(nodeList[0]));
         queue.add(root);
@@ -97,15 +97,15 @@ public class Codec {
         int index = 0;
         boolean isLeftChild = true;
 
-        for (int i = 1; i < nodeList.length; i++) {
-            if (!nodeList[i].equals("#")) {
+        for (int i = 1; i < nodeList.length; i++) {                 //1 开始
+            if (!nodeList[i].equals("#")) {     //比较用 .equals
                 TreeNode node = new TreeNode(Integer.parseInt(nodeList[i]));
                 if (isLeftChild) {
-                    queue.get(index).left = node;
+                    queue.get(index).left = node;           //index 不是 i, index指的是父亲节点
                 } else {
                     queue.get(index).right = node;
                 }
-                queue.add(node);              //这个得加！！！别忘了
+                queue.add(node);              //这个得加！！！别忘了 ！！！！！
             }
 
             if (!isLeftChild) {                 //不能一开始就加 
