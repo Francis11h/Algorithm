@@ -32,107 +32,143 @@ Implement Trie (Prefix Tree) (leetcode 208)			Tire  : insert() search() startWit
 
 
 
+与  79.Word Search 不一样的是 这里的 dfs 可以传入当前的整个字符串 而 Word Search dfs 传入的是 开始match的坐标
+因为 我们 用到 Trie 所以 直接搜 str 中间也会 prune 
+
+
+
+主体
+
+    问题 dfs 返回值 要什么 void or boolean？ ===> void 仅需要在 dfs中 给 ans 添值 
+    肯定不能原主函数中写dfs 要新写一个函数 ===> 因为 主函数中 要对每个点做dfs
+    同时要用到 Trie  ===> 所以主函数中也得 建Trie
+
+    dfs 入参 要写什么 1.当前的字符串              ""
+                    2.用于搜索的二维矩阵         board[][]
+                    3.表示走没走过的boolean数组  visited[][]
+                    4.当前坐标                 i, j
+                    5.Trie                    trie
+重要 tips
+    List不能去重复 dfs中搜索到后 先用Set存结果 再转为List
+
+Trie部分
+
+    Trie 需要用到 Trie类 及 TrieNode类
+
+    TrieNode 表示 每个节点 需要存的信息有  
+        ===> 1.当前节点所代表的从root到该节点的字符串(本题不需要这个)
+             2.孩子指针 用 Map<Character, TrieNode> 存
+             3.是否是叶子(这个属性本题用 isWord 表示)
+
+    Tire 中 需要有的东西 root节点 insert() search() startWith() searchNode() 四个方法 searchNode()是全部match和前缀match公用的方法
+        insert()就是插单词 插一个 最后一个node 叶子结点 记录下该单词的结束
+        searchNode() 根据word找最后的节点 不管是不是 叶子结点
+        startWith() 根据searchNode()找出来的节点 只要不是null就可以
+        search() 要求更高 不光要求 searchNode()找出来的节点 不是null 还要求该节点必须是整个单词 即该节点的word属性不能是null
+
+
+
+
 Trie + DFS
 https://leetcode.com/problems/word-search-ii/discuss/59784/My-simple-and-clean-Java-code-using-DFS-and-Trie
-
+----
 
 
 class TrieNode {
-    String word = "";            //  = ""  这个必须要有 就是相当于给个reference 否则word会是null 后面就会有空指针                                    //记录从root 到该节点的单词 我们后面需要拿出来这个String 去比较
-	Map<Character, TrieNode> children;
-	public TrieNode() { 
+    boolean isWord;
+    Map<Character, TrieNode> children;
+    public TrieNode() {
+        this.isWord = false;
         this.children = new HashMap<>();
-	}
+    }
 }
 
 class Trie {
-	TrieNode root;
+    TrieNode root;
     public Trie() {
-        root = new TrieNode();
+        this.root = new TrieNode();
     }
-	public void insert(String word) {
-		TrieNode cur = root;
-		for (int i = 0; i < word.length(); i++) {
-			char ch = word.charAt(i);
-			if (!cur.children.containsKey(ch)) {
-				cur.children.put(ch, new TrieNode());
-			}
-			cur = cur.children.get(ch);
-		}
-		cur.word = word;
-	}
-
-	public boolean search(String word) {
-        if (searchNode(word) == null || !searchNode(word).word.equals(word)) {
-            return false;
-        }
-        return true;
-    }
-    
-    public boolean startsWith(String prefix) {
-        if (searchNode(prefix) != null)
-            return true;
-        return false;
-    }
-    
-    public TrieNode searchNode(String word) {
-        TrieNode cur = root;
+    //insert
+    public void insert(String word) {
+        TrieNode node = root;
         for (int i = 0; i < word.length(); i++) {
             char ch = word.charAt(i);
-            if (cur.children.containsKey(ch)) {
-                cur = cur.children.get(ch);
-            } else {
+            if (!node.children.containsKey(ch)) {
+                node.children.put(ch, new TrieNode());
+            }
+            node = node.children.get(ch);
+        }
+        node.isWord = true;
+    }
+    //find Node
+    public TrieNode searchNode(String word) {
+        TrieNode node = root;
+        for (int i = 0; i < word.length(); i++) {
+            char ch = word.charAt(i);
+            if (!node.children.containsKey(ch)) {
                 return null;
+            } else {
+                node = node.children.get(ch);
             }
         }
-        return cur;
-    } 
+        return node;
+    }
+    //find by prefix
+    public boolean startWith(String prefix) {
+        return searchNode(prefix) != null;
+    }
+    //find the exact word
+    public boolean search(String word) {
+        if (searchNode(word) == null || !searchNode(word).isWord) return false;
+        return true;
+    }
 }
 
 
 class Solution {
-
-    Set<String> ans = new HashSet<String>();
-
+    //store ans without duplicate for cornercase    input: [["a","a"]]
+    Set<String> ans = new HashSet<>();
+    // main fucntion
     public List<String> findWords(char[][] board, String[] words) {
+        //build Trie
         Trie trie = new Trie();
         for (String word : words) {
             trie.insert(word);
         }
-        
+        //start dfs at every point at board
         int m = board.length, n = board[0].length;
         boolean[][] visited = new boolean[m][n];
-
+        
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 dfs("", i, j, board, visited, trie);
             }
         }
+        //ans
         return new ArrayList<>(ans);
     }
     
+    //dfs
     public void dfs(String str, int x, int y, char[][] board, boolean[][] visited, Trie trie) {
-        if (x < 0 || x >= board.length || y < 0 || y >= board[0].length) return;
-        if (visited[x][y]) return;
-        
+        int m = board.length, n = board[0].length;
+        if (x < 0 || x >= m || y < 0 || y >= n || visited[x][y]) return;
+        // add char to current string
         str += board[x][y];
-        //这里就是让dfs更早返回的地方:如果当前单词 不存在于words所有单词的前缀中 立即返回
-        if (!trie.startsWith(str)) return;
-        //这里是和words中某个单词完整匹配
+        //important statement to stop dfs earlier
+        // can't find word with the prefix str then we do not need to search the whole word with the same prefix
+        if (!trie.startWith(str)) return;
+        // find the str is a word add it to ans
         if (trie.search(str)) {
             ans.add(str);
         }
-
         visited[x][y] = true;
         dfs(str, x + 1, y, board, visited, trie);
         dfs(str, x - 1, y, board, visited, trie);
         dfs(str, x, y + 1, board, visited, trie);
         dfs(str, x, y - 1, board, visited, trie);
         visited[x][y] = false;
-        
     }
 }
-
 
 
 
