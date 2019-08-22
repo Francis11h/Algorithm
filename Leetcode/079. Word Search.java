@@ -23,37 +23,65 @@ board =
 DFS 标准写法
 
 class Solution {
-     public boolean exist(char[][] board, String word) {
-        boolean[][] visited = new boolean[board.length][board[0].length];
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                if (word.charAt(0) == board[i][j] && backtrack(i, j, 0, word, visited, board)) return true;
+    //main function
+    public boolean exist(char[][] board, String word) {
+        int m = board.length, n = board[0].length;
+        boolean[][] visited = new boolean[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (dfs(0, i, j, board, word, visited)) {
+                    return true;
+                }
             }
         }
         return false;
+    }
+    
+    //dfs function
+    //这里的 index 表示 start 即 从该位开始 是否可以在matrix里找到
+    //如果这里不用 index 用 String str (与 word search2 一样的话 会超时TLE)
 
-    }
-  
-    //判断index位是否和board[i][j] 相等
-    private boolean backtrack(int i, int j, int idx, String word, boolean[][] visited, char[][] board) {
-        //先写 dfs 递归出口
-        if (idx == word.length()) return true;
-        if (i >= board.length || i < 0 || j >= board[0].length || j < 0 || board[i][j] != word.charAt(idx) || visited[i][j])
-            return false;
-        //标记走过，以便进入下一状态
-        visited[i][j] = true;
-        //4个方向递归进入下一状态
-        if (backtrack(i + 1, j, idx + 1, word, visited, board) 
-            || backtrack(i - 1, j, idx + 1, word, visited, board) 
-            || backtrack(i, j + 1, idx + 1, word, visited, board) 
-            || backtrack(i, j - 1, idx + 1, word, visited, board)) 
+    public boolean dfs(int index, int x, int y, char[][] board, String word, boolean[][] visited) {
+        if (index == word.length()) return true;
+        //出口 要写在 board[x][y] != word.charAt(index)之前 否则 会越界
+        if (x < 0 || x >= board.length || y < 0 || y >= board[0].length || visited[x][y]) return false;
+        if (board[x][y] != word.charAt(index)) return false;
+        
+        visited[x][y] = true;
+        //言下之意是 如果后面的都满足 那么加上开始的这一位 肯定也满足 
+        if (dfs(index + 1, x + 1, y, board, word, visited) ||
+            dfs(index + 1, x - 1, y, board, word, visited) || 
+            dfs(index + 1, x, y + 1, board, word, visited) ||
+            dfs(index + 1, x, y - 1, board, word, visited)) {
             return true;
-        //回溯回上一状态
-        visited[i][j] = false;
-                                                      
+        }
+        visited[x][y] = false;
+        
         return false;
-    }
+    }  
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
