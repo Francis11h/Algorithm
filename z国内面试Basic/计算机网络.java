@@ -2,7 +2,23 @@
 计算机网络
 
 1. 电路交换与分组交换的区别？ 优劣对比。
+    
+
 2. OSI有哪几层，会画出来，知道主要几层的各自作用。
+
+    Application             HTTP FTP
+        Presentation        encryption, compression  
+        Session             synchronization checkpointing
+    Transport               TCP UDP
+    Network                 IP , routing protocols
+    Link                    ethernet
+    Physical                bits 'on the wire'
+
+    layers make calls 每一层可以使用下层提供的服务并且向上层提供服务
+
+
+
+
 3. TCP/IP有哪几层，会画出来，知道所有层数的作用，会列举各层主要的协议名称。
 4. 硬件(MAC)地址的概念及作用。
 5. ARP协议的用途 及算法、在哪一层上会使用arp？. check 1point3acres for more.
