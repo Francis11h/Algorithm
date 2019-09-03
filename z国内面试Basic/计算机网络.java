@@ -18,6 +18,15 @@
     layers make calls 每一层可以使用下层提供的服务并且向上层提供服务
 
 
+CS 架构 client-server architecture
+    
+    Server : 1. always-on host 2. permanent IP address 3. data centers for scaling
+    
+    Client : 1.communicate with server and Do not communicate directly with each other!
+             2.may have dynamic IP address
+
+
+
 
 
 3. TCP/IP有哪几层，会画出来，知道所有层数的作用，会列举各层主要的协议名称。
