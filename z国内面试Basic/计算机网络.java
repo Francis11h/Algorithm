@@ -75,7 +75,11 @@ TCP与UDP的概念, 相互的区别及优劣
 21. UDP报文的格式，字段的意义。
 22.TCP报文的格式，字段的意义。
 23. TCP通过哪些措施，保证传输可靠？
+
 24.三次握手，四次断开过程。
+
+
+
 25.TIME_WAIT状态的概念及意义。
 26. 滑动窗口协议 与 停止等待协议的区别。
 27.TCP的流量控制和拥塞控制实现原理(会画拥塞控制的典型图)。
@@ -84,6 +88,29 @@ TCP与UDP的概念, 相互的区别及优劣
 30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
 -------
 HTTP基本格式
+            Http request
+    client ---------------> server
+           <---------------
+           Http response
+
+    request : method + URL + header lines + ...
+                e.g. GET /index.html HTTP/1.1\r\n + header lines.. + ...
+    response : 
+                e.g. HTTP/1.1 200 OK\r\n + header lines.. + data data data
+                
+
+-------
+Http GET 与 POST 的区别
+
+    GET把参数包含在URL中, POST通过 request body 传递参数.
+
+    GET : input is uploaded in URL field of request line
+          请求会把请求的参数拼接在URL后面,以 ? 分隔,多个参数之间用 & 连接;
+          (浏览器和服务器会限制URL的长度,所以传输的数据有限,
+            而且账户密码明文显示会不安全)
+
+    POST : 请求会把提交的数据放在请求体中，不会在URL中显示出来
+          (一般可以传输较大量的数据)
 
 
 -------
@@ -92,11 +119,12 @@ Cookie Session 区别
     session 在服务器端，cookie 在客户端（浏览器）
     session 默认被存在在服务器的一个文件里（不是内存）
     session 的运行依赖 session id，而 session id 是存在 cookie 中的，也就是说，如果浏览器禁用了 cookie ，同时 session 也会失效（但是可以通过其它方式实现，比如在 url 中传递 session_id）
-    session 可以放在 文件、数据库、或内存中都可以。
-    用户验证这种场合一般会用 session 因此，维持一个会话的核心就是客户端的唯一标识，即 session id
 
-    Session是在服务端保存的一个数据结构，用来跟踪用户的状态，这个数据可以保存在集群、数据库、文件中；
-    Cookie是客户端保存用户信息的一种机制，用来记录用户的一些信息，也是实现Session的一种方式。
+    用户验证这种场合一般会用 session 因此，维持一个会话的核心就是客户端的唯一标识，即 session id.
+
+    Session是 服务端server 保存的一个数据结构, 用来跟踪用户的状态，这个数据可以保存在集群、数据库、文件中.
+
+    Cookie是 客户端client 保存 用户信息.
  
 
 
@@ -181,12 +209,18 @@ Cookie Session 区别
             1xx：指示信息–表示请求已接收，继续处理。
 
             2xx：成功–表示请求已被成功接收、理解、接受。
+                200 Ok  request succeeded,requested object later in this msg
 
-            3xx：重定向–要完成请求必须进行更进一步的操作。
+            3xx：重定向–要完成请求必须进行更进一步的操作
+                301 Moved Permanently
 
-            4xx：客户端错误–请求有语法错误或请求无法实现。
+            4xx：客户端错误–请求(request)有 语法错误 或 请求无法实现。
+                400 Bad Request request msg not understood by server
+                403 Forbidden                                           //服务器收到请求，但是拒绝提供服务
+                404 Not Found requested document not found on this server
 
             5xx：服务器端错误–服务器未能实现合法的请求。
+                505 HTTP Version Not Supported
 
         响应报头 ：  常见的响应报头字段有: Server, Connection...。
                 
@@ -198,11 +232,5 @@ Cookie Session 区别
 
 
 
--------
-Http GET 与 POST 的区别
-
-    GET把参数包含在URL中, POST通过 request body 传递参数.
-    GET产生一个TCP数据包, 浏览器会把http header和data一并发送出去, 
-    POST产生两个TCP数据包, 浏览器先发送header，服务器响应100 continue，浏览器再发送data，服务器响应200 ok（返回数据).
 
 
