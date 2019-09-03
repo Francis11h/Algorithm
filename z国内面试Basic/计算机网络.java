@@ -1,11 +1,12 @@
 
 计算机网络
-
-1. 电路交换与分组交换的区别？ 优劣对比。
+-------
+电路交换与分组交换的区别？ 优劣对比。
 
     packet switching allows More users to use network!
 
-2. OSI有哪几层，会画出来，知道主要几层的各自作用。
+-------
+OSI有哪几层，会画出来，知道主要几层的各自作用。
 
     Application             HTTP FTP
         Presentation        encryption, compression  
@@ -17,13 +18,22 @@
 
     layers make calls 每一层可以使用下层提供的服务并且向上层提供服务
 
-
+-------
 CS 架构 client-server architecture
     
     Server : 1. always-on host 2. permanent IP address 3. data centers for scaling
-    
+
     Client : 1.communicate with server and Do not communicate directly with each other!
              2.may have dynamic IP address
+
+-------
+Sockets
+    
+    socket 就像是一扇门,从application层通往transport层
+
+    Socket编程接口在设计的时候，就希望也能适应其他的网络协议.
+    所以,socket的出现只是可以更方便的使用 TCP/IP协议栈而已,其对TCP/IP进行了抽象,形成了几个最基本的函数接口
+    比如 create，listen，accept，connect，read和write等等.
 
 
 
@@ -48,8 +58,20 @@ CS 架构 client-server architecture
 19. DNS的概念，用途，DNS查询的实现算法。
     
 
+-------
+TCP与UDP的概念, 相互的区别及优劣
+    TCP service : 1. Reliable Transport  between sending and receiving process.
+                  2. Flow Control        sender won‘t overwhelm receiver.
+                  3. Congestion Control  throttle（截住）sender when network overloaded.
+                  4. Connection-Oriented setup required between client and server processes
+                  5. But Doesnot Provide timing, minimum throughput guarantee, security
 
-20.TCP与UDP的概念，相互的区别及优劣。
+    UDP service : Unreliable data transfer between sending and receiving process
+    
+
+    Securing TCP :  SSL （改进的tcp）
+
+
 21. UDP报文的格式，字段的意义。
 22.TCP报文的格式，字段的意义。
 23. TCP通过哪些措施，保证传输可靠？
@@ -60,9 +82,13 @@ CS 架构 client-server architecture
 28. TCP的快速重传与快速恢复算法。
 29. TFTP与FTP的区别。
 30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
-31.HTTP基本格式。
+-------
+HTTP基本格式
 
+
+-------
 Cookie Session 区别
+
     session 在服务器端，cookie 在客户端（浏览器）
     session 默认被存在在服务器的一个文件里（不是内存）
     session 的运行依赖 session id，而 session id 是存在 cookie 中的，也就是说，如果浏览器禁用了 cookie ，同时 session 也会失效（但是可以通过其它方式实现，比如在 url 中传递 session_id）
@@ -74,7 +100,7 @@ Cookie Session 区别
  
 
 
-
+-------
 从输入URL到页面加载发生了什么        https://segmentfault.com/a/1190000006879700
     DNS解析
 
@@ -172,7 +198,7 @@ Cookie Session 区别
 
 
 
-
+-------
 Http GET 与 POST 的区别
 
     GET把参数包含在URL中, POST通过 request body 传递参数.
