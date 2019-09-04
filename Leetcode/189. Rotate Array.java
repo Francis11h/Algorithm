@@ -180,6 +180,39 @@ class Solution {
 
 
 
+最优的办法 借鉴 rotate list
+分块儿
+
+Example：nums = [1,2,3,4,5,6,7] k = 3
+Step1:划分成[1,2,3,4], [5,6,7]
+Step2:分别reverse，[4,3,2,1], [7,6,5]
+Step3:合并reverse，[5,6,7,1,2,3,4]
+
+
+public class Solution {
+    
+    public int[] rotate(int[] nums, int k) {
+        int n = nums.length;
+        k %= n;
+        reverse(nums, 0, n - k - 1);
+        reverse(nums, n - k, nums.length - 1);
+        reverse(nums, 0, nums.length - 1);
+        return nums;
+    }
+    
+    public void reverse(int[] nums, int left, int right) {
+        while (left < right) {
+            int temp = nums[left];
+            nums[left++] = nums[right];
+            nums[right--] = temp;
+        }
+    }
+}
+
+
+
+
+
 
 
 
