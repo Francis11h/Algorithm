@@ -120,7 +120,48 @@ public class Codec {
 
 
 
+recurison
 
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        serial(root, sb);
+        return sb.toString();
+    }
+    //先序遍历 preorder
+    private void serial(TreeNode root, StringBuilder sb) {
+        if (root == null) {
+            sb.append("#,");
+        } else {
+            sb.append(root.val + ",");
+            serial(root.left, sb);
+            serial(root.right, sb);
+        } 
+    }
+    // [1, 2, n, n, 3, 4, n, n, 5, n, n]
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        String[] str = data.split(",");
+        //linkedlist 去 头节点 O(1) ArrayList 则会 O(n) 要前移
+        List<String> nodeList = new LinkedList<>(Arrays.asList(str));
+        return deserial(nodeList);
+    }
+    //每次deserialize nodeList的头节点即其子树 并去掉这些点
+    private TreeNode deserial(List<String> nodeList) {
+        if (nodeList.get(0).equals("#")) {
+            nodeList.remove(0);
+            return null;
+        }
+        TreeNode root = new TreeNode(Integer.parseInt(nodeList.get(0)));
+        nodeList.remove(0);
+        root.left = deserial(nodeList);
+        root.right = deserial(nodeList);
+        return root;
+    }
+}
 
 
 
