@@ -83,7 +83,8 @@ class Solution {
 本题的 最优化解法
 
 
-use Level_start to indicate the head of each level
+use Level_start to indicate the head of current level
+use Dummy to record the next level‘s begin, which modified by Prev.next
 use Prev to indicate the prev node of the next layer, means what node we should modify the next pointer
 use Cur to indicate the current node of current level level 
 
