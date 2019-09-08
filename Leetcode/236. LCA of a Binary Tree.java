@@ -22,12 +22,59 @@ Note :
 
 
 
+找到A和B 第一次 在 同一棵子树中的 子树根节点 即是LCA
+
+LCA(root, p, q) 函数的意义
+
+在以root为根的整个树中搜索pq的LCA
+如果root就是p或q 返回root  如果root既不是p也不是q 我们先检查左边 然后检查右边
+如果在左边找到了 p/q 停止这边 并返回该node
+继续检查下一边 下一边 有另一个 返回root, 没有 返回在左边找到的node
+
+
+
+
+// There is an assumption that p and q nodes exist and are part of the tree.
+
+// Let’s start from the beginning, from the root node.
+// If root of the tree is p or q then line
+
+// if(root == p || root == q) return root;
+
+// returns real root which is LCA since it’s doesn’t matter where second (p or q) is – root is LCA anyway.
+
+// Let’s say root node is not p or q then it checks left branch first
+
+// TreeNode left = lowestCommonAncestor(root.left, p, q);
+
+// And then right branch:
+
+// TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+// If it found p or q on the left it stops and returns that node and doesn’t check the rest of the left sub tree.
+// Why? Because if second node (p or q) is somewhere below in the current left sub tree – then current node is LCA and it already has it. How does it know whether second node is below in the current sub tree or not? It goes to check a right branch.
+// If right branch doesn’t have second node then it’s somewhere below in the left sub tree where we found first p or q and it’s below the node we already found so the node we found on the left is LCA.
+// If second node is on the right branch then LCA is a node for which both lines
+
+// TreeNode left = lowestCommonAncestor(root.left, p, q); and
+
+// TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+// return != null left and right
+
+// It checks this here:
+// return left != null && right != null ? root
+
+
+
+
+
 BST 中用范围确定
 	普通 BT 中 需要明确找到两个节点
 
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode A, TreeNode B) {
-    //两个递归出口，没搜到 返回null
+        //两个递归出口，没搜到 返回null
         if (root == null) {
             return null;
         }
@@ -53,6 +100,8 @@ class Solution {
         }
         //两边都空，则没有
         return null;
+        //4 合一 代码更优雅
+        //return left != null && right != null ? root : left == null ? right : left; 
     }
 }
 
