@@ -59,7 +59,7 @@ class Solution {
             return res;
         }
         Stack<TreeNode> stack = new Stack<>();
-
+	//按照左根右的次序遍历二叉树，搜索左子树，存入当前点，搜索右子树。
         while (root != null || !stack.isEmpty()) {
             while (root != null) {
                 stack.push(root);
