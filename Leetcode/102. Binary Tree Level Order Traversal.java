@@ -40,6 +40,50 @@ class Solution {
 
 
 
+
+递归的解法 
+本来 如果要是 listlist的话 要用一个 path 不断变 回溯（排列组合问题）
+这里 
+if (level == ans.size()) {
+    ans.add(new ArrayList<>());
+}
+ans.get(level).add(root.val);
+很奇妙 看的很湿.............. 就是 每次到新的一层建一个当层的list 然后每次 先通过level get 这个list然后再往里加
+
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> ans = new ArrayList<>();
+        if (root == null) return ans;
+        dfs(root, 0, ans);
+        return ans;
+    }
+    private void dfs(TreeNode root, int level, List<List<Integer>> ans) {
+        if (root == null) return;
+        if (level == ans.size()) {
+            ans.add(new ArrayList<>());
+        }
+        ans.get(level).add(root.val);
+        dfs(root.left, level + 1, ans);
+        dfs(root.right, level + 1, ans);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 199. Binary Tree Right Side View
 //从右边看树， 即取层序遍历最后一个
 class Solution {
