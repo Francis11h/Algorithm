@@ -32,6 +32,7 @@ class Solution {
   1   3
 先输出 231 然后 倒过来
 
+
 class Solution {
     public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> ans = new ArrayList<>();
@@ -48,4 +49,8 @@ class Solution {
     }
 }
 
+
+
+
+590. N-ary Tree Postorder Traversal
 
