@@ -1,5 +1,13 @@
 27. Remove Element
 
+Given an array nums and a value val, remove all instances of that value in-place and return the new length.
+
+Given nums = [3,2,2,3], val = 3,
+Your function should return length = 2, 
+
+Given nums = [0,1,2,2,3,0,4,2], val = 2,
+should return length = 5
+
 class Solution {
     public int removeElement(int[] nums, int val) {
         if (nums == null || nums.length == 0) return 0;
