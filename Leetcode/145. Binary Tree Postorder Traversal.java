@@ -35,7 +35,8 @@ class Solution {
 
 class Solution {
     public List<Integer> postorderTraversal(TreeNode root) {
-        List<Integer> ans = new ArrayList<>();
+        // LinkedList 保证每次往 index = 0 的时候插都是 O(1)
+        List<Integer> ans = new LinkedList<>(); 
         if (root == null) return ans;
         Stack<TreeNode> stack = new Stack<>();
         stack.push(root);
