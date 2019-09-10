@@ -144,6 +144,7 @@ public class Codec {
 
     // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
+        if (data == null) return null;
         String[] str = data.split(",");
         //linkedlist 去 头节点 O(1) ArrayList 则会 O(n) 要前移
         List<String> nodeList = new LinkedList<>(Arrays.asList(str));
@@ -170,6 +171,61 @@ public class Codec {
 
 
 
+428. Serialize and Deserialize N-ary Tree
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> children;
+
+    public Node() {}
+
+    public Node(int _val,List<Node> _children) {
+        val = _val;
+        children = _children;
+    }
+};
+*/
+class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(Node root) {
+        StringBuilder sb = new StringBuilder();
+        serial(root, sb);
+        return sb.toString();
+    }
+    private void serial(Node root, StringBuilder sb) {
+        //这里不用再写root == null的时候 append(“#”) 因为根本就不走 就是 root.children.size() 这个条件限制了不会走到null的
+        if (root == null) return;                           //just handle the corner case serialize(null)
+        sb.append(root.val).append(",");
+        sb.append(root.children.size()).append(",");
+        for (Node child : root.children) {
+            serial(child, sb);
+        }
+    }
+
+    // Decodes your encoded data to tree.
+    public Node deserialize(String data) {
+        if (data.length() == 0) return null;                //just handle the corner case serialize(null)
+        String[] nodeList = data.split(",");
+        List<String> list = new LinkedList<>(Arrays.asList(nodeList));
+        return deserial(list);
+    }
+    
+    private Node deserial(List<String> list) {
+        
+        Node root = new Node();
+        root.children = new ArrayList<>();
+        root.val = Integer.parseInt(list.get(0));
+        list.remove(0);
+        int size = Integer.parseInt(list.get(0));
+        list.remove(0);
+        for (int i = 0; i < size; i++) {
+            root.children.add(deserial(list));
+        }
+        return root;
+    }
+}
 
 
 
