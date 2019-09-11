@@ -13,6 +13,9 @@ This path may or may Not pass through the root.
       return 3 , which is the length of the path [4,2,1,3] or [5,2,1,3].
 
 
+对每一个节点，先dfs求其深度 => 需要dfs其左右两孩子节点的深度
+而 过这一点的 最长路径长 = 其左子树的最大深度+ 其右子树的最大深度
+=>  维护一个全局变量 diameter 每次dfs 判断是否需要修改其即可
 
 
 
@@ -39,3 +42,5 @@ class Solution {
     }
 }
 
+time complexity : O(N) we visted every node once.
+space complexity : the size of our implicit call stack during our dfs
