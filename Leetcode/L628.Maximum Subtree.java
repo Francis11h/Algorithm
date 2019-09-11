@@ -53,4 +53,31 @@ class Solution {
 
 
 
+L596. Minimum Subtree
+
+class Solution {
+
+	TreeNode node = null;
+	int min = Integer.MAX_VALUE;
+
+    /**
+     * @param root: the root of binary tree
+     * @return: the minimum weight node
+     */
+    public TreeNode findSubtree(TreeNode root) {
+        if (root == null) return null;
+        dfs(root);
+        return node;
+    }
+    // return the sum of the subtree whose root is root
+    private int dfs(TreeNode root) {
+    	if (root == null) return 0;
+    	int sum = dfs(root.left) + dfs(root.right) + root.val;
+    	if (node == null || min > sum) {	
+    		min = sum;
+    		node = root;
+    	}
+    	return sum;
+    }
+}
 
