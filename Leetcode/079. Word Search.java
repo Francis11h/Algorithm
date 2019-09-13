@@ -21,47 +21,38 @@ board =
 
 
 DFS 标准写法
-
-class Solution {
-    //main function
+public class Solution {
     public boolean exist(char[][] board, String word) {
+        if (board == null || board.length == 0 || board[0].length == 0) return false;
+        if (word == null || word.length() == 0) return false;
         int m = board.length, n = board[0].length;
         boolean[][] visited = new boolean[m][n];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (dfs(0, i, j, board, word, visited)) {
-                    return true;
-                }
+                if (dfs(board, 0, i, j, visited, word)) return true;
             }
         }
         return false;
     }
-    
-    //dfs function
-    //这里的 index 表示 start 即 从该位开始 是否可以在matrix里找到
-    //如果这里不用 index 用 String str (与 word search2 一样的话 会超时TLE)
-
-    public boolean dfs(int index, int x, int y, char[][] board, String word, boolean[][] visited) {
+    // what param dfs need?  1.board 2.x 3.y 4.visited 5. index of the string 6. string
+    // what dfs return? whether the char at board[x][y] == word.charAt(index)
+    //      if index == word.length ----> the word can be constructed from the board
+    private boolean dfs(char[][] board, int index, int x, int y, boolean[][] visited, String word) {
+        int m = board.length, n = board[0].length;
+        //found
         if (index == word.length()) return true;
-        //出口 要写在 board[x][y] != word.charAt(index)之前 否则 会越界
-        if (x < 0 || x >= board.length || y < 0 || y >= board[0].length || visited[x][y]) return false;
-        if (board[x][y] != word.charAt(index)) return false;
-        
+        // not qualified
+        if (x < 0 || x >= m || y < 0 || y <= n || visited[x][y] || board[x][y] != word.charAt(index)) return false;
         visited[x][y] = true;
-        //言下之意是 如果后面的都满足 那么加上开始的这一位 肯定也满足 
-        if (dfs(index + 1, x + 1, y, board, word, visited) ||
-            dfs(index + 1, x - 1, y, board, word, visited) || 
-            dfs(index + 1, x, y + 1, board, word, visited) ||
-            dfs(index + 1, x, y - 1, board, word, visited)) {
-            return true;
-        }
+        if (dfs(board, index + 1, x + 1, y, visited, word) || 
+            dfs(board, index + 1, x - 1, y, visited, word) || 
+            dfs(board, index + 1, x, y + 1, visited, word) || 
+            dfs(board, index + 1, x, y - 1, visited, word) )
+        return true;
         visited[x][y] = false;
-        
         return false;
-    }  
+    }
 }
-
-
 
 
 
