@@ -146,3 +146,39 @@ public class Solution {
         return res;
     }
 }
+
+
+
+
+
+
+
+
+如果 节点可能不在树上 先判断在不在树上
+
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (!isExist(root, p) || !isExist(root, q)) return null;
+        return LCA(root, p, q);
+    }
+    
+    private boolean isExist(TreeNode root, TreeNode p) {
+        if (root == null) return false;
+        if (root.val == p.val) return true;
+        if (isExist(root.left, p) || isExist(root.right, p)) return true;
+        return false;
+    }
+    
+    private TreeNode LCA(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) return null;
+        if (root == p || root == q) return root;
+        
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        
+        if (left != null && right != null) return root;
+        if (left == null) return right;
+        if (right == null) return left;
+        return null;
+    }
+}
