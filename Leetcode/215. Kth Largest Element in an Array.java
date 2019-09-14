@@ -1,6 +1,14 @@
 215. Kth Largest Element in an Array
 
-minHeap
+Solution 1 Sort
+    O(NlogN) O(1)
+
+improve time complexity by using additional space
+
+Solution 2 minHeap
+
+    keeping the size of heap always less or equal to K
+    O(NlogK) O(K)
 
 class Solution {
     public int findKthLargest(int[] nums, int k) {
@@ -15,7 +23,16 @@ class Solution {
     }
 }
 
-O(nlogn)
+
+
+Solution 3 quickSelect 
+    O(N) in average O(N^2) in the worst case
+    discard half each time n+(n/2)+(n/4)..1 = n + (n-1) = O(2n-1) = O(n)
+    O(1) space
+
+随机选下标index 作为 pivot的下标
+遍历数组交换 左边都比 pivot 小 右边都比 pivot 大
+
 
 //     [3,2,5,1,6,4]
 //          i
@@ -33,8 +50,6 @@ O(nlogn)
 //          i
 //      j
 
-
-quickSelect
 
 class Solution {
     public int findKthLargest(int[] nums, int k) {
@@ -69,4 +84,3 @@ class Solution {
     }
 }
 
-O(n);
