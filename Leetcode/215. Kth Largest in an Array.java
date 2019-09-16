@@ -202,3 +202,36 @@ low + k - 1 = 2 + 1 - 1 = 2
 [j, pivot, i]
 结果就是 return nums[j + 1] = nums[1 + 1] = 3
 
+
+
+
+
+
+worst case
+
+find 4th min 找第1小的 每次pivot取最后
+
+[1, 2, 3, 4]    k = 1 ,pivot = 4
+       j     i
+
+
+return quickSelect(nums, low, j, k)
+       quickSelect(nums, 0, 3, 1);
+
+
+[1, 2, 3]       k = 1 ,pivot = 3
+    j     i
+return quickSelect(nums, low, j, k)
+       quickSelect(nums, 0, 2, 1);
+
+[1, 2]
+ j     i
+return quickSelect(nums, low, j, k)
+       quickSelect(nums, 0, 1, 1);
+
+  [1] 
+j-1  i 1    low + k - 1 = 0
+return nums[j + 1] / nums[i - 1] = 1
+
+
+每一轮只减少一个 所以最坏情况是 O(N^2)  
