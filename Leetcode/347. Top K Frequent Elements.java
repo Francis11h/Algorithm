@@ -153,3 +153,47 @@ class Solution {
 		return ans;
 	}
 }
+
+
+
+
+
+692. Top K Frequent Words
+
+Given a non-empty list of words, return the k most frequent elements.
+
+Your answer should be sorted by frequency from highest to lowest. 
+If two words have the same frequency, then the word with the lower alphabetical order comes first.
+
+class Solution {
+    public List<String> topKFrequent(String[] words, int k) {
+        List<String> ans = new LinkedList<>();
+        Map<String, Integer> map = new HashMap<>();
+        for (String word : words) {
+            map.put(word, map.getOrDefault(word, 0) + 1);
+        }
+        
+        // PriorityQueue<String> minHeap = new PriorityQueue<>(new Comparator<String>(){
+        //     @Override
+        //     public int compare(String a, String b) {
+        //         if (map.get(a) == map.get(b)) {
+        //             return b.compareTo(a);
+        //         } else {
+        //             return map.get(a) - map.get(b);
+        //         }
+        //     }
+        // });
+        PriorityQueue<String> minHeap = new PriorityQueue<>((w1, w2) -> map.get(w1) == map.get(w2) ? w2.compareTo(w1) : map.get(w1) - map.get(w2));
+        for (String key : map.keySet()) {
+            minHeap.offer(key);
+            if (minHeap.size() > k) {
+                minHeap.poll();
+            }
+        }
+        while (minHeap.size() > 0) {
+            ans.add(0, minHeap.poll());
+        }
+        
+        return ans;
+    }
+}
