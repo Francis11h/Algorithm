@@ -5,8 +5,8 @@ brute force
 Sorting the all points by their distance to the origin point directly
 O(NlogN)
 pro: short, easy to implement
-con: 1.not very efficient and 2.have to know all of the points previously, so it is unable to 
-                                deal with real-time(onine) case, it is an off-line solution.
+con: 1.not very efficient and 2.have to know All of the points Previously, so it is unable to 
+                                deal with Real-time(onine) case, it is an off-line solution.
         
 class Solution {
     public int[][] kClosest(int[][] points, int K) {
