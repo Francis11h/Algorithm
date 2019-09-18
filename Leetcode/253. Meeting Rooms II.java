@@ -96,3 +96,44 @@ class Solution {
     }
 }
 
+
+
+
+
+
+
+
+另一种思路 用 TreeMap做 
+通用的算法 
+遇到任何的 interval 将interval的start当作key存入 value + 1, 遇到end也当作key存入 value - 1.
+用一个TreeMap存储, 保证key的值是sort的
+
+每个区间的 端点 代表着 +1 和 -1
+
+O(NogN)
+
+1. Load all intervals to the TreeMap, where keys are intervals start/end boundaries, and values accumulate the changes at that point in time.
+2. Traverse the TreeMap (in other words, sweep the timeline). 
+    If a new interval starts, increase the counter (k value) by 1,
+    and the counter decreases by 1, if an interval has finished.
+3. Calcalulate the number of the active ongoing intervals.
+
+
+
+class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        Map<Integer, Integer> map = new TreeMap<>();
+        for (int[] interval : intervals) {
+            int start = interval[0];
+            int end = interval[1];
+            map.put(start, map.getOrDefault(start, 0) + 1);
+            map.put(end, map.getOrDefault(end, 0) - 1);
+        }
+        int count = 0, now = 0;
+        for (Integer key : map.keySet()) {
+            now += map.get(key);
+            count = Math.max(count, now);
+        }
+        return count;
+    }
+}
