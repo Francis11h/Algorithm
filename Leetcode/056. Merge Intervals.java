@@ -12,11 +12,18 @@ Output: [[1,5]]
 Explanation: Intervals [1,4] and [4,5] are considered overlapping.
 
 
-分析 : 要合并 需要顺序 ------> sort by beginning
+分析 : 要合并 需要顺序 ------> sort by beginning 为什么排序？   如果我们按照区间的 start 大小排序，那么在这个排序的列表中可以合并的区间一定是连续的
+
         怎么判断可以合并: 每次比 两个int[] 的 a1.end 与 a2.start 
         但是怎么合并？？ 本题卡在这了
             就是 还是先建 List<int[]> 再转 int[][], 因为肯定是动态的 要可变的
 
+
+
+
+如果我们按照区间的 start 大小排序，那么在这个排序的列表中可以合并的区间一定是连续的
+If we sort by the start size of the interval,
+Then the intervals that can be merged in this sorted list must be continuous.
 
 class Solution {
     public int[][] merge(int[][] intervals) {
@@ -33,11 +40,13 @@ class Solution {
         for (int i = 0; i < intervals.length - 1; i++) {
             if (intervals[i][1] >= intervals[i + 1][0]) {
                 intervals[i + 1][0] = intervals[i][0];
+                // for case [1,4] [2,3] 第二个区间的 end 也要变（如果第一个区间的end比第二个要大的话）
                 intervals[i + 1][1] = Math.max(intervals[i][1], intervals[i + 1][1]);
             } else {
                 ans.add(intervals[i]);
             }
         }
+        //最后一个要加上 必须要的 
         ans.add(intervals[intervals.length - 1]);
 
         //List 转 Array 最后是 new int[][]
@@ -58,8 +67,47 @@ String[] array = list.toArray(new String[list.size()]);
 
 
 List<int[]> ans = new ArrayList<>();
-
 int[][] res = ans.toArray(new int[ans.size()][]);
+
+
+
+TreeMap做法 不用sort
+
+sweep line
+
+
+https://leetcode.com/problems/meeting-rooms-ii/discuss/203658/HashMapTreeMap-resolves-Scheduling-Problem
+
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        if (intervals == null || intervals.length == 0) return new int[0][0];
+        Map<Integer, Integer> map = new TreeMap<>();
+        for (int[] interval : intervals) {
+            int start = interval[0], end = interval[1];
+            map.put(start, map.getOrDefault(start, 0) + 1);
+            map.put(end, map.getOrDefault(end, 0) - 1);
+        }
+        List<int[]> ans = new LinkedList<>();
+        int newStart = 0, count = 0;
+        for (Integer key : map.keySet()) {
+            if (count == 0) newStart = key;
+            count += map.get(key);
+            // this count == 0 means a full interval has been completed
+            if (count == 0) {
+                ans.add(new int[]{newStart, key});
+            }
+        }
+        return ans.toArray(new int[ans.size()][]);
+    }
+}
+
+
+
+
+
+
+
+
 
 
 
@@ -67,50 +115,6 @@ int[][] res = ans.toArray(new int[ans.size()][]);
 
 
 旧版本
-
-
-//按 start time sorting
-//time complexity : sort : O(nlogn) + O(n)
-//space O(n)-final result storage
-class Solution {
-    //也可以写个 class 重新定义 
-    /*private class IntervalComparator implements Comparator<Interval> {
-        @Override
-        public int compare(Interval a, Interval b) {
-            return a.start < b.start ? -1 : a.start == b.start ? 0 : 1;
-        }
-    }*/
-
-    public List<Interval> merge(List<Interval> intervals) {
-        Collections.sort(intervals, new Comparator<Interval>(){
-            @Override
-            public int compare(Interval a, Interval b) {
-                return a.start - b.start;
-            }
-        });
-
-        //[1,3],[5,10],[17,19],[2,6],[2,7],[15,18]
-        //after sort
-        //[1,3],[2,6],[2,7],[5,10],[15,18],[17,19]
-        //merge one-by-one
-        //[1,3],[2,6] -> [1,6][2,7] ->[1,7][5,10] -> [1,10]   [15,18],[17,19] -> [15,19]
-        //[1,10] [15,19]
-
-        LinkedList<Interval> merged = new LinkedList<>();
-        for (Interval interval : intervals) {
-            //getLast()取出之前 merged结果的最后一个 和后面没merge的 判断
-            //无 overlapped， 直接加
-            if (merged.isEmpty() || merged.getLast().end < interval.start) {
-                merged.add(interval);
-            } else {    //merge end 的时间，开始 时间不变
-                merged.getLast().end = Math.max(merged.getLast().end, interval.end);
-            }
-        }
-        return merged;
-    }
-}
-
-
  class Solution {
     /**
      * @param intervals: interval list.
