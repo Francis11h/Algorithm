@@ -67,3 +67,24 @@ class Solution {
 
 
 
+
+
+
+
+
+sweep line
+
+public boolean canAttendMeetings(Interval[] intervals) {
+    Map<Integer, Integer> map = new TreeMap<>();
+    for (Interval itl : intervals) {
+        map.put(itl.start, map.getOrDefault(itl.start, 0) + 1);
+        map.put(itl.end, map.getOrDefault(itl.end, 0) - 1);
+    }
+    int room = 0; 
+    for (int v : map.values()) {
+        room += v; 
+        if (room > 1) return false; 
+    }
+    return true; 
+}
+
