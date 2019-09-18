@@ -36,3 +36,29 @@ class Solution {
         return ans.toArray(new int[ans.size()][]);
     }
 }
+
+
+另一种写法
+
+
+class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        //定位到区间集与待插入的区间开始重合的部分，然后开始求交集
+        List<int[]> ans = new LinkedList<>();
+
+        int insertPos = 0;
+        for (int[] interval : intervals) {
+        	if (interval[1] < newInterval[0]) {
+        		ans.add(interval);
+        		insertPos++;
+        	} else if (interval[0] > newInterval[1]) {
+        		ans.add(interval);
+        	} else {
+        		newInterval[0] = Math.min(interval[0], newInterval[0]);
+        		newInterval[1] = Math.max(interval[1], newInterval[1]);
+        	}
+        }
+        ans.add(insertPos, newInterval);
+        return ans.toArray(new int[ans.size()][]);
+    }
+}
