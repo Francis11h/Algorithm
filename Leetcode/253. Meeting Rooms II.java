@@ -40,6 +40,38 @@ So, we can save time here and simply allocate a new room.
 Input: [[0, 30],[5, 10],[15, 20]]
 Output: 2
 
+
+
+class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        Arrays.sort(intervals, new Comparator<int[]>(){
+            @Override
+            public int compare(int[] a, int[] b) {
+                if (a[0] == b[0]) return a[1] - b[1];
+                return a[0] - b[0];
+            }
+        });
+        int count = 0;
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        
+        for (int[] interval : intervals) {
+            //无新屋子可用
+            if (minHeap.isEmpty() || interval[0] < minHeap.peek()) {
+                count++;
+            } else {    //有新屋子可用(新会议的开始时间 比 用着的屋子能空出来的最早时间 靠后)
+                minHeap.poll();
+            }
+            //新来的会议的结束时间都要入堆    因为它总会占一个房间 而一个房间我们总要记录它的结束时间
+            minHeap.offer(interval[1]);
+        }
+        return count;
+    }
+}
+
+
+
+其实 最后的 heap.size() 就是 会议室 个数
+
 class Solution {
     public int minMeetingRooms(int[][] intervals) {
         if (intervals == null || intervals.length == 0) return 0;
@@ -59,46 +91,6 @@ class Solution {
                 minHeap.poll();
             }
             minHeap.offer(intervals[i][1]);
-        }
-        return minHeap.size();
-    }
-}
-
-
-
-
-
-
-
-旧版本
-
-/**
- * Definition for an interval.
- * public class Interval {
- *     int start;
- *     int end;
- *     Interval() { start = 0; end = 0; }
- *     Interval(int s, int e) { start = s; end = e; }
- * }
- */
-class Solution {
-    public int minMeetingRooms(Interval[] intervals) {
-        if (intervals.length == 0) return 0;
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
-
-        Arrays.sort(intervals, new Comparator<Interval>() {
-            public int compare(Interval a, Interval b) {
-                return a.start - b.start;
-            }
-        });
-
-        minHeap.offer(intervals[0].end);
-
-        for (int i = 1; i < intervals.length; i++) {
-            if (intervals[i].start >= minHeap.peek()) {
-                minHeap.poll();
-            }
-            minHeap.offer(intervals[i].end);
         }
         return minHeap.size();
     }
