@@ -43,16 +43,18 @@ s.topk()
 
 public class Solution {
     int[] A;
-    int n = 0; //放堆的数组的目前元素个数 
-    int size = 0; // heap size
-
+    int now;                        //放堆的数组的目前元素个数 
+    int size;                       // heap size
+    
     public Solution(int k) {
         A = new int[k];
-        size = k;
+        now = 0;
+        this.size = k;
     }
 
-    public void add(int num) { //add a new number in the data structure
-        if (n < size) { //判断k个元素的堆 满没满
+    
+    public void add(int num) {
+        if (now < size) {                       //判断k个元素的堆 满没满
             offer(num);
         } else if (num > A[0]) {
             poll();
@@ -60,58 +62,45 @@ public class Solution {
         }
     }
 
-    public void offer(int num) { //往堆中插入元素
-        A[n] = num; //n是A这个数组的容量，A[n-1]是其原有的最后一个，A[n]代表新来的一个
-        int k = n;
-        n++;// n还代表了 当前 整个数组元素的个数
-        while (k > 0) { //上移动作
-            int i = (k - 1) / 2;;//找到其父亲节点
-            if (A[k] > A[i]) break;
-            
-            int tmp = A[i];
-            A[i] = A[k];
-            A[k] = tmp;
-            
-            k = i;          //它指向他的父亲节点，，再次上移
+    private void offer(int num) {
+        A[now] = num;                   //n是A这个数组的容量，A[n-1]是其原有的最后一个，A[n]代表新来的一个
+        int k = now;
+        now++;
+        while (k > 0) {                     //k is the child's index when it not reach the top
+            int parent = (k - 1) / 2;
+            if (A[k] > A[parent]) break;
+            int temp = A[k];
+            A[k] = A[parent];
+            A[parent] = temp;
+            k = parent;                             //它指向他的父亲节点，，再次上移
         }
     }
-
-    public void poll() { //删除堆顶元素
-        A[0] = A[n - 1]; //把末尾元素的值保存到堆顶
-        n--; //删除末尾元素（即是删除堆顶元素，因为上一步堆顶元素的值已经删了）
-        //堆化了该，就是 还要维持小跟堆的结构，就把新堆顶 shiftdown
-        int k = 0; //要下移 元素的下标 ： 0   。 即是堆顶元素
-        while (2 * k + 1 < n) {//k节点还是父亲节点的时候才进行
+    
+    private void poll() {
+        A[0] = A[now - 1];                          //把末尾元素的值保存到堆顶
+        now--;                                      //删除末尾元素（即是删除堆顶元素，因为上一步堆顶元素的值已经删了）
+        int k = 0;                                  //要下移 元素的下标 ： 0   。 即是堆顶元素
+        while ((2 * k + 1) < now) {     //if the node has child
             int left = 2 * k + 1;
-            int right = left + 1;
-            int minIndex = k;
-            if (left <= n && A[minIndex] > A[left]) {
-                minIndex = left;
-            }
-            if (right <= n && A[minIndex] > A[right]) {
-                minIndex = right;
-            }
-            if (minIndex == k) break;
-            int tmp = A[minIndex];
+            int right = 2 * k + 2;
+            int minIndex = left;
+            if (right < now && A[right] < A[left]) minIndex = right;       
+            if (A[minIndex] >= A[k]) break;
+            int temp = A[minIndex];
             A[minIndex] = A[k];
-            A[k] = tmp;
+            A[k] = temp;
             k = minIndex;
         }
     }
-
-    public List<Integer> topk() { //return the top k largest numbers in this data structure
-        List<Integer> ans = new ArrayList<>();
-        for (int i = 0; i < n; i++) { //这里的n应该就代表堆的大小，因为前面不足size的时候是n
-                                        //足了size 一个poll操作 n--， 一个offer操作n++，n就是size了
-            ans.add(A[i]);
-        }
-        Collections.sort(ans, Collections.reverseOrder());
-        //本来不用排序的，但是题目要，就用java自带的 
-        // Collections 是给list排序。
-        //Arrays.sort是给定长数组，
+    
+    public List<Integer> topk() {
+        List<Integer> ans = new LinkedList<>();
+        for (int i = 0; i < now; i++) {                     //这里的n应该就代表堆的大小，因为前面不足size的时候是n
+            ans.add(A[i]);                                  //足了size 一个poll操作 n--， 一个offer操作n++，n就是size了
+        }   
+        Collections.sort(ans, Collections.reverseOrder());  //用java自带 Collections.sort 并反转 Collections.reversrOrder()
         return ans;
     }
-
 }
 
 
