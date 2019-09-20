@@ -90,9 +90,64 @@ if s < floor.end Or e > ceiling.start, there is an overlap.
    [15, 25]
      s  e
 
+对于每个以[start开始,end结束]的新时间段,若
+用start做key,end做value
+只需查询TreeMap中 start 相邻两侧的key
+保证 左侧end <= [start , end] <= 右侧start 即可
 
+
+class MyCalendar {
+     TreeMap<Integer, Integer> map;
+     public MyCalendar() {
+          map = new TreeMap<>();
+     }
+
+     public boolean book(int start, int end) {
+          //Integer 必须是个类 因为后面要 != null int作为基本数据类型无法这么比
+          Integer floorKey = map.floorKey(start);
+          if (floorKey != null && map.get(floorKey) > start) return false;
+          Integer ceilingKey = map.ceilingKey(start);       //还是 求start的天花板
+          if (ceilingKey != null && ceilingKey < end) return false;
+
+          map.put(start, end);
+          return true;
+     }
+}
 
 
 
 
 T:O(N * logN)，N是添加成功的时间段数量，对于每一个时间段的搜索需要O(logN)
+
+
+
+
+
+
+补充 TreeMap 中的 函数 
+
+查询 小于等于 某个值的 最大的key   地板floor   map.floorKey()
+
+查询 大于等于 某个值的 最小的key   天花板ceil  map.ceilingKey()
+
+
+
+
+
+
+类似在常见的二叉搜索树中查找某个数一样，如果我们能够实现出一种特殊的二叉搜索树，使得：
+
+1. 树中每个节点是已加的一个时间段。
+2. 能方便地查找新时间段与树中节点是否重叠。
+2. 这样就能大幅提高效率。
+
+庆幸的是，这种想法是可行的。
+
+3. 具体地，从树根开始搜索，当前搜索节点指向树根。
+
+新的时间段与当前节点有三种可能：
+     1. 完全在当前节点左侧，则当前节点指向左孩子；
+     2. 完全在当前节点右侧，则当前节点指向右孩子；
+     3. 有重叠，直接返回false。
+4. 循环该过程，直到当前节点指空。指空说明新的时间段与整棵树无重叠，则把新的时间段添加在当前位置，并返回true。
+
