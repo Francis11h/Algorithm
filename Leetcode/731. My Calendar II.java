@@ -59,6 +59,29 @@ class MyCalendarTwo {
 
 
 
+732. My Calendar III
+完全一样 就是求最大的k
+
+class MyCalendarThree {
+	TreeMap<Integer, Integer> map;
+    public MyCalendarThree() {
+        map = new TreeMap<>();
+    }
+    int ans = 0;
+    public int book(int start, int end) {
+        map.put(start, map.getOrDefault(start, 0) + 1);
+        map.put(end, map.getOrDefault(end, 0) - 1);
+        
+        int count = 0;		
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+        	count += entry.getValue();
+        	ans = Math.max(ans, count);
+        }
+        return ans;
+    }
+}
+
+
 
 
 
