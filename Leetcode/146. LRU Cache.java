@@ -2,23 +2,19 @@
 
 Least Recently Used 最近最少使用(把这个pop出)
 
-we need to implement the structure in O(1).
+we need to implement the structure in O(1). do both operations in O(1) time complexity
 
-Get the key / Check if the key exists
-Put the key
-Delete the first added key
 
-There is a structure called ordered dictionary, 
-it combines behind both hashmap and linked list : LinkedHashMap
+It should support the following operations: get and put.
 
+get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+put(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
 
 获取数据get(key) : 如果缓存中存在key，则获取其数据值（通常是正数），否则返回-1。
 
 写入数据set(key, value) : 如果key还没有在缓存中，则写入其数据值。
-当缓存达到上限，它应该在写入新数据之前删除最近最少使用的数据用来腾出空闲位置。
+当缓存达到上限，它应该在写入新数据之前删除 最近最少 使用的数据 来腾出空闲位置。
 
-
-Map中存的是 <Integer 值, ListNode 链表节点>
 
 LRUCache cache = new LRUCache( 2 /* capacity */ );
 
@@ -32,6 +28,15 @@ cache.get(1);       // returns -1 (not found)
 cache.get(3);       // returns 3
 cache.get(4);       // returns 4
 
+
+
+
+
+
+
+
+
+Map中存的是 <Integer 值, ListNode 链表节点>
 
 每次删都从tail删, 每次使用(添加) 都把对应的Node放到head。
 =====
@@ -103,14 +108,15 @@ class LRUCache {
         }
         ListNode current = map.get(key);
 
-        //如果 current 是尾部节点 tail的赋值就要变了
-        if (current.next == null) {
+        //先切割原有的关系
+        if (current.next == null) {                 //如果 current 是尾部节点 tail的赋值就要变了
             current.prev.next = null;
             tail = tail.prev;
         } else {
             current.prev.next = current.next;
             current.next.prev = current.prev;
         }
+        //再移动到头部
         moveToFront(current);
         return map.get(key).val;
     }
@@ -167,6 +173,89 @@ In addition, it takes constant time to add and remove from the head or tail.
 
 
 S : O(capacity), hashmap and linkedlist
+
+
+
+
+更加简洁的代码 把tail也设为一个dummy 这样子get()中 切割原有的关系时 就没有 cur.next = null 的特殊情况了
+
+class Node {
+    int key;
+    int val;
+    Node prev;
+    Node next;
+    public Node(int key, int val) {
+        this.key = key;
+        this.val = val;
+        prev = null;
+        next = null;
+    }
+}
+
+class LRUCache {
+    Map<Integer, Node> map;
+    int capacity;
+    Node head;
+    Node tail;
+    
+    public LRUCache(int capacity) {
+        map = new HashMap<>();
+        this.capacity = capacity;
+        head = new Node(0, 0);
+        tail = new Node(0, 0);
+    }
+    
+    private void moveToFront(Node node) {
+        //whole list is empty initialize head & tail
+        if (head.next == null) {
+            head.next = node;
+            node.prev = head;
+            tail.prev = node;
+            node.next = tail;
+        } else {
+            node.prev = head;
+            node.next = head.next;
+            node.next.prev = node;
+            head.next = node;
+        }
+        
+    }
+    
+    public int get(int key) {
+        if (!map.containsKey(key)) {
+            return -1;
+        }
+        //found remove its relationship within list
+        Node cur = map.get(key);
+        cur.prev.next = cur.next;
+        cur.next.prev = cur.prev;
+        
+        moveToFront(cur);    
+        return cur.val;
+    }
+    
+    public void put(int key, int value) {
+        if (get(key) != -1) {
+            map.get(key).val = value;
+            return;
+        }
+        
+        if (map.size() == capacity) {
+            map.remove(tail.prev.key);
+            tail.prev.prev.next = tail;
+            tail.prev = tail.prev.prev;
+        }
+        
+        Node node = new Node(key, value);
+        map.put(key, node);
+        moveToFront(node);
+    }
+}
+
+
+
+
+
 
 
 
