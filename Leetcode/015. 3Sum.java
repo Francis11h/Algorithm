@@ -30,8 +30,12 @@ A solution set is:
 
 改进 用 two pointers, 确定第一个数后,要判断是否与之前确定的数一样, 这就要求整个数组是有序的 所以要先排序.
 					 该数确定之后, 也是不走回头路的, 该数 下一个 设为 left, 数组最大值 设为 right
-
-					 再用两个指针可排除后面出现的重复情况, 出现第一次等于0后,两个指针l,r 都要一直跳到不重复的数为止.
+					 如果 nums[left] + nums[right] < target 我们 扩大一点 往右边动一下 即 left++  再试 
+					 如果                          > 			缩小一点 往左边动一下  right--	
+					 							  == 		加入ans 
+					 							  怎么建List<List<>> ? new ArrayList<>(Arrays.asList(几个数));
+					    找到相等 两个同时动下 left++ right--
+					 	再用两个指针可排除后面出现的重复情况, 出现第一次等于0后,两个指针l,r 都要一直跳到不重复的数为止.
 
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
