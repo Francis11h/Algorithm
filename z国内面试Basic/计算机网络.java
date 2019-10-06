@@ -125,6 +125,92 @@ HTTP基本格式
           
 
 
+-------
+Http GET 与 POST 的区别
+
+    GET把参数包含在URL中, POST通过 request body 传递参数.
+
+    GET : input is uploaded in URL field of request line
+          请求会把请求的参数拼接在URL后面,以 ? 分隔,多个参数之间用 & 连接;
+          (浏览器和服务器会限制URL的长度,所以传输的数据有限,
+            而且账户密码明文显示会不安全)
+
+    POST : 请求会把提交的数据放在请求体中，不会在URL中显示出来
+          (一般可以传输较大量的数据)
+
+-------
+Cookie
+-------
+user-server state　
+can be used for
+	authorization
+	shopping carts
+	recommendations
+	user session state (Web e-mail)
+
+how to keep “state”:
+	protocol endpoints: maintain state at sender/receiver over multiple transactions
+	cookies: http messages carry state
+
+
+-------------------
+Cookie Session 区别
+-------------------
+
+    session 在服务器端，cookie 在客户端（浏览器）
+    session 的运行依赖 session id，而 session id 是存在 cookie 中的，
+    也就是说，如果浏览器禁用了 cookie ，同时 session 也会失效
+    （但是可以通过其它方式实现，比如在 url 中传递 session_id）
+
+    用户验证这种场合一般会用 session 因此，维持一个会话的核心就是客户端的唯一标识，即 session id.
+
+    Session是 服务端server 保存的一个 数据结构 , 用来跟踪用户的状态，这个数据可以保存在集群、数据库、文件中.
+
+    Cookie是 客户端client 保存 用户信息.
+ 
+
+-------------------------
+Web Caches = Proxy Server
+-------------------------
+
+goal : satisfy client request Without involving Origin server
+
+browser sends all HTTP requests to cache
+	object in cache: cache returns object
+		else cache requests object from origin server, then returns object to client
+
+
+why Web caching?
+	Reduce response time for client request
+	Reduce traffic on an institution‘s access link
+
+	cause increasing access link speed is costly
+
+	
+
+
+
+
+
+
+
+----------
+DNS
+----------
+
+
+
+----------
+P2P
+----------
+
+
+
+
+
+
+   
+
 
 3. TCP/IP有哪几层，会画出来，知道所有层数的作用，会列举各层主要的协议名称。
 4. 硬件(MAC)地址的概念及作用。
@@ -153,56 +239,6 @@ HTTP基本格式
 28. TCP的快速重传与快速恢复算法。
 29. TFTP与FTP的区别。
 30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
-
-
-
-
--------
-Http GET 与 POST 的区别
-
-    GET把参数包含在URL中, POST通过 request body 传递参数.
-
-    GET : input is uploaded in URL field of request line
-          请求会把请求的参数拼接在URL后面,以 ? 分隔,多个参数之间用 & 连接;
-          (浏览器和服务器会限制URL的长度,所以传输的数据有限,
-            而且账户密码明文显示会不安全)
-
-    POST : 请求会把提交的数据放在请求体中，不会在URL中显示出来
-          (一般可以传输较大量的数据)
-
-
--------
-Cookie Session 区别
-
-    session 在服务器端，cookie 在客户端（浏览器）
-    session 默认被存在在服务器的一个文件里（不是内存）
-    session 的运行依赖 session id，而 session id 是存在 cookie 中的，也就是说，如果浏览器禁用了 cookie ，同时 session 也会失效（但是可以通过其它方式实现，比如在 url 中传递 session_id）
-
-    用户验证这种场合一般会用 session 因此，维持一个会话的核心就是客户端的唯一标识，即 session id.
-
-    Session是 服务端server 保存的一个数据结构, 用来跟踪用户的状态，这个数据可以保存在集群、数据库、文件中.
-
-    Cookie是 客户端client 保存 用户信息.
- 
-
-
-
-----------
-DNS
-----------
-
-
-
-----------
-P2P
-----------
-
-
-
-
-
-
-   
 
 
 
