@@ -1,6 +1,16 @@
 
 计算机网络
 -------
+Protocol
+-------
+protocols define Format, Order of messages sent and receivedamong network entities, 
+    and Actions taken on message transmission / receipt.
+
+
+
+
+
+-------
 电路交换与分组交换的区别？ 优劣对比。
 
     packet switching allows More users to use network!
