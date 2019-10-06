@@ -26,10 +26,21 @@ CS 架构 client-server architecture
     Client : 1.communicate with server and Do not communicate directly with each other!
              2.may have dynamic IP address
 
+
+---------------
+Client & Server
+---------------
+
+client : the process that Initiates the communication
+server : the process theat Waits to be contacted to begin the session.
+
 -------
 Sockets
-    
+-------
+    Process sends / receives messages to / from its socket.
+
     socket 就像是一扇门,从application层通往transport层
+    socket analogous to door
 
     Socket编程接口在设计的时候，就希望也能适应其他的网络协议.
     所以,socket的出现只是可以更方便的使用 TCP/IP协议栈而已,其对TCP/IP进行了抽象,形成了几个最基本的函数接口
@@ -126,6 +137,43 @@ Cookie Session 区别
 
     Cookie是 客户端client 保存 用户信息.
  
+
+
+
+----------
+DNS
+----------
+
+
+
+----------
+P2P
+----------
+
+
+
+
+
+----------
+Port
+----------
+
+端口,  Ip 地址 是房子, Port 是进房子的门, 一个Ip可以有 65536 (2 ^ 16) 个 端口 (0 - 65535 整数).
+
+
+一台拥有IP地址的主机可以提供许多服务, HTTP（万维网服务）, FTP（文件传输）, SMTP（电子邮件）等
+主机是怎样区分不同的网络服务呢?
+显然不能只靠IP地址,因为IP地址与网络服务的关系是 一对多的关系
+实际上是通过'IP地址+端口号'来区分不同的服务的
+   
+
+
+
+
+
+
+
+
 
 
 -------
@@ -231,35 +279,6 @@ Cookie Session 区别
     5. 浏览器解析渲染页面    显示出来
 
     6. 连接结束:(4次挥手)
-
-
-----------
-DNS
-----------
-
-
-
-----------
-P2P
-----------
-
-
-
-
-
-----------
-Port
-----------
-
-端口,  Ip 地址 是房子, Port 是进房子的门, 一个Ip可以有 65536 (2 ^ 16) 个 端口 (0 - 65535 整数).
-
-
-一台拥有IP地址的主机可以提供许多服务, HTTP（万维网服务）, FTP（文件传输）, SMTP（电子邮件）等
-主机是怎样区分不同的网络服务呢?
-显然不能只靠IP地址,因为IP地址与网络服务的关系是 一对多的关系
-实际上是通过'IP地址+端口号'来区分不同的服务的
-   
-
 
 
 
