@@ -48,6 +48,82 @@ Sockets
 
 
 
+--------------------
+Addressing processes
+--------------------
+
+identifer includes both IP address and Port.
+just IP address is not suffice cause that many processes can be running on the same host.
+
+-----
+Port
+-----
+
+端口,  Ip 地址 是房子, Port 是进房子的门, 一个Ip可以有 65536 (2 ^ 16) 个 端口 (0 - 65535 整数).
+
+
+一台拥有IP地址的主机可以提供许多服务, HTTP（万维网服务）, FTP（文件传输）, SMTP（电子邮件）等
+主机是怎样区分不同的网络服务呢?
+显然不能只靠IP地址,因为IP地址与网络服务的关系是 一对多的关系
+实际上是通过'IP地址+端口号'来区分不同的服务的
+
+
+
+
+
+-----------------------------
+TCP与UDP的概念, 相互的区别及优劣
+-----------------------------
+
+
+    TCP service : 1. Reliable Transport  between sending and receiving process.
+                  2. Flow Control        sender won‘t overwhelm receiver.
+                  3. Congestion Control  throttle（截住）sender when network overloaded.
+                  4. Connection-Oriented setup required between client and server processes
+                  5. But Doesnot Provide timing, minimum throughput guarantee, security
+
+    UDP service : Unreliable data transfer between sending and receiving process
+    
+
+    Securing TCP :  SSL （改进的tcp）
+
+
+-------------------
+non-persistent HTTP
+-------------------
+
+non-persistent HTTP
+	at most One object sent over TCP connection
+	connection then closed
+	downloading multiple objects required multiple connections 一次只下一个object
+
+	non-persistent HTTP 
+		response time = 2RTT+ file transmission time
+		one RTT to initiate TCP connection
+		one RTT for HTTP request and first few bytes of HTTP response to return.
+
+persistent HTTP    
+	multiple objects can be sent over Single TCP connection between client, server  
+
+
+----------
+HTTP基本格式
+----------
+            Http request
+    client ---------------> server
+           <---------------
+           Http response
+
+    request : method + URL + header lines + ...
+                e.g. GET /index.html HTTP/1.1\r\n 
+                	 + header lines.. 
+                	 + entity body...
+
+
+    response : 
+                e.g. HTTP/1.1 200 OK\r\n + header lines.. + data data data
+          
+
 
 
 3. TCP/IP有哪几层，会画出来，知道所有层数的作用，会列举各层主要的协议名称。
@@ -67,48 +143,19 @@ Sockets
 17.子网划分的概念，子网掩码。
 18.IP地址的分类，如何划分的，及会计算各类地址支持的主机数。
 19. DNS的概念，用途，DNS查询的实现算法。
-    
-
--------
-TCP与UDP的概念, 相互的区别及优劣
-    TCP service : 1. Reliable Transport  between sending and receiving process.
-                  2. Flow Control        sender won‘t overwhelm receiver.
-                  3. Congestion Control  throttle（截住）sender when network overloaded.
-                  4. Connection-Oriented setup required between client and server processes
-                  5. But Doesnot Provide timing, minimum throughput guarantee, security
-
-    UDP service : Unreliable data transfer between sending and receiving process
-    
-
-    Securing TCP :  SSL （改进的tcp）
-
-
 21. UDP报文的格式，字段的意义。
 22.TCP报文的格式，字段的意义。
-23. TCP通过哪些措施，保证传输可靠？
-
+23. TCP通过哪些措施，保证传输可靠
 24.三次握手，四次断开过程。
-
-
-
 25.TIME_WAIT状态的概念及意义。
 26. 滑动窗口协议 与 停止等待协议的区别。
 27.TCP的流量控制和拥塞控制实现原理(会画拥塞控制的典型图)。
 28. TCP的快速重传与快速恢复算法。
 29. TFTP与FTP的区别。
 30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
--------
-HTTP基本格式
-            Http request
-    client ---------------> server
-           <---------------
-           Http response
 
-    request : method + URL + header lines + ...
-                e.g. GET /index.html HTTP/1.1\r\n + header lines.. + ...
-    response : 
-                e.g. HTTP/1.1 200 OK\r\n + header lines.. + data data data
-                
+
+
 
 -------
 Http GET 与 POST 的区别
@@ -154,17 +201,7 @@ P2P
 
 
 
-----------
-Port
-----------
 
-端口,  Ip 地址 是房子, Port 是进房子的门, 一个Ip可以有 65536 (2 ^ 16) 个 端口 (0 - 65535 整数).
-
-
-一台拥有IP地址的主机可以提供许多服务, HTTP（万维网服务）, FTP（文件传输）, SMTP（电子邮件）等
-主机是怎样区分不同的网络服务呢?
-显然不能只靠IP地址,因为IP地址与网络服务的关系是 一对多的关系
-实际上是通过'IP地址+端口号'来区分不同的服务的
    
 
 
