@@ -189,6 +189,17 @@ why Web caching?
 	
 
 
+----
+SMTP
+----
+delivery/storage to receiver’s server
+
+mail access protocol: retrieval from server : POP IMAP HTTP
+
+SMTP uses persistent connections
+	HTTP: each object encapsulated in its own response message
+	SMTP: multiple objects sent in multipart message
+
 
 
 
