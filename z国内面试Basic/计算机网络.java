@@ -10,10 +10,19 @@ protocols define Format, Order of messages sent and receivedamong network entiti
 
 
 
--------
-电路交换与分组交换的区别？ 优劣对比。
+----------------
+Packet-switching
+----------------
+    packet-switching: hosts break application-layer messages into packets
 
     packet switching allows More users to use network!
+
+    store and forward: Entire packet must arrive at router before it can be transmitted
+
+
+
+
+
 
 -------
 OSI有哪几层，会画出来，知道主要几层的各自作用。
