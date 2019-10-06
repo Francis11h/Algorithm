@@ -187,8 +187,6 @@ why Web caching?
 	cause increasing access link speed is costly
 
 	
-
-
 ----
 SMTP
 ----
@@ -201,26 +199,102 @@ SMTP uses persistent connections
 	SMTP: multiple objects sent in multipart message
 
 
-
-
-
-
-----------
+----
 DNS
-----------
+----
+domain name system
 
+hostname : 类比 人名 
 
+DNS services :
+	hostname to IP address translation		名字映射到id
+	host aliasing
+	mail server aliasing
+	load distribution
 
 ----------
 P2P
 ----------
 
 
+BitTorrent
+file divided into 256Kb chunks
+peers in torrent send/receive file chunks
 
 
 
+----
+UDP
+----
+
+Python UDP Server
+
+	from socket import *
+	serverPort = 12000
+	serverSocket = socket(AF_INET, SOCK_DGRAM) 		//create UDP socket		
+	serverSocket.bind(('', serverPort))				//bind socket to local port number 12000
+	print (“The server is ready to receive”)
+	while True:										//loop forever
+		//read from UDP socket into meaasge
+		//getting client’s address (client IP and port)
+		message, clientAddress = serverSocket.recvfrom(2048)
+		modifiedMessage = message.decode().upper() 
+		//send upper case string back to yhis client
+		serverSocket.sendto(modifiedMessage.encode(),clientAddress)
+
+Python UDP Client
+
+	from socket import * 
+	serverName = ‘hostname’
+	serverPort = 12000 
+	clientSocket = socket(AF_INET,SOCK_DGRAM)				//create UDP socket for server
+	message = raw_input(’Input lowercase sentence:’)		//get user keyboard input
+	//Attach server name, port to message; send into socket
+	clientSocket.sendto(message.encode(), (serverName, serverPort))
+	//read reply characters from socket into string
+	modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
+	print modifiedMessage.decode() 
+	clientSocket.close()
 
    
+if the server has not been started yet? what will happen?
+there is no connection of UDP 
+the process will be block at clientSocket.recvfrom(2048) forever.
+
+
+
+
+----
+TCP
+----
+Python TCP Server
+	from socket import *
+	serverPort = 12000
+	serverSocket = socket(AF_INET,SOCK_STREAM) 
+	serverSocket.bind((‘’,serverPort)) 
+	serverSocket.listen(1)							//server begins listening for incoming TCP requests
+	print ‘The server is ready to receive’
+	while True:
+		connectionSocket, addr = serverSocket.accept()		//server waits on accept() for incoming requests, new socket created on return
+		sentence = connectionSocket.recv(1024).decode() 	//read bytes from socket (but not address as in UDP)
+		capitalizedSentence = sentence.upper() 
+		connectionSocket.send(capitalizedSentence.encode())
+		connectionSocket.close()
+
+Python TCP Client
+	from socket import *
+	serverName = ’servername’
+	serverPort = 12000
+	clientSocket = socket(AF_INET, SOCK_STREAM) 	//create TCP socket for server, remote port 12000
+	clientSocket.connect((serverName,serverPort)) 
+	sentence = raw_input(‘Input lowercase sentence:’) 
+	clientSocket.send(sentence.encode())			//No need to attach server name, port
+	modifiedSentence = clientSocket.recv(1024)
+	print (‘From Server:’, modifiedSentence.decode()) 
+	clientSocket.close()
+
+
+
 
 
 3. TCP/IP有哪几层，会画出来，知道所有层数的作用，会列举各层主要的协议名称。
