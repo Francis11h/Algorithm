@@ -9,37 +9,58 @@ protocols define Format, Order of messages sent and receivedamong network entiti
 
 
 
+----------------
+Circuit-switching
+----------------
+    Reserved 
+    the transmit rate is know and it will last for a long period, 
+    we can reserve a link for this, 
+    which can guarantee the transmission quality.
 
 ----------------
 Packet-switching
 ----------------
-    packet-switching: hosts break application-layer messages into packets
-
     packet switching allows More users to use network!
 
-    store and forward: Entire packet must arrive at router before it can be transmitted
+    packet-switching: hosts break application-layer messages into packets
+
+    Store and Forward: Entire packet must arrive at router before it can be transmitted
+
+    Queuing and Loss:
+        if arrival rate to link exceeds transmission rate of link for a period of time,
+            packets will queue, wait to be transmitted on link
+            lost happened when the buffer is full
 
 
 
+-----------
+OSI layers
+-----------
 
-
-
--------
-OSI有哪几层，会画出来，知道主要几层的各自作用。
-
-    Application             HTTP FTP
-        Presentation        encryption, compression  
-        Session             synchronization checkpointing
-    Transport               TCP UDP
-    Network                 IP , routing protocols
-    Link                    ethernet
+    Application             HTTP FTP                            //supporting network applications
+        Presentation        encryption, compression             //allow applications to interpret meaning of data
+        Session             synchronization checkpointing       //synchronization, checkpointing, recovery of data exchange
+    Transport               TCP UDP                             //process-process data transfer
+    Network                 IP , routing protocols              //routing of datagram from source to destination
+    Link                    ethernet                            //data transfer between neighboring network elements
     Physical                bits 'on the wire'
 
     layers make calls 每一层可以使用下层提供的服务并且向上层提供服务
 
--------
+    layers: each layer implements a service via its own internal-layer actions 
+                relying on services provided by layer below
+
+    why layering?
+        explicit structure allows identification, relationship of complex system’s pieces
+        modularization eases maintenance, updating of system
+
+
+
+
+----------------------------------
 CS 架构 client-server architecture
-    
+----------------------------------
+
     Server : 1. always-on host 2. permanent IP address 3. data centers for scaling
 
     Client : 1.communicate with server and Do not communicate directly with each other!
