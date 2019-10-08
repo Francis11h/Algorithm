@@ -337,15 +337,79 @@ Python TCP Client
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------
+Transport services and protocols
+--------------------------------
+
+provide Logical Communication between app processes running on different Hosts
+
+    send side: breaks app messages into Segments, passes to network layer
+    rcv side: Reassembles segments into messages, passes to app layer
+
+-----------------------------
+Multiplexing, Demultiplexing
+-----------------------------
+multiplexing at sender
+    handle data from multiple sockets, add transport header to network layer
+
+demultiplexing at receiver
+    use header info to deliver received segments to correct socket
+        host uses IP addresses & Port numbers to direct segment to appropriate socket
+
+
+---------------------
+UDP segment structure
+---------------------
+
+    src port # | dest port #
+        length | checksum
+
+         application data 
+            (payload)
+
+---------------------
+TCP segment structure
+---------------------
+
+        src port # | dest port #
+            sequence number
+        acknowledgement number
+    head U A P R S F receive window
+        checksum ...
+
+            application data 
+            (variable length)
+
+
+----------------------
+reliable data transfer
+----------------------
+TCP通过哪些措施，保证传输可靠
+
+flow control
+congestion control
+
+
 3. TCP/IP有哪几层，会画出来，知道所有层数的作用，会列举各层主要的协议名称。
 4. 硬件(MAC)地址的概念及作用。
 5. ARP协议的用途 及算法、在哪一层上会使用arp？
 6. CRC冗余校验算法，反码和检验算法。
 7. 如何实现透明传输。
-8. 知道各个层使用的是哪个数据交换设备。（交换机、路由器、网关）
+
 9.  路由表的内容。
 10. 分组转发算法。
-11.IP报文的格式，格式的各个字段的含义要理解。
+11. IP报文的格式，格式的各个字段的含义要理解。
 12. MTU的概念，啥叫路径MTU？MTU发现机制，TraceRoute(了解)。
 13. RIP协议的概念 及算法。
 14. ICMP协议的主要功能。
@@ -353,13 +417,11 @@ Python TCP Client
 16. Ping协议的实现原理，ping命令格式。
 17.子网划分的概念，子网掩码。
 18.IP地址的分类，如何划分的，及会计算各类地址支持的主机数。
-19. DNS的概念，用途，DNS查询的实现算法。
-21. UDP报文的格式，字段的意义。
-22.TCP报文的格式，字段的意义。
-23. TCP通过哪些措施，保证传输可靠
+
+
 24.三次握手，四次断开过程。
 25.TIME_WAIT状态的概念及意义。
-26. 滑动窗口协议 与 停止等待协议的区别。
+26. 滑动窗口协议 与 停止等待协议 的区别。
 27.TCP的流量控制和拥塞控制实现原理(会画拥塞控制的典型图)。
 28. TCP的快速重传与快速恢复算法。
 29. TFTP与FTP的区别。
