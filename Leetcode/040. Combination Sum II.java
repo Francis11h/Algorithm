@@ -23,7 +23,7 @@ class Solution {
         return res;
     }
 
-    //level 的意义 是取candidates数组中的下标为level的数
+    //level 的意义 当前走到的层数 表示的是 结果中的第几个数 
     public void dfs(int level, int target, int[] candidates, List<Integer> cur, List<List<Integer>> res) {
         if (target == 0) {
             res.add(new ArrayList<>(cur));
@@ -31,6 +31,10 @@ class Solution {
         }
 
         for (int i = level; i < candidates.length; i++) {
+            // i > level 处理corner case [1,1,1] target = 2
+            // 在当前深度 如果有重复 需要跳过 
+            // i > level 表示的是 i = level 之后 所有的更深层dfs 都已经结束 回溯了 然后在这个for中 我们没有取 candidates[level]
+            // 然后 如果 后面的元素 == 前面的元素的话 我们就不可以再计算一次了 因为 当前深度 我已经用过该元素了
             if (i > level && candidates[i] == candidates[i - 1]) continue;
             if (candidates[i] > target) return;
             cur.add(candidates[i]);
