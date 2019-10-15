@@ -17,6 +17,40 @@ n = 3;
 
 dfs 需要的最重要参数 : 左右括号的个数
 
+
+用 sb 而不用 string 同时 这就要求 回溯了 因为每次 string 都会新建新的 而sb不会。
+
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> ans = new ArrayList<>();
+        dfs(0, 0, n, new StringBuilder(), ans);
+        return ans;
+    }
+    
+    private void dfs(int left, int right, int n, StringBuilder sb, List<String> ans) {
+        if (left == n && right == n) {
+            ans.add(sb.toString());
+            return;
+        }
+        
+        if (left < n) {
+            sb.append('(');
+            dfs(left + 1, right, n, sb, ans);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        
+        if (right < n && right < left) {
+            sb.append(')');
+            dfs(left, right + 1, n, sb, ans);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+    }
+}
+
+
+
+
+
 class Solution {
     public List<String> generateParenthesis(int n) {
         List<String> result = new ArrayList<>();
