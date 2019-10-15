@@ -89,47 +89,48 @@ class Solution {
 }
 
 
-最开始 写的 错误版本
+
+用 stringbuilder 代替 string 
+每次 backtracking 的时候 把 sb 重新设置为之前的长度 这样子 就处理了 删除多个的问题！！！ 
+sb.setLength(len);
 
 class Solution {
-    List<String> ans = new ArrayList<>();
     
-    //main function just try every possible ways by dfs
     public List<String> addOperators(String num, int target) {
-        dfs(num, target, 0, "", 0, 0);
+        List<String> ans = new ArrayList<>();
+        dfs(num, target, 0, new StringBuilder(), 0, 0, ans);
         return ans;
     }
     
-    //dfs need 1.original string num  2.target value  3. now index
-    //         4.now String with operator  5. now sum
-    // 6. * is specialwe should save the value that is to be multiplied in the next recursion
     
-    public void dfs(String num, int target, int index, String cur, int sum, int multiply) {
+    public void dfs(String num, int target, int index, StringBuilder sb, long sum, long multiply, List<String> ans) {
         if (index == num.length()) {
             if (sum == target) {
-                ans.add(cur);
+                ans.add(sb.toString());
             }
             return;
         }
         
-        //decide how many digits to take one time
-        // begin from index(start) 
         for (int i = index; i < num.length(); i++) {
-        	这里也是 错误 应该是 index 不是 i
-            if (i != index && num.charAt(i) == '0') break;
-            //fetch one or multiply digits 
-            int operand = Integer.parseInt(num.substring(index, i + 1));
-            // begin we can't add operator
+            Long operand = Long.parseLong(num.substring(index, i + 1));
+            int len = sb.length();
+         
+            // "0004" 这种直接 不走了
+            if (i > index && num.charAt(index) == '0') break;
+            
             if (index == 0) {
-            	这里应该是 i 不是 index
-                dfs(num, target, index + 1, cur + operand, sum + operand, operand);
+                dfs(num, target, i + 1, sb.append(operand), operand, operand, ans);
+                sb.setLength(len);
             } else {
-                dfs(num, target, index + 1, cur + "+" + operand, sum + operand, operand);
-                dfs(num, target, index + 1, cur + "-" + operand, sum - operand, -operand);
-                // 1 + 1 * 5
-                dfs(num, target, index + 1, cur + "*" + operand, sum - multiply + multiply * operand, multiply * operand);
+                dfs(num, target, i + 1, sb.append('+').append(operand), sum + operand, operand, ans);
+                sb.setLength(len);
+                dfs(num, target, i + 1, sb.append('-').append(operand), sum - operand, -operand, ans);
+                sb.setLength(len);
+                dfs(num, target, i + 1, sb.append('*').append(operand), sum - multiply + multiply * operand, multiply * operand, ans);
+                sb.setLength(len);
             }
         }
+        
     }
 }
 
@@ -137,6 +138,8 @@ class Solution {
 
 
 
+T:O(4^N) 
+S:O(N)
 
 
 
