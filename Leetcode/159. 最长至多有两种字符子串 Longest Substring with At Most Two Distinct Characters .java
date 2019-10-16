@@ -15,18 +15,24 @@ Explanation: t is "aabbb" which its length is 5.
 
 class Solution {
     public int lengthOfLongestSubstringTwoDistinct(String s) {
-        if (s == null || s.length() == 0) return 0;
-        int ans = 0, left = 0, right = 0;
-
+        int left = 0, right = 0;
+        int dist = 0;
+        int ans = 0;
         int[] count = new int[256];
-        int distCount = 0;
+        
         while (right < s.length()) {
-            count[s.charAt(right)]++;
-            if (count[s.charAt(right)] == 1) distCount++;
-
-            while (distCount > 2) {
-                count[s.charAt(left)]--;
-                if (count[s.charAt(left)] == 0) distCount--;
+            char ch = s.charAt(right);
+            count[ch]++;
+            if (count[ch] == 1) {
+                dist++;
+            }
+            
+            while (dist > 2) {
+                char rmv = s.charAt(left);
+                count[rmv]--;
+                if (count[rmv] == 0) {
+                    dist--;
+                }
                 left++;
             }
             ans = Math.max(ans, right - left + 1);
