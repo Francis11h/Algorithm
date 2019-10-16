@@ -7,26 +7,26 @@ Explanation: The answer is "wke", with the length of 3.
 
 
 
+sliding window
 
 外层while右指针先动, 某个字符个数超过1了,内层while左指针再动
-
 
 class Solution {
     public int lengthOfLongestSubstring(String s) {
         if (s == null || s.length() == 0) return 0;
-        char[] chars = s.toCharArray();
-        int[] count = new int[256]; //ASCII a-z A-Z < 256
+        int[] count = new int[256];
         int ans = 0;
-        int l = 0, r = 0;
-        while (r < chars.length) {
-            count[chars[r]]++;
-            //用一个count数组统计每个字符出现的个数,超过1了就动左指针,直到=1
-            while (count[chars[r]] > 1) {
-                count[chars[l]]--;
-                l++;
-            }
-            ans = Math.max(ans, r - l + 1);
-            r++;
+        int left = 0, right = 0;
+        while (right < s.length()) {
+            char ch = s.charAt(right);
+            count[ch]++;
+            while (count[ch] > 1 && left < right) {
+                char rmv = s.charAt(left);
+                count[rmv]--;
+                left++;
+            } 
+            ans = Math.max(ans, right - left + 1);
+            right++;
         }
         return ans;
     }
