@@ -21,49 +21,50 @@ When the window is no longer valid, start expanding again using the right pointe
 
 
 class Solution {
-    public String minWindow(String ss, String tt) {
-        if (tt == null || tt == "") return "";
-        char[] s = ss.toCharArray();
-        char[] t = tt.toCharArray();
-
-        int[] cntS = new int[256];
-        int[] cntT = new int[256];
-
-        int k = 0;      //kind of characters in T
-        for (char c : t) {
-            cntT[c]++;          //count every kind of char's #
-            if (cntT[c] == 1) {
+    public String minWindow(String s, String t) {
+        if (s == null || t == null) return "";
+        int[] countT = new int[256];
+        
+        int k = 0;          //kind of characters in T
+        for (int i = 0; i < t.length(); i++) {
+            char ch = t.charAt(i);
+            countT[ch]++;
+            if (countT[ch] == 1) {
                 k++;
             }
         }
-
-        String minStr = "";
-        int now = 0;    //S的substring中 和 T中的字符 种类+个数 一样的 字符种类数
-        int l = 0, r = 0;
-        while (l < s.length) {
-            while (r < s.length && now < k) {   //先找到长的
-                cntS[s[r]]++;
-                if (cntS[s[r]] == cntT[s[r]]) {
-                    now++;
+        
+        int left = 0, right = 0;
+        String ans = "";
+        
+        int[] countS = new int[256];
+        int now = 0;            //S的substring中 和 T中的字符 种类+个数 一样的 字符种类数
+        
+        while (now < k && right < s.length()) {
+            
+            char ch = s.charAt(right);
+            countS[ch]++;
+            if (countS[ch] == countT[ch]) {
+                now++;
+            }
+            right++;
+            
+            // now == k move left to narrow the window
+            while (now == k) {
+                if (ans == "" || ans.length() > right - left) {
+                    ans = s.substring(left, right);
                 }
-                r++;
-            }
-            if (now == k){                  
-                if (minStr == "" || r - l < minStr.length()){
-                    minStr = ss.substring(l, r);
+                char rmv = s.charAt(left);
+                if (countS[rmv] == countT[rmv]) {
+                    now--;
                 }
+                countS[rmv]--;
+                left++;
             }
-            //再从左边缩小
-            cntS[s[l]]--;
-            if (cntS[s[l]] == cntT[s[l]] - 1) {
-                now--;
-            }
-            l++;
         }
-        return minStr;
+        return ans;
     }
 }
-
 
 
 
