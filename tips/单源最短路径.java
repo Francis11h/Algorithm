@@ -28,11 +28,11 @@ Bellman-Ford()
    	Set all predecessors and distance estimates to undefined			O(V)
    	Set source distance to zero
    	# Relax everything enough times to find all shortest paths.
-   	for V – 1 iterations												O(V) * O(E)
+   	for V – 1 iterations								O(V) * O(E)
 		for each edge i -> j 
 			relax edge i -> j
 	# See if there are any edges that could still relax 
-	for each edge i -> Just												O(E)
+	for each edge i -> Just								O(E)
       	if j.distance > i.distance + weight[ i ][ j ]
         	return false
 return true
@@ -56,7 +56,7 @@ DAG-Shortest-path()
    	Set source distance to zero
    	# Relax all the edges in the order of the topological sort.
    	for each vertex i in topological sort order.						V次循环，总共E条边			
-		for each edge i -> j 											O(E)
+		for each edge i -> j 										O(E)
 			relax edge i -> j
 
 O(V+E)
@@ -82,9 +82,9 @@ Dijkstra()
 	For source vertex s
 	s.distance = 0										O( 1 ) + O( log V )
 
-	while Q is non-empty								O( V ) itera@ons
+	while Q is non-empty								O( V ) iterations
 	    u = remove lowest-distance vertex from Q. 		O( log V )
-		for each u -> j edge 							Total of O( E ) itera@ons			
+		for each u -> j edge 							Total of O( E ) iterations			
 			relax edge u -> j 							O( log V )
 
 
