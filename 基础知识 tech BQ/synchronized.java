@@ -103,6 +103,204 @@ public class Bank {
 
 
 
+/**
+ * Java synchronized keyword marks a block or method a critical section.
+ *
+ * A critical section is where one and only one thread is executing at a time,
+ * and the thread holds the lock for the synchronized section.
+ *
+ * Java synchronized block ||  Java synchronized method
+ *
+ */
+
+
+lockObject is a reference to an Object whose lock associates with the monitor that the synchronized statements represent.
+
+When a thread wants to execute synchronized statements inside the synchronized block,
+It must acquire the lock on the lockObject‘s monitor.
+At a time, only one thread can acquire the monitor of a lock object, so all other threads m,ust wait till this thread , currently acquired the lock, finish it‘s execution.
+
+In this way, synchronized keyword guarantees that only one thread will bee executing the synchronized block statements at a time,
+and thus prevent multiple threads from corrupting the shared data inside the block.
+
+keep in mind that if a thread is put on Sleep(), then is does not release the lock.
+At this sleeping time, no thrrad will be executing the synchronized block statements.
+
+
+语法syntax
+synchronized (lockObject) {
+    // synchronized statements
+}
+
+例子 
+
+1. 不加 synchronized 即两个线程可以随机访问 
+
+package haveFunWithThread;
+class  MathClass {
+    void printNumbers(int n) throws InterruptedException {
+//        synchronized (this) {
+            for (int i = 1; i <= n; i++) {
+                System.out.println(Thread.currentThread().getName() + " :: "+  i);
+                Thread.sleep(500);
+            }
+//        }
+    }
+}
+public class SyncTest {
+    public static void main(String args[]) {
+        MathClass mathClass = new MathClass();
+
+        // first thread
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mathClass.printNumbers(3);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        // public Thread(Runnable target, String name)
+        // Allocates a new object.
+        // target : the object whose {@code run} method is invoked when this thread
+        new Thread(r, "ONE").start();
+        new Thread(r, "TWO").start();
+    }
+}
+
+输出 就是 乱序
+TWO :: 1
+ONE :: 1
+TWO :: 2
+ONE :: 2
+ONE :: 3
+TWO :: 3
+
+
+2. 加上 synchronized 即 一个线程要等前面一个结束 才可以访问 synchronized block
+only one thread is allowed access and other thread has to wait until first thread is finished.
+
+
+
+
+
+package haveFunWithThread;
+class  MathClass {
+    void printNumbers(int n) throws InterruptedException {
+        synchronized (this) {
+            for (int i = 1; i <= n; i++) {
+                System.out.println(Thread.currentThread().getName() + " :: "+  i);
+                Thread.sleep(500);
+            }
+        }
+    }
+}
+public class SyncTest {
+    public static void main(String args[]) {
+        MathClass mathClass = new MathClass();
+
+        // first thread
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mathClass.printNumbers(3);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        // public Thread(Runnable target, String name)
+        // Allocates a new object.
+        // target : the object whose {@code run} method is invoked when this thread
+        new Thread(r, "ONE").start();
+        new Thread(r, "TWO").start();
+    }
+}
+
+按线程输出
+
+ONE :: 1
+ONE :: 2
+ONE :: 3
+
+TWO :: 1
+TWO :: 2
+TWO :: 3
+
+
+
+
+
+
+
+Java synchronized method
+
+The general syntax for writing a synchronized method is as follows. 
+Here lockObject is a reference to an Object whose lock associates with the monitor that the synchronized statements represent.
+
+语法syntax
+<access modifier> synchronized method( parameters ) {
+    // synchronized code
+}
+
+
+Similar to synchronized block, a thread MUST acquire the lock on the associated monitor object with synchronized method.
+In case of synchronized method, the lock object is –
+
+    1. ‘.class’ object – if the method is static.
+    2. ‘this’ object – if the method is not static. 
+        ‘this’ refer to reference to current object in which synchronized method is invoked.
+
+
+
+
+
+
+package haveFunWithThread;
+class MathClass2 {
+    // synchronized 直接写在方法上
+    synchronized void printNumbers(int n) throws InterruptedException {
+        for (int i = 1; i <= n; i++) {
+            System.out.println(Thread.currentThread().getName() + " :: "+  i);
+            Thread.sleep(500);
+        }
+    }
+}
+
+public class SyncMethod {
+    public static void main(String args[]) {
+        MathClass2 mathClass = new MathClass2();
+
+        // first thread
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mathClass.printNumbers(3);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        
+        new Thread(r, "ONE").start();
+        new Thread(r, "TWO").start();
+    }
+}
+
+
+ONE :: 1
+ONE :: 2
+ONE :: 3
+ 
+TWO :: 1
+TWO :: 2
+TWO :: 3
+
+
 
 
 
