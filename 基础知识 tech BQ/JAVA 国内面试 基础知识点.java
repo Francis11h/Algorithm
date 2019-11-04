@@ -77,8 +77,75 @@ Java 继承 inheritance		Son extends Father 	||  Dog extends Animal
 
 
 
+keyWords
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+-------------------------
+Comparable and Comparator 
+-------------------------
+if sorting of objects needs to be based on natural order then use Comparable 
+	whereas if you sorting needs to be done on attributes of different objects, 
+		then use Comparator in Java.
+
+Comparable相当于“内部比较器”, 而Comparator相当于“外部比较器”
+
+
+Comparable
+	若一个类实现了Comparable接口，就意味着“该类支持排序”
+	List列表(或数组)可以通过 Collections.sort（或 Arrays.sort）进行排序
+
+	public interface Comparable<T> {
+	    public int compareTo(T o);
+	}
+
+	A comparable object is capable of comparing itself with another object. 
+	The class itself must Implements the java.lang.Comparable interface to compare its instances.
+
+Comparator 
+	Comparator 是比较器接口
+
+	public interface Comparator<T> {
+
+	    int compare(T o1, T o2);
+
+	    boolean equals(Object obj);
+	}
+
+	我们若需要控制某个类的次序，而该类本身不支持排序(即没有实现Comparable接口)；那么，我们可以建立一个“该类的比较器”来进行排序。这个“比较器”只需要实现Comparator接口即可。
+
+
+
+
+
+-------
+static
+-------
+
+
+-------
+checked/unchecked exception
+-------
+
+
+-------
+final/finalize/finally; 
+-------
+
+
+-------
+
+-------
+
+
+-------
+
+-------
+
+
+-------
+
+-------
 
 
 
@@ -91,21 +158,21 @@ Java中，什么是构造函数？什么是构造函数重载？什么是复制�
 
 
 什么是值传递和引用传递
-java创建线程有几种不同的方式？你喜欢哪一种？为什么？
+
 概括的解释下线程的几种可用状态。
-同步方法和同步代码块的区别是什么？
-Java集合类框架的基本接口有哪些？
+
+
 为什么集合类没有实现Cloneable和Serializable接口？
 什么是迭代器(Iterator)？
-Java中的HashMap的工作原理是什么？ConcurrentHashMap呢？
-hashCode()和equals()方法的重要性体现在什么地方？
+
+
 数组(Array)和列表(ArrayList)有什么区别？什么时候应该使用Array而不是ArrayList？
-ArrayList和LinkedList有什么区别？
+
 java的动态代理机制是怎样的？
 
 如何权衡是使用无序的数组还是有序的数组？
 Enumeration接口和Iterator接口的区别有哪些？
-Java中垃圾回收有什么目的？什么时候进行垃圾回收？
+
 finalize()方法什么时候被调用？析构函数(finalization)的目的是什么？
 如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？ 
 Java堆的结构是什么样子的？什么是堆中的永久代(Perm Gen space)?

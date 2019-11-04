@@ -102,9 +102,6 @@ The most important distinction between these classes is the Time-Guarantees and 
 Tree
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
 ---
 BST
 ---
@@ -118,47 +115,62 @@ BST
 
 
 
+Collections
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
--------
-
--------
-
-
-
-
-
-
-
-
-
--------
-
--------
+-------------------------
+Set extends Collection<E> 
+-------------------------
+Set is an interface which extends Collection. 
+It is an unordered collection of objects in which duplicate values cannot be stored.
 
 
 
+------------------------
+ArrayList and LinkedList
+------------------------
+ArrayList和LinkedList都实现了List接口，他们有以下的不同点： 
+	• ArrayList是基于索引的数据接口，它的底层是数组Array。
+	它可以以O(1)时间复杂度对元素进行随机访问。
+
+	• LinkedList是以元素链表的形式存储它的数据，每一个元素都和它的前一个和	后一个元素链接在一起，在这种情况下，查找某个元素的时间复杂度是O(n)。 
+
+	• 相对于ArrayList，LinkedList的插入，添加，删除操作速度更快，因为当元素	被添加到集合任意位置的时候，不需要像数组那样重新计算大小或者是更新索		引。 
+	• LinkedList比ArrayList更占内存，因为LinkedList为每一个节点存储了两个引	用，一个指向前一个元素，一个指向下一个元素。
+
+
+
+-----------------------
+Stack extends Vector<E> 
+-----------------------
+
+A stack is a linear data structure in which 
+	elements can be inserted and deleted only from one side of the list, called the Top栈顶. 
+A stack follows the LIFO (Last In First Out) principle, i.e., the element inserted at the last is the first element to come out. 
+The insertion of an element into stack is called push() operation, 
+and deletion of an element from the stack is called pop() operation. 
+In stack we always keep track of the last element present in the list with a pointer called peek().
+
+
+--------------------------
+Queue extends Collection<E> 
+--------------------------
+
+A queue is a linear data structure in which e
+	lements can be inserted only from one side of the list called Rear队尾进, 
+	and the elements can be deleted only from the other side called the Front队首出. 
+A queue data structure follows the FIFO (First In First Out) principle, i.e. the element inserted at first in the list, is the first element to be removed from the list. 
+The insertion of an element in a queue is called an enqueue() operation 
+and the deletion of an element is called a dequeue() operation.
 
 
 
 
 
-
-
-
-
-
--------
-
--------
-
-
-
-
-
-
-
-
+-------------------------
+Dequeue  extends Queue<E>
+-------------------------
 
 
 
