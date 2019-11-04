@@ -1,0 +1,230 @@
+Data Structure 
+
+Map
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+---------
+HashTable
+---------
+It is a data structure that can map keys to values.
+
+优点
+就是把数据的存储和查找消耗的时间大大降低 O(1)
+Significantly reduce the time it takes to store and Search data to O(1)
+
+
+Hash-Function
+	A hash table uses a Hash-Function to compute an index, also called a hashcode, 
+	into an array of buckets or slots, from which the desired value can be found.
+
+Collisions : the hash function generates the same index for more than one key.
+
+	开散列 open hashing, 拉链法 separate chaining
+			开一个数组，数组中每个元素都是一个链表头节点的引用
+			通过hash函数，算index，把index相同的<key, value>插入同一链表
+	闭散列 closed hashing, 开地址方法 open addressing
+			如果该位置有元素了，找其他位置放入(将冲突元素顺序后移)
+			线性探查 linear probing
+			二次探查 quadratic probing
+Rehash
+		超过负载因子 load factor， 把容量扩大为原i来的两倍 capacity * 2
+
+--------------------
+HashMap vs HashTable
+--------------------
+
+1.HashMap is non-synchronized.
+	It is not-thread safe and can’t be shared between many threads without proper synchronization code 
+	whereas Hashtable is synchronized. It is thread-safe and can be shared with many threads.
+
+2.HashMap allows one null key and multiple null values whereas Hashtable doesn’t allow any null key or value.
+	why ? 
+	To successfully store and retrieve objects from a HashTable, 
+	the objects used as keys must implement the hashCode() method and the equals() method. 
+	Since null is not an object, it can’t implement these methods.
+
+	HashMap is an advanced version and improvement on the Hashtable. HashMap was created later.
+
+-------
+HashMap
+-------
+
+HashMap 内部存储使用了一个 Node 数组(默认大小是16)，而 Node 类包含一个类型为 Node 的 next 的变量，也就是相当于一个链表。
+在默认情况下，数组大小为16，loadFactor 为0.75，也就是说当 HashMap 中的元素超过16\0.75=12时，会把数组大小扩展为2*16=32，并且重新计算每个元素在新数组中的位置。
+	 
+HashMap 在并发时可能出现的问题	
+	1）如果多个线程同时使用put方法添加元素，而且假设正好存在两个 put 的 key 发生了碰撞(根据 hash 值计算的 bucket 一样)
+		这两个 key 会添加到数组的同一个位置，这样最终就会发生其中一个线程的 put 的数据被覆盖。		
+	2）第二就是如果多个线程同时检测到元素个数超过数组大小* loadFactor
+		这样就会发生多个线程同时对 Node 数组进行扩容，都在重新计算元素位置以及复制数据
+
+
+--------------------
+HashMap如何保证线程安全
+--------------------
+ConcurrentHashMap : 因为它包含一个 segment 数组, 将数据分段存储, 给每一段数据配一把锁,也就是所谓的锁分段技术.
+
+
+-------
+TreeMap
+-------
+The map is sorted according to the Natural-Ordering of its keys, 			O(log N) 不是 O(1)
+	or by a Comparator provided at map creation time, depending on which constructor is used.
+
+This proves to be an efficient way of Sorting and Storing the key-value pairs. 
+
+The treemap implementation is Not synchronized.
+
+红黑树 + key不能为null
+
+
+----------------------------------------------
+Differences TreeMap, HashMap and LinkedHashMap
+----------------------------------------------
+The most important distinction between these classes is the Time-Guarantees and the Ordering of the keys.
+
+1. HashMap: HashMap offers O(1) lookup and insertion. 
+	If you iterate through the keys, though, the ordering of the keys is essentially Arbitrary. 
+	It is implemented by an array of linked lists.
+
+2. TreeMap: TreeMap offers O(log N) lookup and insertion. 
+	Keys are ordered, so if you need to iterate through the keys in sorted order, you can.
+	It is implemented by a Red-Black Tree.
+
+3. LinkedHashMap offers O(1) lookup and insertion.
+	Keys are ordered by their insertion order. 		能保证是按插入时的顺序排列 key
+	It is implemented by doubly-linked buckets.
+
+
+
+
+Tree
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+---
+BST
+---
+搜索效率，bfs和dfs
+ BST, 问了BFS和DFS的差别，删除一个节点的时候它的子节点怎么办
+
+
+
+
+
+
+
+
+
+
+-------
+
+-------
+
+
+
+
+
+
+
+
+
+-------
+
+-------
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------
+
+-------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------
+
+-------
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------
+
+-------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------
+
+-------
+
+
+
+
+
+
+
+
+
+
+
+
+-------
+
+-------
+
+
+
+
+
+
+
+
