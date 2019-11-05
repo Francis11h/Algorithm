@@ -219,9 +219,24 @@ Java中的两种异常类型是什么？他们有什么区别？
 
 
 
--------
+---------------
+Throws vs Throw
+---------------
 
--------
+Java的异常处理是通过5个关键字来实现的：try，catch，throw，throws，finally
+
+  Throws: Lists the exceptions a method could throw.  
+		throws总是出现在一个函数头中，用来标明该成员函数可能抛出的各种异常。
+			对大多数Exception子类来说，Java 编译器会强迫你声明在一个成员函数中抛出的异常的类型。
+			如果异常的类型是Error或 RuntimeException， 或它们的子类，这个规则不起作用， 因为这在程序的正常部分中是不期待出现的。
+			如果你想明确地抛出一个RuntimeException，你必须用throws语句来声明它的类型。  
+	   
+   
+  Throw: Transfers control of the method to the exception handler. 
+		throw总是出现在函数体中，用来抛出一个异常。
+			程序会在throw语句后 立即终止........
+			它后面的语句执行不到，然后在包含它的所有try块中（可能在上层调用函数中）从里向外寻找含有与其匹配的catch子句的try块
+
 
 
 -------
@@ -261,7 +276,7 @@ Java堆的结构是什么样子的？什么是堆中的永久代(Perm Gen space)
 JVM的永久代中会发生垃圾回收么？
 
 
-throw和throws有什么区别？
+
 异常处理完成以后，Exception对象会发生什么变化？
 
 
