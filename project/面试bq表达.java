@@ -32,19 +32,38 @@ and maybe after some years, that we also need to looking for the problems worthi
 我开发的产品收到负面评价之后我怎么处理的例子
 ------------------------------
 
-# system infra Phone Q:
 
-# system related
-1. 
-2. Stack vs Heap (Memory)
-3. TCP vs UDP
-4. Transaction (ACID)
-5. Virtual memory (paging, page fault)
-6. write-back cache vs write-through cache
+--------------------------------------
+Something you did with calculated risk.
+--------------------------------------
 
-# java related
-1. final/finally/finalize differences
-2. checked exception vs unchecked exception
-3. Nested class (static vs non-static), how to instantiate
-4. Java HashMap (原理，实现，线程安全)
-5. Java Objects(Abstraction, Polymorphism, Inheritance, Encapsulation)
+
+
+--------------------------------------
+Once a time you have to learn something new without any guidence
+--------------------------------------
+
+
+--------------------------------------
+Once a time, you started doing sth without asking others advice or opinion.
+--------------------------------------
+
+
+
+--------------------------------------
+
+--------------------------------------
+
+--------------------------------------
+
+--------------------------------------
+
+--------------------------------------
+
+--------------------------------------
+
+--------------------------------------
+
+--------------------------------------
+
+

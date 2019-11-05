@@ -3,6 +3,11 @@ JAVA 国内面试 基础知识点
 Java支持多继承么
 	绝不
 
+-----------
+Abstraction
+-----------
+In java, abstraction is achieved by interfaces and abstract classes
+
 Java接口的作用
 	针对这个 很通俗的问题
 		例如我定义了一个接口, 但是我在继承这个接口的类中还要写接口的实现方法,
@@ -52,7 +57,11 @@ Java接口的作用
 				}
 			}
 
-Java 多态 polymorphism 		
+
+------------
+Polymorphism
+------------
+Java 多态 		
 	多态指的是同一个事物等在不同情况下不同的表现, 体现在程序中 有三种
 	1.统一的接口不同的实现
 
@@ -69,10 +78,18 @@ Java 多态 polymorphism
 		在一个类(1 1 1 一个类)中定义了多个同名的方法,它们或有不同的参数个数或有不	同的	参数类型
 		Overloading occurs when two or more methods in One-class have the same method name but Different Parameters.
 
-
+-------------------------
+Inheritance Encapsulation
+-------------------------
 
 Java 继承 inheritance		Son extends Father 	||  Dog extends Animal
 	 封装 encapsulation		改变 可访问的权限  private 变量 public getter() & setter() 
+
+
+
+
+
+
 
 
 
@@ -119,23 +136,87 @@ Comparator
 
 
 -------
-static
+Static
 -------
 
+Static Variables. 全局变量
+	Static variables are, essentially, global variables 就是全局变量
+	All instances of the class share the same static variable. 一个类所有的实例共用这一个变量
 
--------
-checked/unchecked exception
--------
+同时 static声明的方法 不能调用 非static 声明的方法或变量
 
-
--------
-final/finalize/finally; 
--------
+如果一个类要被声明为static的，只有一种情况，就是静态内部类 "static-nested-class"		Only nested classes can be static.
 
 
--------
+------------
+Nested class
+------------
+官方定义 嵌套类(定义在别的类里面的类) 
+Nested classes are divided into two categories: static and non-static. 
+Nested classes that are declared static are simply called static nested classes. 
+Non-static nested classes are called inner-classes.	//
 
--------
+
+how to instantiate??
+
+	static inner classes can be initialized separately	//静态内部类可以单独初始化
+		Inner i = new Outer.Inner();
+
+	inner-class can only be initialized by the instance of the outer class // 普通的内部类不行 必须得有外部类的引用
+		Outer o = new Outer();
+		Inner i = o.new Inner();
+
+
+区别 
+	1.Nested static class doesn’t need reference of Outer class, 
+		but Non-static nested class(Inner class) requires Outer class reference.
+	2.Inner class(or non-static nested class) can access both static and non-static members of Outer class. 
+		A static class cannot access non-static members of the Outer class. 
+		It can access only static members of Outer class.
+
+
+
+
+----------------------
+Final/Finally/Finalize
+----------------------
+
+Final is a keyword.	Finally is a block.	Finalize is a method.
+
+Final is used to apply Restrictions on class, method or variable.
+	final variable value can‘t be changed   //final声明引用， 就不可改变这个引用了,不可再次初始化。
+	final method can‘t be overridden 		//final声明方法，这个方法不可被子类重写overried。
+	final class can’t be inherited 		    // final声明类， 这个类不能被继承
+
+
+Finally is used to place important code, 
+	it will be executed Whether Exception is handled or not.
+	//Finally一般与try一起使用，在程序进入try块之后，无论程序是因为异常而中止或其它方式返回终止的, finally块的内容 一定会被执.
+	//finally在return语句之后，跳转到上一级程序之前执行.
+
+Finalize() is used to perform clean up processing just before object is garbage collected.
+
+
+
+
+--------------------------
+checked / unchecked exception
+--------------------------
+Java中的两种异常类型是什么？他们有什么区别？
+
+派生于 Error 或者 RuntimeException 的异常称为unchecked异常 严重 无法控制
+所有其他的异常成为checked异常 
+
+
+“Throwable” is the parent class of the classes Error and Exception. 
+ The class “RuntimeException” and its subclasses, the class “Error” and its child classes are the “Unchecked exceptions” 
+
+ whereas, the remaining subclasses of the class “Exception” except “RuntimeException” are the checked exceptions. 
+
+ The basic difference between checked and unchecked exception is that 
+ 	the checked exceptions are checked by the compiler whereas, 
+ 	the compiler does not check the unchecked exceptions.
+
 
 
 -------
@@ -151,22 +232,21 @@ final/finalize/finally;
 
 
 什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？
-static关键字是什么意思？Java中是否可以覆盖(override)一个private或者是static的方法？ 
-是否可以在static环境中访问非static变量？
-Java中的方法覆盖(Overriding)和方法重载(Overloading)是什么意思？
-Java中，什么是构造函数？什么是构造函数重载？什么是复制构造函数？
+static关键字是什么意思？
 
 
-什么是值传递和引用传递
+
+
+
 
 概括的解释下线程的几种可用状态。
 
 
 为什么集合类没有实现Cloneable和Serializable接口？
-什么是迭代器(Iterator)？
 
 
-数组(Array)和列表(ArrayList)有什么区别？什么时候应该使用Array而不是ArrayList？
+
+
 
 java的动态代理机制是怎样的？
 
@@ -179,17 +259,11 @@ Java堆的结构是什么样子的？什么是堆中的永久代(Perm Gen space)
 串行(serial)收集器和吞吐量(throughput)收集器的区别是什么？
 在Java中，对象什么时候可以被垃圾回收？
 JVM的永久代中会发生垃圾回收么？
-Java中的两种异常类型是什么？他们有什么区别？
-Java中Exception和Error有什么区别？
+
+
 throw和throws有什么区别？
 异常处理完成以后，Exception对象会发生什么变化？
-异常处理的时候，finally代码块的重要性是什么？
-	Finally一般与try一起使用，在程序进入try块之后，无论程序是因为异常而中止或其它方式返回终止的, finally块的内容 一定会被执.
-	finally在return语句之后，跳转到上一级程序之前执行.
-	
 
 
 
-
-finally代码块和finalize()方法有什么区别？
 java类是如何被虚拟机加载的？生命周期又是怎样的？
