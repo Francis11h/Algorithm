@@ -242,7 +242,8 @@ SMTP uses persistent connections
 ----
 DNS
 ----
-domain name system
+DNS(Domain Name System) is a Database that maintains 
+                    the name of the website (URL) and the particular IP address it links to.
 
 hostname : 类比 人名 
 
@@ -259,7 +260,7 @@ P2P
 
 BitTorrent
 file divided into 256Kb chunks
-peers in torrent send/receive file chunks
+peers in torrent send / receive file chunks
 
 
 
@@ -405,11 +406,36 @@ congestion control
 ICMP（Internet Control Message Protocol）
 ---------------------------------------
 Internet控制报文协议,它是TCP/IP协议簇的一个子协议
-用于在 IP主机,路由器 之间传递控制消息 :
-     控制消息是指 网络通不通, 主机是否可达, 路由是否可用等 网络本身的消息
+用于在 IP主机 host,路由器 router 之间传递控制消息 :
+     控制消息是指 网络通不通, 主机是否可达, 路由ICMP是否可用等 网络本身的消息
 
 这些控制消息虽然并不传输用户数据, 但是对于用户数据的传递起着重要的作用
 ICMP使用IP的基本支持, 就像它是一个更高级别的协议, 但是, ICMP实际上是IP的一个组成部分, 必须由每个IP模块实现.
+
+
+--------------
+三次握手 四次断开 
+--------------
+client --------- SYN ------> server
+client <------ACK + SYN ---- server
+client --------- ACK ------> server
+
+
+client --------- FIN ------> server
+client <-------- ACK ------- server
+client <-------- FIN ------- server
+client --------- ACK ------> server
+
+为什么建立连接是三次握手，关闭连接确是四次挥手呢？
+
+建立连接的时候， 服务器在LISTEN状态下，
+收到建立连接请求的SYN报文后，把ACK和SYN放在一个报文里发送给客户端。
+
+而关闭连接时，服务器收到对方的FIN报文时，仅仅表示"对方不再发送数据了但是还能接收数据"
+而自己也"未必全部数据都发送给对方了"，所以己方可以立即关闭，也可以发送一些数据给对方后，再发送FIN报文给对方来表示同意现在关闭连接，
+因此，己方ACK和FIN一般都会分开发送，从而导致多了一次。
+
+
 
 
 
@@ -437,15 +463,38 @@ ICMP使用IP的基本支持, 就像它是一个更高级别的协议, 但是, IC
 18.IP地址的分类，如何划分的，及会计算各类地址支持的主机数。
 
 
-24.三次握手，四次断开过程。
 25.TIME_WAIT状态的概念及意义。
-26. 滑动窗口协议 与 停止等待协议 的区别。
 27.TCP的流量控制和拥塞控制实现原理(会画拥塞控制的典型图)。
 28. TCP的快速重传与快速恢复算法。
 29. TFTP与FTP的区别。
 30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
 
 
+-------------
+HTTP vs HTTPS
+-------------
+
+    HTTP报文是包裹在TCP报文中发送的，服务器端收到TCP报文时会解包提取出HTTP报文。
+    但是这个过程中存在一定的风险，HTTP报文是明文，如果中间被截取的话会存在一些信息泄露的风险。
+    那么在进入TCP报文之前对HTTP做一次加密就可以解决这个问题了。HTTPS协议的本质就是HTTP + SSL(or TLS)。
+    在HTTP报文进入TCP报文之前，先使用 SSL 对HTTP报文进行加密。(加密过程处在TCP 和 HTTP之间)
+
+HTTPS过程
+    HTTPS在传输数据之前需要客户端与服务器进行一个握手(TLS/SSL握手), 在握手过程中将确立双方加密传输数据的密码信息。
+    TLS/SSL使用了非对称加密，对称加密以及hash等。
+
+
+    对称加密 非对称加密
+        对称 : 在加密和解密时使用相同的密钥，或是使用两个可以简单地相互推算的密钥 (DES)
+        非对称 :
+        需要一对密钥, 一个是私人密钥, 另一个则是公开密钥.
+        私钥只能由一方安全保管，不能外泄，而公钥则可以发给任何请求它的人。
+        非对称加密使用这对密钥中的一个进行加密，而解密则需要另一个密钥。
+        比如，你向银行请求公钥，银行将公钥发给你，你使用公钥对消息加密，那么只有私钥的持有人--银行才能对你的消息解密。
+        与对称加密不同的是，银行不需要将私钥通过网络发送出去，因此安全性大大提高.
+
+    SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。
+    HTTPS相比于HTTP，虽然提供了安全保证，但是势必会带来一些时间上的损耗，如握手和加密等过程，是否使用HTTPS需要根据具体情况在安全和性能方面做出权衡。
 
 
 
@@ -453,10 +502,10 @@ ICMP使用IP的基本支持, 就像它是一个更高级别的协议, 但是, IC
 
 
 
-
--------
+-----------------------------------------------------------------------------
 从输入URL到页面加载发生了什么        https://segmentfault.com/a/1190000006879700
-    DNS解析
+                                 https://medium.com/@maneesha.wijesinghe1/what-happens-when-you-type-an-url-in-the-browser-and-press-enter-bb0aa2449c1a
+    DNS解析(先找缓存)
 
     TCP连接
 
@@ -468,53 +517,38 @@ ICMP使用IP的基本支持, 就像它是一个更高级别的协议, 但是, IC
 
     连接结束
 
-    1.DNS解析 ： 
-        寻找哪台机器上有你需要资源的过程。当你在浏览器中输入一个地址时，例如 www.google.com，其实不是百度网站真正意义上的地址。
-        互联网上每一台计算机的唯一标识是它的IP地址，但是IP地址并不方便记忆。用户更喜欢用方便记忆的网址去寻找互联网上的其它计算机，也就是上面提到的百度的网址。
-        所以互联网设计者需要在 用户的 方便性与可用性 做一个权衡，这个权衡就是网址到IP地址的转换，这个过程就是DNS解析。
-        它实际上充当了一个翻译的角色，实现了网址到IP地址的转换。
+    1.DNS解析 : 
+        1.1 先查缓存Cache里有没有对应的
+        DNS有高速缓存, 把 www.google.com 的ip记录到高速缓存一阵子，这样子避免了再找一大圈子。
+                    浏览器缓存browser，系统缓存os，路由器缓存router，IPS服务器缓存Isp
 
-        这个解析是分级的 先从本地域名服务器 到 根域名服务器 再到 COM顶级域名服务器 再到具体的 google.com 域名服务器, 最后返回本地域名服务器
+        1.2             
+        ISP 缓存中都没有 则由 ISP‘s DNS server initiates a DNS Query
+        这个查找是分级的 
+            先从本地域名服务器 Local-DNS server 到 
+            根域名服务器 Root-DNS server 再到 
+            顶级域名服务器 TLD(top-level domain)-DNS server 
+            再到具体的 google.com 域名服务器 Authoritative-DNS server, 
+            最后返回本地域名服务器
 
-        同时有个 DNS高速缓存, 把 www.google.com 的ip记录到高速缓存一阵子，这样子避免了再找一大圈子。
-                    浏览器缓存，系统缓存，路由器缓存，IPS服务器缓存，根域名服务器缓存，顶级域名服务器缓存，主域名服务器缓存
+        
 
         DNS 负载均衡
             其实真实的互联网世界背后存在成千上百台服务器，大型的网站甚至更多。但是在用户的眼中，它需要的只是处理他的请求，哪台机器处理请求并不重要。
             DNS可以返回一个合适的机器的IP给用户，例如可以根据每台机器的负载量，该机器离用户地理位置的距离等等，这种过程就是DNS负载均衡
 
 
-    2.TCP连接 : (三次握手)
+    2. browser 请求建立TCP连接 : (三次握手)
+
+        client --------- SYN ------> server
+        client <------ACK + SYN ---- server
+        client --------- ACK ------> server
+
         HTTP协议是使用TCP作为其传输层协议的
 
-        HTTPS协议
-            HTTP报文是包裹在TCP报文中发送的，服务器端收到TCP报文时会解包提取出HTTP报文。
-            但是这个过程中存在一定的风险，HTTP报文是明文，如果中间被截取的话会存在一些信息泄露的风险。
-            那么在进入TCP报文之前对HTTP做一次加密就可以解决这个问题了。HTTPS协议的本质就是HTTP + SSL(or TLS)。
-            在HTTP报文进入TCP报文之前，先使用 SSL 对HTTP报文进行加密。(加密过程处在TCP 和 HTTP之间)
+    3. browser 发送HTTP请求
 
-        HTTPS过程
-            HTTPS在传输数据之前需要客户端与服务器进行一个握手(TLS/SSL握手)，在握手过程中将确立双方加密传输数据的密码信息。
-            TLS/SSL使用了非对称加密，对称加密以及hash等。
-
-
-            对称加密 非对称加密
-                对称 : 在加密和解密时使用相同的密钥，或是使用两个可以简单地相互推算的密钥 (DES)
-                非对称 :
-                需要一对密钥, 一个是私人密钥, 另一个则是公开密钥.
-                私钥只能由一方安全保管，不能外泄，而公钥则可以发给任何请求它的人。
-                非对称加密使用这对密钥中的一个进行加密，而解密则需要另一个密钥。
-                比如，你向银行请求公钥，银行将公钥发给你，你使用公钥对消息加密，那么只有私钥的持有人--银行才能对你的消息解密。
-                与对称加密不同的是，银行不需要将私钥通过网络发送出去，因此安全性大大提高.
-
-            SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。
-            HTTPS相比于HTTP，虽然提供了安全保证，但是势必会带来一些时间上的损耗，如握手和加密等过程，是否使用HTTPS需要根据具体情况在安全和性能方面做出权衡。
-
-
-
-    3.发送HTTP请求
-
-        它主要发生在客户端。发送HTTP请求的过程就是构建HTTP请求报文并通过TCP协议中发送到服务器指定端口(HTTP协议80/8080, HTTPS协议443)。
+        发送HTTP请求的过程就是构建HTTP请求报文并通过TCP协议中发送到服务器指定端口 Port (HTTP协议80/8080, HTTPS协议443)。
         HTTP请求报文是由三部分组成: 请求行, 请求报头和请求正文。
 
         请求行 ：Method Request-URL HTTP-Version CRLF
@@ -523,6 +557,9 @@ ICMP使用IP的基本支持, 就像它是一个更高级别的协议, 但是, IC
         请求报头 ：
                 请求报头允许客户端向服务器传递请求的附加信息和客户端自身的信息。
                 常见的请求报头有: Accept, Accept-Charset, Accept-Encoding, Accept-Language, Content-Type, Authorization, Cookie, User-Agent等。
+                    browser identification (User-Agent header)
+                    types of requests that it will accept (Accept header)
+                    connection headers asking it to keep the TCP connection alive for additional requests (Connection : Keep-Alive)
         请求正文 ： 
                 当使用POST, PUT等方法时，通常需要客户端向服务器传递数据。
                 现在的Web应用通常采用Rest架构，请求的数据格式一般为json。这时就需要设置Content-Type: application/json。
@@ -556,7 +593,64 @@ ICMP使用IP的基本支持, 就像它是一个更高级别的协议, 但是, IC
 
     5. 浏览器解析渲染页面    显示出来
 
+        首先浏览器解析 Html 文件构建 Dom 树
+        解析 Css 文件构建渲染树
+        然后 浏览器开始布局渲染树并将其绘制到屏幕上 这个过程比较复杂 涉及到两个概念: reflow(回流)和repain(重绘)。
+            DOM节点中的各个元素都是以盒 Box 模型的形式存在, 这些都需要浏览器去计算其位置和大小等, 这个过程称为 relow;
+            当盒模型的位置, 大小以及其他属性，如颜色,字体,等确定下来之后，浏览器便开始绘制内容，这个过程称为 repain
+        JS 。。。
+
     6. 连接结束:(4次挥手)
+
+
+英文版解释:
+    1. the browser check the Cache for a DNS record to find the cossesponding ip address.
+        broswer cache ----> OS cache ---> router cache ---> ISP cache
+
+    2. if the requested URL is not in the cache, ISP‘s DNS server initiates a DNS Query 
+        to find the IP address of the server that hosts www.google.com.
+
+    3. browser initiates a TCP connection with the server.
+
+        TCP/IP three-way handshake
+
+            3.1 client sends a SYN packet to the server asking if it is open for new connections.
+            3.2 If the server has open ports that can accept and initiate new connections, 
+                it will response with an ACK of the SYN packet using a SYN/ACK packet.
+            3.3 the client will receive the SYN/ACK packet and will acknowledge it by sending an ACK packet.
+
+    4. browser sends an HTTP request to the web server.
+        GET / POST 
+
+    5. server handles the request and sends back a HTTP response.
+
+        There are five types of statuses
+            5.1  1xx indicates an informational message only
+            5.2  2xx indicates success of some kind
+            5.3  3xx redirects the client to another URL
+            5.4  4xx indicates an error on the client’s part
+            5.5  5xx indicates an error on the server’s part
+
+    6. the browser display the HTML content
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
