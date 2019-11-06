@@ -1,0 +1,198 @@
+#Find Pair With Given Sum
+def twoSum(self, nums: List[int], target: int) -> List[int]:
+        h={}
+        res=[]
+        for i in range(len(nums)):
+            if target-nums[i] in h.keys():
+                res=[h[target-nums[i]],i]
+            if nums[i] not in h.keys():
+                h[nums[i]]=i
+        return res
+
+#Substrings with exactly K distinct chars
+def subarraysWithKDistinct(self, A: List[int], K: int) -> int:
+        left1={}
+        left2={}
+        c1=0
+        c2=0
+        l1=l2=res=0
+        for i in A:
+            if i not in left1.keys():
+                left1[i]=1
+                c1+=1
+            else:
+                left1[i]+=1
+                if left1[i]==1:
+                    c1+=1
+            if i not in left2.keys():
+                left2[i]=1
+                c2+=1
+            else:
+                left2[i]+=1
+                if left2[i]==1:
+                    c2+=1
+                
+            while c1>K:
+                left1[A[l1]]-=1
+                if left1[A[l1]]==0:
+                    c1-=1
+                l1+=1
+            while c2>=K:
+                left2[A[l2]]-=1
+                if left2[A[l2]]==0:
+                    c2-=1
+                l2+=1
+            res+=l2-l1
+        return res
+
+#Path With Maximum Score
+def PathWithMaximumScore(ipt):
+    ipt=[[5,1,2],[4,5,3],[4,5,9]]
+    if not ipt or not ipt[0]:
+        return 0
+    r=len(ipt)
+    c=len(ipt[0])
+    dp={}
+    for i in range(r):
+        for j in range(c):
+            if i == 0 and j == 0:
+                dp[(0, 0)] = ipt[0][0]
+            elif i == 0:
+                dp[(0,j)]=min(dp[(0,j-1)],ipt[0][j])
+            elif j == 0:
+                dp[(i,0)]=min(dp[(i-1,0)],ipt[i][0])
+            else:
+                dp[(i,j)]=min(max(dp[(i-1,j)],dp[(i,j-1)]),ipt[i][j])
+    return dp[(r-1,c-1)]
+
+#Longest Palindromic Substring
+#algorithm1
+def longestPalindrome(self, s: str) -> str:
+    if len(s)==0:
+        return ""       
+    bp={}
+    maxlen=0
+    maxstr=""
+    for i in range(len(s)):
+        for j in range(len(s)-1,i-1,-1):
+            if s[i]==s[j]:
+                if i==0 or j==len(s)-1:
+                    if i==j:
+                        bp[(i,j)]=1
+                    else:
+                        bp[(i,j)]=2
+                elif i==j:
+                    bp[(i,j)]=bp[(i-1,j+1)]+1
+                else:
+                    bp[(i,j)]=bp[(i-1,j+1)]+2
+            else:
+                bp[(i,j)]=0
+            if bp[(i,j)]>maxlen and j<=i+1:
+                maxlen=bp[(i,j)]
+                maxstr=s[j-bp[(i,j)]//2:i+bp[(i,j)]//2+1]
+    return maxstr
+#algorithm2
+def longestPalindrome(self, s: str) -> str:
+    l=len(s)
+    if l==0:
+        return ""
+    while(l>=1):
+        for i in range(0,len(s)-l+1):
+            if self.check(s[i:i+l]):
+                return s[i:i+l]
+        l-=1
+            
+def check(self,s):
+    if s==s[::-1]:
+        return True
+    else:
+        return False
+
+
+#Movies on Flight
+def MoviesOnFlight(movieDuration,d):
+    idx={}
+    for i,movie in enumerate(movieDuration):
+        idx[movie]=i
+    movieDuration=sorted(movieDuration)
+    left=0
+    length = 0
+    index = None
+    for right in range(len(movieDuration)-1,-1,-1):
+        while movieDuration[left]+movieDuration[right]<=d-30:
+            if movieDuration[left]+movieDuration[right]>length:
+                index=(movieDuration[left],movieDuration[right])
+                length=movieDuration[left]+movieDuration[right]
+            if left==len(movieDuration)-1:
+                break
+            else:
+                left+=1
+    return [min(idx[index[0]],idx[index[1]]),max(idx[index[0]],idx[index[1]])]
+
+print(MoviesOnFlight([90, 85, 75, 60, 120, 150, 125],250))
+
+
+#Substrings of size K with K distinct chars
+def SubstringsOfSizeKwithKdistinctChars(s,k):
+    if len(s)<k:
+        return []
+    left=0
+    right=0+k-1
+    cnt={}
+    count=0
+    res=[]
+    for i in range(left,right+1):
+        if s[i] not in cnt.keys():
+            cnt[s[i]]=1
+            count+=1
+        else:
+            cnt[s[i]]+=1
+    if count == k:
+        res.append(s[left:right + 1])
+    while(right<len(s)-1):
+        cnt[s[left]]-=1
+        if cnt[s[left]]==0:
+            count-=1
+        left+=1
+        right+=1
+        if s[right] not in cnt.keys() or cnt[s[right]]==0:
+            cnt[s[right]]=1
+            count+=1
+        else:
+            cnt[s[right]]+=1
+        if count==k and s[left:right+1] not in res:
+            res.append(s[left:right+1])
+    return res
+
+#Most Common Word
+def mostCommonWord(self, paragraph: str, banned: List[str]) -> str:
+    paragraph=paragraph.lower()
+    maxcount=0
+    cnt={}
+    res=None
+    word=[]
+    for ch in paragraph:
+        if "a"<=ch<="z":
+            word.append(ch)
+        elif len(word)>0:
+            word="".join(word)
+            if word not in banned:
+                if word not in cnt.keys():
+                    cnt[word]=1
+                else:
+                    cnt[word]+=1
+                if cnt[word]>maxcount:
+                    maxcount=cnt[word]
+                    res=word
+            word=[]
+    if len(word)>0:
+        word="".join(word)
+        if word not in banned:
+            if word not in cnt.keys():
+                cnt[word]=1
+            else:
+                cnt[word]+=1
+            if cnt[word]>maxcount:
+                maxcount=cnt[word]
+                res=word
+    return res
