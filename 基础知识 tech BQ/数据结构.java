@@ -101,24 +101,54 @@ The most important distinction between these classes is the Time-Guarantees and 
 
 Tree
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Binary Tree
+	A binary tree is a tree data structure in which each node has At-most two children.
 
----
-BST
----
-搜索效率，bfs和dfs
- BST, 问了BFS和DFS的差别，删除一个节点的时候它的子节点怎么办
-
-
-
-数据结构binary tree, 请举例几个binary tree,
+Full Binary tree - every node in the tree has 0 or 2 children
+Perfect binary tree - all interior nodes have two children and all leaves have the same depth or level
+Complete binary tree - every level except possibly the last is completely filled, and all nodes in the last level are as far left as possible
 
 
 
+------------------
+Binary Search Tree
+------------------
+
+	A binary search tree (BST) is a data structure that binary tree that keeps it’s keys in sorted order, 
+	so that operations can take advantage of the binary search principle (a logarithmic search that takes happens in O(log n) time)
 
 
 
 
+B-tree
+	A B-tree is a self-balancing tree data structure that keeps data sorted and allows searches, sequential access, insertions, and deletions in logarithmic time. 
+	It is a generalization of a binary search tree in that "a node can have more than two children". 
+	A B-tree is optimized for systems that read and write large blocks of data.
+	B-tree’s are commonly used in Databases and File systems.
 
+
+
+B+ Tree
+	B+ tree is a B-tree in which each node only contains keys (not key-values), and to which an additional level is added at the bottom with linked leaves.
+	This makes for more efficient retrieval of data in block-oriented storage (once you find the start of the block, you can read sequentially without having to traverse up and down the tree to retrieve data nodes). 
+	Additionally, all leave nodes must be the same distance from the root node.
+
+	SQL Server & Oracle store table indexes in B+ trees, which are similar to B-trees, 
+	except that "data is only stored in leaf nodes" - all other nodes hold only key values and pointers to the next nodes.
+
+
+AVL Tree
+	An AVL Tree is a self-balancing binary search tree. 
+	The "height of the two child subtrees of any node differ at most by one", 
+	otherwise the tree is re-balanced. 
+	Lookup, insertion, and deletion take O(log n) time.
+	Insertions and Deletion may cause a tree rotation
+
+Red-Black Tree
+	A red-black tree is a self-balancing binary search tree. 
+	Each node of the tree has an extra bit, which is interpreted as either black or red. 
+	The color bits are used to ensure the tree remains balanced during insertions and deletions. 
+	Operations occur in O(log n) time.
 
 
 
@@ -211,7 +241,7 @@ Graph Storage
 Edge List
 	store an array of edges 
 	 [[0,1], [0,6], [0,8], [1,6]]
-	 
+
 Adjacency List
 	Vertices stored as records or objects
 	each vertex stores a list of adjacent vertices

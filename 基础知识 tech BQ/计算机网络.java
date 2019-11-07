@@ -1,13 +1,175 @@
 
 计算机网络
+
+-----------------------------------------------------------------------------
+从输入URL到页面加载发生了什么        https://segmentfault.com/a/1190000006879700
+                                 https://medium.com/@maneesha.wijesinghe1/what-happens-when-you-type-an-url-in-the-browser-and-press-enter-bb0aa2449c1a
+    DNS解析(先找缓存)
+
+    TCP连接
+
+    发送HTTP请求
+
+    服务器处理请求并返回HTTP报文
+
+    浏览器解析渲染页面
+
+    连接结束
+
+    1.DNS解析 : 
+        1.1 先查缓存Cache里有没有对应的
+        DNS有高速缓存, 把 www.google.com 的ip记录到高速缓存一阵子，这样子避免了再找一大圈子。
+                    浏览器缓存browser，系统缓存os，路由器缓存router，IPS服务器缓存Isp
+
+        1.2             
+        ISP 缓存中都没有 则由 ISP‘s DNS server initiates a DNS Query
+        这个查找是分级的 
+            先从本地域名服务器 Local-DNS server 到 
+            根域名服务器 Root-DNS server 再到 
+            顶级域名服务器 TLD(top-level domain)-DNS server 
+            再到具体的 google.com 域名服务器 Authoritative-DNS server, 
+            最后返回本地域名服务器
+
+        
+
+        DNS 负载均衡
+            其实真实的互联网世界背后存在成千上百台服务器，大型的网站甚至更多。但是在用户的眼中，它需要的只是处理他的请求，哪台机器处理请求并不重要。
+            DNS可以返回一个合适的机器的IP给用户，例如可以根据每台机器的负载量，该机器离用户地理位置的距离等等，这种过程就是DNS负载均衡
+
+
+    2. browser 请求建立TCP连接 : (三次握手)
+
+        client --------- SYN ------> server
+        client <------ACK + SYN ---- server
+        client --------- ACK ------> server
+
+        HTTP协议是使用TCP作为其传输层协议的
+
+    3. browser 发送HTTP请求
+
+        发送HTTP请求的过程就是构建HTTP请求报文并通过TCP协议中发送到服务器指定端口 Port (HTTP协议80/8080, HTTPS协议443)。
+        HTTP请求报文是由三部分组成: 请求行, 请求报头和请求正文。
+
+        请求行 ：Method Request-URL HTTP-Version CRLF
+               eg: GET index.html HTTP/1.1
+               常用的Method有: GET, POST, PUT, DELETE, OPTIONS, HEAD。
+        请求报头 ：
+                请求报头允许客户端向服务器传递请求的附加信息和客户端自身的信息。
+                常见的请求报头有: Accept, Accept-Charset, Accept-Encoding, Accept-Language, Content-Type, Authorization, Cookie, User-Agent等。
+                    browser identification (User-Agent header)
+                    types of requests that it will accept (Accept header)
+                    connection headers asking it to keep the TCP connection alive for additional requests (Connection : Keep-Alive)
+        请求正文 ： 
+                当使用POST, PUT等方法时，通常需要客户端向服务器传递数据。
+                现在的Web应用通常采用Rest架构，请求的数据格式一般为json。这时就需要设置Content-Type: application/json。
+
+    4.服务器处理请求并返回HTTP报文
+        HTTP响应报文也是由三部分组成: 状态码, 响应报头和响应报文。
+        状态码
+            状态码是由3位数组成，第一个数字定义了响应的类别，且有五种可能取值:
+
+            1xx：指示信息–表示请求已接收，继续处理。
+
+            2xx：成功–表示请求已被成功接收、理解、接受。
+                200 Ok  request succeeded,requested object later in this msg
+
+            3xx：重定向–要完成请求必须进行更进一步的操作
+                301 Moved Permanently
+
+            4xx：客户端错误–请求(request)有 语法错误 或 请求无法实现。
+                400 Bad Request request msg not understood by server
+                403 Forbidden                                           //服务器收到请求，但是拒绝提供服务
+                404 Not Found requested document not found on this server
+
+            5xx：服务器端错误–服务器未能实现合法的请求。
+                505 HTTP Version Not Supported
+
+        响应报头 ：  常见的响应报头字段有: Server, Connection...。
+                
+        响应报文
+            服务器返回给浏览器的文本信息，通常HTML, CSS, JS, 图片等文件就放在这一部分。
+
+
+    5. 浏览器解析渲染页面    显示出来
+
+        首先浏览器解析 Html 文件构建 Dom 树
+        解析 Css 文件构建渲染树
+        然后 浏览器开始布局渲染树并将其绘制到屏幕上 这个过程比较复杂 涉及到两个概念: reflow(回流)和repain(重绘)。
+            DOM节点中的各个元素都是以盒 Box 模型的形式存在, 这些都需要浏览器去计算其位置和大小等, 这个过程称为 relow;
+            当盒模型的位置, 大小以及其他属性，如颜色,字体,等确定下来之后，浏览器便开始绘制内容，这个过程称为 repain
+        JS 。。。
+
+    6. 连接结束:(4次挥手)
+
+
+英文版解释:
+    1. the browser check the Cache for a DNS record to find the cossesponding ip address.
+        broswer cache ----> OS cache ---> router cache ---> ISP cache
+
+    2. if the requested URL is not in the cache, ISP‘s DNS server initiates a DNS Query 
+        to find the IP address of the server that hosts www.google.com.
+
+    3. browser initiates a TCP connection with the server.
+
+        TCP/IP three-way handshake
+
+            3.1 client sends a SYN packet to the server asking if it is open for new connections.
+            3.2 If the server has open ports that can accept and initiate new connections, 
+                it will response with an ACK of the SYN packet using a SYN/ACK packet.
+            3.3 the client will receive the SYN/ACK packet and will acknowledge it by sending an ACK packet.
+
+    4. browser sends an HTTP request to the web server.
+        GET / POST 
+
+    5. server handles the request and sends back a HTTP response.
+
+        There are five types of statuses
+            5.1  1xx indicates an informational message only
+            5.2  2xx indicates Success of some kind
+            5.3  3xx Redirects the client to another URL
+            5.4  4xx indicates an error on the Client’s part
+            5.5  5xx indicates an error on the Server’s part
+
+    6. the browser display the HTML content
+
+
+
+
+--------------
+三次握手 四次挥手 
+--------------
+client --------- SYN ------> server
+client <------ACK + SYN ---- server
+client --------- ACK ------> server
+
+
+client --------- FIN ------> server
+client <-------- ACK ------- server
+client <-------- FIN ------- server
+client --------- ACK ------> server
+
+为什么建立连接是三次握手，关闭连接确是四次挥手呢？
+
+建立连接的时候， 服务器在LISTEN状态下，
+收到建立连接请求的SYN报文后，把ACK和SYN放在一个报文里发送给客户端。
+
+而关闭连接时，服务器收到对方的FIN报文时，仅仅表示"对方不再发送数据了但是还能接收数据"
+而自己也"未必全部数据都发送给对方了"，所以己方可以立即关闭，也可以发送一些数据给对方后，再发送FIN报文给对方来表示同意现在关闭连接，
+因此，己方ACK和FIN一般都会分开发送，从而导致多了一次。
+
+
+------------------------
+TIME_WAIT这个状态 为什么必须
+------------------------
+    假设最终的ACK丢失，主机2将重发FIN，主机1必须维护TCP状态信息以便可以重发最终的ACK，否则会发送RST，结果主机2认为发生错误。
+    TCP实现必须可靠地终止连接的两个方向(全双工关闭)，主机1必须进入 TIME_WAIT 状态，因为主机1可能面 临重发最终ACK的情形。
+
+
 -------
 Protocol
 -------
-protocols define Format, Order of messages sent and receivedamong network entities, 
+protocols define Format, Order of messages sent and received among network entities, 
     and Actions taken on message transmission / receipt.
-
-
-
 
 ----------------
 Circuit-switching
@@ -263,92 +425,6 @@ file divided into 256Kb chunks
 peers in torrent send / receive file chunks
 
 
-
-----
-UDP
-----
-
-Python UDP Server
-
-	from socket import *
-	serverPort = 12000
-	serverSocket = socket(AF_INET, SOCK_DGRAM) 		//create UDP socket		
-	serverSocket.bind(('', serverPort))				//bind socket to local port number 12000
-	print (“The server is ready to receive”)
-	while True:										//loop forever
-		//read from UDP socket into meaasge
-		//getting client’s address (client IP and port)
-		message, clientAddress = serverSocket.recvfrom(2048)
-		modifiedMessage = message.decode().upper() 
-		//send upper case string back to yhis client
-		serverSocket.sendto(modifiedMessage.encode(),clientAddress)
-
-Python UDP Client
-
-	from socket import * 
-	serverName = ‘hostname’
-	serverPort = 12000 
-	clientSocket = socket(AF_INET,SOCK_DGRAM)				//create UDP socket for server
-	message = raw_input(’Input lowercase sentence:’)		//get user keyboard input
-	//Attach server name, port to message; send into socket
-	clientSocket.sendto(message.encode(), (serverName, serverPort))
-	//read reply characters from socket into string
-	modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
-	print modifiedMessage.decode() 
-	clientSocket.close()
-
-   
-if the server has not been started yet? what will happen?
-there is no connection of UDP 
-the process will be block at clientSocket.recvfrom(2048) forever.
-
-
-
-
-----
-TCP
-----
-Python TCP Server
-	from socket import *
-	serverPort = 12000
-	serverSocket = socket(AF_INET,SOCK_STREAM) 
-	serverSocket.bind((‘’,serverPort)) 
-	serverSocket.listen(1)							//server begins listening for incoming TCP requests
-	print ‘The server is ready to receive’
-	while True:
-		connectionSocket, addr = serverSocket.accept()		//server waits on accept() for incoming requests, new socket created on return
-		sentence = connectionSocket.recv(1024).decode() 	//read bytes from socket (but not address as in UDP)
-		capitalizedSentence = sentence.upper() 
-		connectionSocket.send(capitalizedSentence.encode())
-		connectionSocket.close()
-
-Python TCP Client
-	from socket import *
-	serverName = ’servername’
-	serverPort = 12000
-	clientSocket = socket(AF_INET, SOCK_STREAM) 	//create TCP socket for server, remote port 12000
-	clientSocket.connect((serverName,serverPort)) 
-	sentence = raw_input(‘Input lowercase sentence:’) 
-	clientSocket.send(sentence.encode())			//No need to attach server name, port
-	modifiedSentence = clientSocket.recv(1024)
-	print (‘From Server:’, modifiedSentence.decode()) 
-	clientSocket.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 --------------------------------
 Transport services and protocols
 --------------------------------
@@ -406,68 +482,12 @@ congestion control
 ICMP（Internet Control Message Protocol）
 ---------------------------------------
 Internet控制报文协议,它是TCP/IP协议簇的一个子协议
-用于在 IP主机 host,路由器 router 之间传递控制消息 :
+用于在 IP主机 host,路由器 router 之间传递 "控制消息" :
      控制消息是指 网络通不通, 主机是否可达, 路由ICMP是否可用等 网络本身的消息
 
 这些控制消息虽然并不传输用户数据, 但是对于用户数据的传递起着重要的作用
 ICMP使用IP的基本支持, 就像它是一个更高级别的协议, 但是, ICMP实际上是IP的一个组成部分, 必须由每个IP模块实现.
 
-
---------------
-三次握手 四次断开 
---------------
-client --------- SYN ------> server
-client <------ACK + SYN ---- server
-client --------- ACK ------> server
-
-
-client --------- FIN ------> server
-client <-------- ACK ------- server
-client <-------- FIN ------- server
-client --------- ACK ------> server
-
-为什么建立连接是三次握手，关闭连接确是四次挥手呢？
-
-建立连接的时候， 服务器在LISTEN状态下，
-收到建立连接请求的SYN报文后，把ACK和SYN放在一个报文里发送给客户端。
-
-而关闭连接时，服务器收到对方的FIN报文时，仅仅表示"对方不再发送数据了但是还能接收数据"
-而自己也"未必全部数据都发送给对方了"，所以己方可以立即关闭，也可以发送一些数据给对方后，再发送FIN报文给对方来表示同意现在关闭连接，
-因此，己方ACK和FIN一般都会分开发送，从而导致多了一次。
-
-
-
-
-
-
-
-
-
-3. TCP/IP有哪几层，会画出来，知道所有层数的作用，会列举各层主要的协议名称。
-4. 硬件(MAC)地址的概念及作用。
-5. ARP协议的用途 及算法、在哪一层上会使用arp？
-6. CRC冗余校验算法，反码和检验算法。
-7. 如何实现透明传输。
-
-9.  路由表的内容。
-10. 分组转发算法。
-11. IP报文的格式，格式的各个字段的含义要理解。
-12. MTU的概念，啥叫路径MTU？MTU发现机制，TraceRoute(了解)。
-13. RIP协议的概念 及算法。
-
-
-
-15. 组播和多播的概念，IGMP的用途。
-16. Ping协议的实现原理，ping命令格式。
-17.子网划分的概念，子网掩码。
-18.IP地址的分类，如何划分的，及会计算各类地址支持的主机数。
-
-
-25.TIME_WAIT状态的概念及意义。
-27.TCP的流量控制和拥塞控制实现原理(会画拥塞控制的典型图)。
-28. TCP的快速重传与快速恢复算法。
-29. TFTP与FTP的区别。
-30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
 
 
 -------------
@@ -496,146 +516,33 @@ HTTPS过程
     SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。
     HTTPS相比于HTTP，虽然提供了安全保证，但是势必会带来一些时间上的损耗，如握手和加密等过程，是否使用HTTPS需要根据具体情况在安全和性能方面做出权衡。
 
+------------------------
+组播和多播的概念, IGMP 的用途
+------------------------
+https://www.cnblogs.com/xujian2014/p/5072215.html
 
 
 
 
 
 
------------------------------------------------------------------------------
-从输入URL到页面加载发生了什么        https://segmentfault.com/a/1190000006879700
-                                 https://medium.com/@maneesha.wijesinghe1/what-happens-when-you-type-an-url-in-the-browser-and-press-enter-bb0aa2449c1a
-    DNS解析(先找缓存)
-
-    TCP连接
-
-    发送HTTP请求
-
-    服务器处理请求并返回HTTP报文
-
-    浏览器解析渲染页面
-
-    连接结束
-
-    1.DNS解析 : 
-        1.1 先查缓存Cache里有没有对应的
-        DNS有高速缓存, 把 www.google.com 的ip记录到高速缓存一阵子，这样子避免了再找一大圈子。
-                    浏览器缓存browser，系统缓存os，路由器缓存router，IPS服务器缓存Isp
-
-        1.2             
-        ISP 缓存中都没有 则由 ISP‘s DNS server initiates a DNS Query
-        这个查找是分级的 
-            先从本地域名服务器 Local-DNS server 到 
-            根域名服务器 Root-DNS server 再到 
-            顶级域名服务器 TLD(top-level domain)-DNS server 
-            再到具体的 google.com 域名服务器 Authoritative-DNS server, 
-            最后返回本地域名服务器
-
-        
-
-        DNS 负载均衡
-            其实真实的互联网世界背后存在成千上百台服务器，大型的网站甚至更多。但是在用户的眼中，它需要的只是处理他的请求，哪台机器处理请求并不重要。
-            DNS可以返回一个合适的机器的IP给用户，例如可以根据每台机器的负载量，该机器离用户地理位置的距离等等，这种过程就是DNS负载均衡
-
-
-    2. browser 请求建立TCP连接 : (三次握手)
-
-        client --------- SYN ------> server
-        client <------ACK + SYN ---- server
-        client --------- ACK ------> server
-
-        HTTP协议是使用TCP作为其传输层协议的
-
-    3. browser 发送HTTP请求
-
-        发送HTTP请求的过程就是构建HTTP请求报文并通过TCP协议中发送到服务器指定端口 Port (HTTP协议80/8080, HTTPS协议443)。
-        HTTP请求报文是由三部分组成: 请求行, 请求报头和请求正文。
-
-        请求行 ：Method Request-URL HTTP-Version CRLF
-               eg: GET index.html HTTP/1.1
-               常用的Method有: GET, POST, PUT, DELETE, OPTIONS, HEAD。
-        请求报头 ：
-                请求报头允许客户端向服务器传递请求的附加信息和客户端自身的信息。
-                常见的请求报头有: Accept, Accept-Charset, Accept-Encoding, Accept-Language, Content-Type, Authorization, Cookie, User-Agent等。
-                    browser identification (User-Agent header)
-                    types of requests that it will accept (Accept header)
-                    connection headers asking it to keep the TCP connection alive for additional requests (Connection : Keep-Alive)
-        请求正文 ： 
-                当使用POST, PUT等方法时，通常需要客户端向服务器传递数据。
-                现在的Web应用通常采用Rest架构，请求的数据格式一般为json。这时就需要设置Content-Type: application/json。
-
-    4.服务器处理请求并返回HTTP报文
-        HTTP响应报文也是由三部分组成: 状态码, 响应报头和响应报文。
-        状态码
-            状态码是由3位数组成，第一个数字定义了响应的类别，且有五种可能取值:
-
-            1xx：指示信息–表示请求已接收，继续处理。
-
-            2xx：成功–表示请求已被成功接收、理解、接受。
-                200 Ok  request succeeded,requested object later in this msg
-
-            3xx：重定向–要完成请求必须进行更进一步的操作
-                301 Moved Permanently
-
-            4xx：客户端错误–请求(request)有 语法错误 或 请求无法实现。
-                400 Bad Request request msg not understood by server
-                403 Forbidden                                           //服务器收到请求，但是拒绝提供服务
-                404 Not Found requested document not found on this server
-
-            5xx：服务器端错误–服务器未能实现合法的请求。
-                505 HTTP Version Not Supported
-
-        响应报头 ：  常见的响应报头字段有: Server, Connection...。
-                
-        响应报文
-            服务器返回给浏览器的文本信息，通常HTML, CSS, JS, 图片等文件就放在这一部分。
-
-
-    5. 浏览器解析渲染页面    显示出来
-
-        首先浏览器解析 Html 文件构建 Dom 树
-        解析 Css 文件构建渲染树
-        然后 浏览器开始布局渲染树并将其绘制到屏幕上 这个过程比较复杂 涉及到两个概念: reflow(回流)和repain(重绘)。
-            DOM节点中的各个元素都是以盒 Box 模型的形式存在, 这些都需要浏览器去计算其位置和大小等, 这个过程称为 relow;
-            当盒模型的位置, 大小以及其他属性，如颜色,字体,等确定下来之后，浏览器便开始绘制内容，这个过程称为 repain
-        JS 。。。
-
-    6. 连接结束:(4次挥手)
-
-
-英文版解释:
-    1. the browser check the Cache for a DNS record to find the cossesponding ip address.
-        broswer cache ----> OS cache ---> router cache ---> ISP cache
-
-    2. if the requested URL is not in the cache, ISP‘s DNS server initiates a DNS Query 
-        to find the IP address of the server that hosts www.google.com.
-
-    3. browser initiates a TCP connection with the server.
-
-        TCP/IP three-way handshake
-
-            3.1 client sends a SYN packet to the server asking if it is open for new connections.
-            3.2 If the server has open ports that can accept and initiate new connections, 
-                it will response with an ACK of the SYN packet using a SYN/ACK packet.
-            3.3 the client will receive the SYN/ACK packet and will acknowledge it by sending an ACK packet.
-
-    4. browser sends an HTTP request to the web server.
-        GET / POST 
-
-    5. server handles the request and sends back a HTTP response.
-
-        There are five types of statuses
-            5.1  1xx indicates an informational message only
-            5.2  2xx indicates success of some kind
-            5.3  3xx redirects the client to another URL
-            5.4  4xx indicates an error on the client’s part
-            5.5  5xx indicates an error on the server’s part
-
-    6. the browser display the HTML content
 
 
 
+4. 硬件(MAC)地址的概念及作用。
+5. ARP协议的用途 及算法、在哪一层上会使用arp？
+6. CRC冗余校验算法，反码和检验算法。
+7. 如何实现透明传输。
+9.  路由表的内容。
+10. 分组转发算法。
+11. IP报文的格式，格式的各个字段的含义要理解。
+12. MTU的概念，啥叫路径MTU？MTU发现机制，TraceRoute(了解)。
+13. RIP协议的概念 及算法。
 
+16. Ping协议的实现原理，ping命令格式。
+17.子网划分的概念，子网掩码。
+18.IP地址的分类，如何划分的，及会计算各类地址支持的主机数。
+30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
 
 
 
