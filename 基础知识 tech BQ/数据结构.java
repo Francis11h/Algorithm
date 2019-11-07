@@ -110,6 +110,25 @@ BST
 
 
 
+数据结构binary tree, 请举例几个binary tree,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -180,34 +199,50 @@ Dequeue  extends Queue<E>
 
 
 
-
--------
-
--------
-
+Graph
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+A graph is an abstract data type that consists of a finite set of Vertices together with a set of Edges connecting the vertices.
 
 
+------------
+Graph Storage
+------------
+
+Edge List
+	store an array of edges 
+	 [[0,1], [0,6], [0,8], [1,6]]
+	 
+Adjacency List
+	Vertices stored as records or objects
+	each vertex stores a list of adjacent vertices
+
+Adjacency Matrix
+
+								adjacency matrix		adjacency list
+inspect all edges					O(V^2)					O(E)
+Find all edges incident on i 		O(V)					O(k)
+Is there an edge from i to j		O(1)					O(logk)
+
+
+------------------------
+BFS和DFS 英文定义 and 差别
+------------------------
+
+
+DFS : One starts at the root (selecting some arbitrary node as the root in the case of a graph) 
+		and explores As-Far-As possible along each Branch "before" Backtracking.
+		从根节点/图中随便选一点 沿着 每个分支  回溯之前 走越远越好
+		You explore one path, hit a dead end, and go back and try a different one.
+
+BFS :  It starts at the tree root (or some arbitrary node of a graph, sometimes referred to as a ‘search key’)
+		 and explores the Neighbor-Nodes first, "before" moving to the Next Level neighbors.
 
 
 
+Depth-first search on a binary tree generally requires Less Memory than breadth-first.
+Depth-first search can be easily implemented with Recursion.
 
-
-
-
-
-
-
--------
-
--------
-
-
-
-
-
-
-
-
+A DFS doesn‘t necessarily find the Shortest path to a node, while breadth-first search does
 
 
 
