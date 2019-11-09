@@ -4,7 +4,7 @@ It is about a P2P file sharing system,
 
 Also designed the Communication-Protocols according to the standered HTTP protocol.
 
-Implemented Distributed-Index at the server to store the metadata for each peer 
+Implemented Distributed-Index at the peer server to store the metadata for each peer 
     to accelerate the transmission speed and eliminate redundant transmissions.
 
 
