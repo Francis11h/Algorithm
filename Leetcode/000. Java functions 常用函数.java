@@ -71,6 +71,9 @@ Map
 						System.out.println(entry.getKey() + entry.getValue());
 					}
 
+					map.ketSet();
+					map.values();
+
 取值没有默认			map.getOrDefault(keyName, 0);
 
 增删改				map.put(key, value);
