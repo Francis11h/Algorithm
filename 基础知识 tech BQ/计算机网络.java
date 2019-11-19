@@ -516,6 +516,7 @@ HTTPS过程
     SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。
     HTTPS相比于HTTP，虽然提供了安全保证，但是势必会带来一些时间上的损耗，如握手和加密等过程，是否使用HTTPS需要根据具体情况在安全和性能方面做出权衡。
 
+
 ------------------------
 组播和多播的概念, IGMP 的用途
 ------------------------
@@ -527,13 +528,83 @@ https://www.cnblogs.com/xujian2014/p/5072215.html
 
 
 
+------------------------
+硬件(MAC)地址的概念及作用
+------------------------
+MAC address = LAN address = pyhsical address  是 Link-Layer address
+
+    it is not the host and routers that have link-layer address but Rather 
+        their adapters("network interfaces") that have link-layer address
+
+        就是 网卡地址 一个主机host 可以有多个 MAC地址
+
+    6 bytes long hexadecimal  e.g.:  1A-23-F9-CD-06-9B
 
 
-4. 硬件(MAC)地址的概念及作用。
-5. ARP协议的用途 及算法、在哪一层上会使用arp？
-6. CRC冗余校验算法，反码和检验算法。
+想要联网 必须得有这个 MAC 地址 
+Each Interface connected to a LAN has a unique MAC address
+
+------------------------------------
+ARP协议的用途 及算法, 在哪一层上会使用arp
+------------------------------------
+ARP是 Link-Layer 数据链路层 上的
+
+Address Resolution Protocol
+    provides a mechanism to translate network layer address(IP address) to link-layer address(MAC address)
+    地址转换的           linux上看arp表(arp -v // arp -n)
+
+
+ARP resolving is analogous to DNS.
+    but DNS resolves host names for fosts anywhere in the Internet,
+    whereas ARP resolves IP address only for hosts and router interfaces "on the same subnet"
+
+    If a node is CA were to try to use ARP to resolve the IP address for a node in NC, ARP will return with an error
+
+
+ 但是 不同的 subnet之间 怎么传？
+    用 router 一个router 有多个 IP 及对应的 MAC, 同时还有 "router table" 就可以了
+
+
+
+
+
+--------------------------
+CRC冗余校验算法，反码和检验算法
+--------------------------
+规定一个 G
+D 上加上 G的位数-1 个 0
+然后 除 
+做 XOR 运算 
+
+
+----------------
+Switch vs Router
+----------------
+
+工作层次不同: Switch交换机 主要工作在数据链路层（第二层）
+            Router路由器 工作在网络层（第三层）
+
+转发依据不同: Switch交换机 转发所依据的对象时:MAC地址（物理地址）
+            路由转发所依据的对象是:IP地址（网络地址）
+
+主要功能不同: 交换机 主要用于组建局域网
+            路由主要功能是将由交换机组好的局域网相互连接起来，或者接入Internet。
+            交换机能做的，路由都能做。
+            交换机不能分割广播域，路由可以。
+            路由还可以提供防火墙的功能。
+            路由配置比交换机复杂。
+
+简而言之 Switch交换机 是看门大爷,Router路由 是邮局
+
+
+
+--------------------------
+路由表Routering table 的内容
+--------------------------
+
+
+
 7. 如何实现透明传输。
-9.  路由表的内容。
 10. 分组转发算法。
 11. IP报文的格式，格式的各个字段的含义要理解。
 12. MTU的概念，啥叫路径MTU？MTU发现机制，TraceRoute(了解)。
