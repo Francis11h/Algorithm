@@ -1,7 +1,57 @@
 210. Course Schedule II
 
-//临接表 表示出来图 5ms
 
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        List[] graph = new ArrayList[numCourses];
+        int[] indegree = new int[numCourses];
+        int[] ans = new int[numCourses];
+        
+        for (int i = 0; i < numCourses; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        
+        for (int[] pre : prerequisites) {
+            int from = pre[1], to = pre[0];
+            // add edge for our directed graph
+            // there are no duplicate edges in the input prerequisites.
+            graph[from].add(to);
+            indegree[to]++;
+        }
+        // do bfs
+        
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (indegree[i] == 0) {
+                queue.add(i);
+            }
+        }
+        
+        int index = 0;
+        while (!queue.isEmpty()) {
+            int from = queue.poll();
+            // 这里 很 tricky 每次 修改ans的一个下标 
+            ans[index++] = from;
+            
+            for (int k = 0; k < graph[from].size(); k++) {
+                int to = (int) graph[from].get(k);
+                indegree[to]--;
+                if (indegree[to] == 0) {
+                    queue.offer(to);
+                }
+            }
+        }
+        return index == numCourses ? ans : new int[0];
+    } 
+}
+
+
+
+
+
+
+
+//临接表 表示出来图 5ms
 class Solution {
     public int[] findOrder(int numCourses, int[][] prerequisites) {
         ArrayList[] graph = new ArrayList[numCourses];
