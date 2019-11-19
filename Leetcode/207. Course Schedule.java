@@ -48,7 +48,7 @@ space O(n ^ 2)
 // 用临接表（本题临接数组即可）表示 省空间 （数组 套 数组 表示图）
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        List[] graph = new ArrayList[numCourses];   //建大小为V的主“表”
+        List[] graph = new ArrayList[numCourses];   //建大小为V的主“表” 这里 知道了 有多少个 vertex 直接建 固定大小的 array
         int[] indegree = new int[numCourses];
         //初始化临接表
         for (int i = 0; i < numCourses; i++) {
@@ -88,4 +88,57 @@ class Solution {
 }
 Time O(V+E)
 space O(V+E)
+
+
+
+
+最新的解法 2019.11.19
+
+
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        List[] graph = new ArrayList[numCourses];
+        int[] indegree = new int[numCourses];
+        
+        for (int i = 0; i < numCourses; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        
+        for (int[] pre : prerequisites) {
+            int from = pre[1], to = pre[0];
+            // add edge for our directed graph
+            // there are no duplicate edges in the input prerequisites.
+            graph[from].add(to);
+            indegree[to]++;
+        }
+        // do bfs
+        
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (indegree[i] == 0) {
+                queue.add(i);
+            }
+        }
+        int count = 0;
+        while (!queue.isEmpty()) {
+            int from = queue.poll();
+            count++;
+            for (int k = 0; k < graph[from].size(); k++) {
+                int to = (int) graph[from].get(k);              //这里要注意下 ArrayList里面存的是 Integer 要转变成 int
+                indegree[to]--;
+                if (indegree[to] == 0) {
+                    queue.offer(to);
+                }
+            }
+        }
+        return count == numCourses;
+    } 
+}
+
+vertex : numCourses = V
+edge : prerequisites.length = E
+
+S: O(2V + E)     List-Array(V) + indegree(V) +  total Adjacency-Lists(E)
+
+T: O(2V + 2E)    buildGraph(V + E) + bfs(V + E)
 
