@@ -239,9 +239,56 @@ Java的异常处理是通过5个关键字来实现的：try，catch，throw，th
 
 
 
--------
+--------------------------------------
+Enumeration接口 和 Iterator接口 的区别有哪些？
+--------------------------------------
 
--------
+Iterator
+	is an interface which belongs to collection framework.
+	It allow us to traverse the collection, access the data element and remove the data elements of the collection.
+
+	public interface Iterator<E> {
+		boolean hasNext()
+		Object next()
+		void remove()
+	}
+
+	public interface Iterable<T> {
+    	Iterator<T> iterator();
+    	// Iterable 就是实现了 for each  的 补充版的 Iterator
+    	// Iterable接口用于支持foreach的循环。Iterable接口只有一个方法，就是iterator()方法，返回集合的Iterator对象。所有实现Iterable接口的集合都可以使用foreach循环进行遍历。
+    	default void forEach(Consumer<? super T> action) {
+	        Objects.requireNonNull(action);
+	        for (T t : this) {
+	            action.accept(t);
+	        }
+	    }
+	}
+
+Iterators differ from enumerations in two ways:
+
+	Iterators allow the caller to "remove elements" from the underlying collection during the iteration with well-defined semantics.
+	在遍历过程中 允许删除元素
+	
+		Using Enumeration, you can Only traverse the Collection object. 
+		But using Iterator, you can also remove an element while traversing the Collection.
+
+
+
+Java容器中，所有的Collection子类会实现 Iteratable接口 以实现 foreach 功能
+	Iteratable接口的实现 又依赖于 实现了Iterator的内部类
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -266,7 +313,7 @@ static关键字是什么意思？
 java的动态代理机制是怎样的？
 
 如何权衡是使用无序的数组还是有序的数组？
-Enumeration接口和Iterator接口的区别有哪些？
+
 
 finalize()方法什么时候被调用？析构函数(finalization)的目的是什么？
 如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？ 
