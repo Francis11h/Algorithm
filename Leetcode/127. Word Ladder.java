@@ -30,7 +30,7 @@ return its length 5.
         ===> 用一个新的set，每次把走过的加进入
 
 具体实现的问题
-问题4: nextWord 判定和result计算
+问题4: result计算: 按 bfs 层算 即需要记录 每层的 size = queue.size()
 
 
 
@@ -39,31 +39,28 @@ class Solution {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
         if (wordList == null || wordList.size() == 0)
             return 0;
-        // if (beginWord == endWord)
-        //     return 1;
-        Set<String> dict = new HashSet<>();
-        for (String s : wordList) {
-            dict.add(s);
-        }
+
+        Set<String> dict = new HashSet<>(wordList);
+
         if (!dict.contains(endWord))
             return 0;
         
         Queue<String> queue = new LinkedList<>();
-        Set<String> set = new HashSet<>();
+        Set<String> visited = new HashSet<>();
         queue.offer(beginWord);
-        set.add(beginWord);
+        visited.add(beginWord);
         
         int result = 1;
         while (!queue.isEmpty()) {
-            int size = queue.size();
+            int size = queue.size();                // 这里 本题的最关键！！！ 每一层 记录 
             for (int i = 0; i < size; i++) {
                 String word = queue.poll();
                 if (word.equals(endWord)) {        //出队的时候比     word == endWord这么写不行
                     return result;
                 }
                 for (String nextWord : getNestWords(word, dict)) {
-                    if (!set.contains(nextWord)) {
-                        set.add(nextWord);
+                    if (!visited.contains(nextWord)) {
+                        visited.add(nextWord);
                         queue.offer(nextWord);
                     }
                 }
@@ -113,3 +110,18 @@ Arrays.toString(temp),得到的是一个类似 [a, b, c]
         String str = new String(data);
 方法2：调用String类的方法转换。
         String.valueOf(char[] ch)
+
+
+
+
+
+
+I think, that time complexity is "O(N*M)", where N is size of the dictionary and M is length of the word.
+
+Details:
+
+To generate neighbors - O(26 * M)
+To check if the word exists in dict - O(1). This is a reason why it is better to put all words to the Set. Note, that the original version of this problem uses List<String> wordList. It is a bit confusing since author changed the signature to Set<String> dict.
+To generate a tree and traverse the tree via BFS - O(N)
+So, the result is "O(26 * M * 1 * N)" -> O(M * N)
+
