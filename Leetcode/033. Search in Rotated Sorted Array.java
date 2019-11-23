@@ -103,3 +103,122 @@ class Solution {
         return -1;
     }
 }
+
+
+
+
+
+
+
+2019 11.23 再写。。。 写出了 两个笨b做法 我吐了。。。
+
+
+
+class Solution {
+    public int search(int[] nums, int target) {
+        if (nums == null || nums.length == 0) return -1;
+        int left = 0, right = nums.length - 1;
+        while (left + 1 < right) {
+            int mid = left + (right - left) / 2;
+            
+
+            if (nums[mid] > nums[left]) {
+                if (nums[mid] == target) {
+                    return mid;
+                } else if (nums[mid] < target) {
+                    left = mid;
+                } else {
+                    if (nums[left] == target) return left;          // 这里 可写可不写。。 等号带着也行。。。。
+                    else if (nums[left] > target) left = mid; 
+                    else right = mid;
+                }
+            } else {
+                if (nums[mid] == target) {                      // 这里就是 代码的冗余
+                    return mid;
+                } else if (nums[mid] > target) {
+                    right = mid;
+                } else {
+                    if (nums[left] == target) return left;  
+                    else if (nums[left] > target) left = mid; 
+                    else right = mid;
+                }
+            }
+            
+        }
+
+        if (nums[left] == target)  return left;
+        if (nums[right] == target) return right;
+        
+        return -1;
+    }
+}
+
+
+
+
+
+
+
+
+class Solution {
+    public int search(int[] nums, int target) {
+        if (nums == null || nums.length == 0) return -1;
+        int left = 0, right = nums.length - 1;
+        while (left + 1 < right) {
+            int mid = left + (right - left) / 2;
+            
+            if (nums[mid] == target) return mid;
+            
+            if (nums[mid] > nums[left]) {
+                if (target > nums[mid]) {
+                    left = mid;
+                } else {
+                    if (target >= nums[left]) right = mid;
+                    else left = mid;                                    // 这里也是冗余 这里可以和上面合并
+                }
+            } else {
+                if (target < nums[mid]) {
+                    right = mid;
+                } else {
+                    if (target <= nums[right]) left = mid;
+                    else right = mid;
+                }
+            }
+        }
+
+        if (nums[left] == target)  return left;
+        if (nums[right] == target) return right;
+        
+        return -1;
+    }
+}
+
+
+精简版本 
+
+
+
+class Solution {
+    public int search(int[] nums, int target) {
+        if (nums == null || nums.length == 0) return -1;
+        int left = 0, right = nums.length - 1;
+        while (left + 1 < right) {
+            int mid = left + (right - left) / 2;
+            
+            if (nums[mid] == target) return mid;
+
+            if (nums[mid] > nums[left]) {
+                if (target >= nums[left] && target < nums[mid]) right = mid;
+                else left = mid;
+            } else {
+                if (target <= nums[right] && target > nums[mid]) left = mid;
+                else right = mid;
+            }
+        }
+        
+        if (nums[left] == target)  return left;
+        if (nums[right] == target) return right;
+        
+        return -1;
+    }
+}
