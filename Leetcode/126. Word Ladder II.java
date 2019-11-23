@@ -282,3 +282,228 @@ public class Solution {
 
 
 
+
+
+
+
+
+
+2019.11.22 错误的版本 根据 127 word Ladder 修改的 
+该版本 只能返回一个 串儿 而不是 全部
+
+错误在于 建图的时候 bfs 碰到最短的 路径 就直接 return 了 
+
+这样子 graph 就建 的 不完全了 少了 "log" --> "cog" 这条本来该有的边
+所以 不能    if (cur.equals(endword)) return true; 
+            和
+            for (String nei : getNextWords(cur, dict)) {
+               if (!distance.containsKey(nei)) {
+                    graph.get(cur).add(nei);
+                    distance.put(nei, step);
+                    queue.offer(nei);
+                } 
+            }  
+        这两处 就不能这么写 
+
+        因为 nei 边 应该可以被 多次加入 图中 所以 这里 不正确 应该 改为 
+
+        在判断重复的上头 先加入边 
+        for (String nei : getNextWords(cur, dict)) {
+            // 应该在这 加 先加了边 再说 后面 dfs 再去重
+            graph.get(cur).add(nei);
+            if (!distance.containsKey(nei)) {
+                distance.put(nei, step);
+                queue.offer(nei);
+            }
+        }
+
+
+        "dot" ----> "hot", "lot", "dog"  然后 后面再根据 dfs中的  if (distance.get(nei) + 1 == cur.size()) 再判断是。进下一层还是回溯
+
+
+
+
+
+
+
+import java.util.*;
+
+public class WordLadder {
+    public static void main(String[] args) {
+        String beginWord = "hit";
+        String endWord = "cog";
+        List<String> wordList = Arrays.asList("hot","dot","dog","lot","log","cog");
+        findLadders(beginWord, endWord, wordList);
+    }
+    public static List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+
+        Set<String> dict = new HashSet<>(wordList);
+        List<List<String>> ans = new ArrayList<>();
+        Map<String, List<String>> graph = new HashMap<>();
+        Map<String, Integer> distance = new HashMap<>();
+
+        if (bfs(beginWord, endWord, dict, graph, distance)) {
+            dfs(beginWord, endWord, graph, distance, new ArrayList<>(Arrays.asList(beginWord)), ans);
+        }
+        return ans;
+    }
+
+    public static boolean bfs(String beginword, String endword, Set<String> dict, Map<String, List<String>> graph, Map<String, Integer> distance) {
+        graph.put(beginword, new ArrayList<>());
+        for (String word : dict) {
+            graph.put(word, new ArrayList<>());
+        }
+
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginword);
+        distance.put(beginword, 0);
+        int step = 0;
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            step++;
+            for (int i = 0; i < size; i++) {
+                String cur = queue.poll();
+                if (cur.equals(endword)) {
+                    return true;
+                }
+                for (String nei : getNextWords(cur, dict)) {
+                    if (!distance.containsKey(nei)) {
+                        graph.get(cur).add(nei);
+                        distance.put(nei, step);
+                        queue.offer(nei);
+                    }
+
+                }
+            }
+
+        }
+        return false;
+
+    }
+
+    private static  void dfs(String beginWord, String endWord, Map<String, List<String>> graph, Map<String, Integer> distance, List<String> cur, List<List<String>> ans) {
+        if (beginWord.equals(endWord)) {
+            ans.add(new ArrayList<>(cur));
+            return;
+        }
+        for (String nei : graph.get(beginWord)) {
+            cur.add(nei);
+            if (distance.get(nei) + 1 == cur.size()) {
+                dfs(nei, endWord, graph, distance, cur, ans);
+            }
+            cur.remove(cur.size() - 1);
+        }
+    }
+
+    public static List<String> getNextWords(String word, Set<String> wordList_set) {
+        List<String> nextWords = new ArrayList<>();
+
+        for (int i = 0; i < word.length(); i++) {
+            for (char ch = 'a'; ch <= 'z'; ch++) {
+                if (word.charAt(i) == ch) continue;
+
+                char[] temp = word.toCharArray();
+                temp[i] = ch;
+                String newWord = new String(temp);
+
+                if (wordList_set.contains(newWord)) {
+                    nextWords.add(newWord);
+                }
+            }
+        }
+        return nextWords;
+    }
+}
+
+
+
+
+
+
+按上述 修改后的 正确版本 
+
+class Solution {
+    public static List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+
+        Set<String> dict = new HashSet<>(wordList);
+        List<List<String>> ans = new ArrayList<>();
+        Map<String, List<String>> graph = new HashMap<>();
+        Map<String, Integer> distance = new HashMap<>();
+
+        if (bfs(beginWord, endWord, dict, graph, distance)) {
+            dfs(beginWord, endWord, graph, distance, new ArrayList<>(Arrays.asList(beginWord)), ans);
+        }
+        return ans;
+    }
+
+    public static boolean bfs(String beginword, String endword, Set<String> dict, Map<String, List<String>> graph, Map<String, Integer> distance) {
+        graph.put(beginword, new ArrayList<>());
+        for (String word : dict) {
+            graph.put(word, new ArrayList<>());
+        }
+
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginword);
+        distance.put(beginword, 1);
+        int step = 1;
+        boolean isReach = false;
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            step++;
+            for (int i = 0; i < size; i++) {
+                String cur = queue.poll();
+                if (cur.equals(endword)) {
+                    isReach = true;
+                }
+                for (String nei : getNextWords(cur, dict)) {
+                    graph.get(cur).add(nei);
+                    if (!distance.containsKey(nei)) {
+                        distance.put(nei, step);
+                        queue.offer(nei);
+                    }
+
+                }
+            }
+            if (isReach) {
+                break;
+            }
+        }
+
+        return isReach;
+    }
+
+    private static void dfs(String beginWord, String endWord, Map<String, List<String>> graph, Map<String, Integer> distance, List<String> cur, List<List<String>> ans) {
+        if (beginWord.equals(endWord)) {
+            ans.add(new ArrayList<>(cur));
+            return;
+        }
+        for (String nei : graph.get(beginWord)) {
+            cur.add(nei);
+            if (distance.get(nei) == cur.size()) {
+                dfs(nei, endWord, graph, distance, cur, ans);
+            }
+            cur.remove(cur.size() - 1);
+        }
+    }
+
+    public static List<String> getNextWords(String word, Set<String> wordList_set) {
+        List<String> nextWords = new ArrayList<>();
+
+        for (int i = 0; i < word.length(); i++) {
+            for (char ch = 'a'; ch <= 'z'; ch++) {
+                if (word.charAt(i) == ch) continue;
+
+                char[] temp = word.toCharArray();
+                temp[i] = ch;
+                String newWord = new String(temp);
+
+                if (wordList_set.contains(newWord)) {
+                    nextWords.add(newWord);
+                }
+            }
+        }
+        return nextWords;
+    }
+}
