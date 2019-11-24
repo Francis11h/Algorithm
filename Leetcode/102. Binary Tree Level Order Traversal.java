@@ -7,37 +7,31 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
+2019.11.24 一遍过 ✅
+
 class Solution {
     public List<List<Integer>> levelOrder(TreeNode root) {
         List<List<Integer>> ans = new ArrayList<>();
+        if (root == null) return ans;
+        
         Queue<TreeNode> queue = new LinkedList<>();
-        if (root == null) {
-            return ans;
-        }
-
         queue.offer(root);
 
         while (!queue.isEmpty()) {
-            List<Integer> path = new ArrayList<>();
             int size = queue.size();
-
+            List<Integer> temp = new ArrayList<>();
             for (int i = 0; i < size; i++) {
                 TreeNode cur = queue.poll();
-                path.add(cur.val);
-
-                if (cur.left != null) {
-                    queue.offer(cur.left);
-                }
-                if (cur.right != null) {
-                    queue.offer(cur.right);
-                }
+                temp.add(cur.val);
+                if (cur.left != null) queue.offer(cur.left);
+                if (cur.right != null) queue.offer(cur.right);
             }
-            ans.add(path);
+            ans.add(new ArrayList<>(temp));
         }
+        
         return ans;
     }
 }
-
 
 
 
@@ -68,7 +62,31 @@ class Solution {
     }
 }
 
+官方dfs
+class Solution {
+    List<List<Integer>> levels = new ArrayList<List<Integer>>();
 
+    public void helper(TreeNode node, int level) {
+        // start the current level
+        if (levels.size() == level)
+            levels.add(new ArrayList<Integer>());
+
+         // fulfil the current level
+         levels.get(level).add(node.val);
+
+         // process child nodes for the next level
+         if (node.left != null)
+            helper(node.left, level + 1);
+         if (node.right != null)
+            helper(node.right, level + 1);
+    }
+    
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null) return levels;
+        helper(root, 0);
+        return levels;
+    }
+}
 
 
 
