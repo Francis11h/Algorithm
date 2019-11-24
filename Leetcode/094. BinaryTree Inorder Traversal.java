@@ -16,11 +16,47 @@ class Solution {
 }
 
 T:O(N)
-S:O(logN)
+S:O(logN) worst O(N) when tree is a list
+
 
 
 //iteration
 // using stack
+2019 11.24 直观写法
+    先把 root 左子树全部入栈 然后pop
+    pop的时候 如果该点 有右孩子 入栈 然后再把该右孩子的左孩子们全部入栈
+
+class Solution {
+    
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        if (root == null) return ans;
+        Stack<TreeNode> stack = new Stack<>();
+        while (root != null) {
+            stack.push(root);
+            root = root.left;
+        }
+        
+        while (!stack.isEmpty()) {
+            TreeNode cur = stack.pop();
+            ans.add(cur.val);
+            if (cur.right != null) {
+                stack.push(cur.right);
+                cur = cur.right;
+                while (cur.left != null) {
+                    stack.push(cur.left);
+                    cur = cur.left;
+                }
+            }
+        }
+        return ans; 
+    }
+}
+
+
+
+
+
 
 class Solution {
     //iterate 用 inorder traversal 的 定义一步步的来做

@@ -17,6 +17,15 @@ diagonal-traversal-of-binary-tree
 2. pop 出队后 "如果有"左孩子 再遍历该左孩子节点 的右孩子入队
 3. 一层 记一下size
 
+
+
+对比一下 “inorder traversal
+        先把 root 左子树全部入栈 然后pop
+        pop的时候 如果该点 有右孩子 入栈 然后再把该右孩子的左孩子们全部入栈”
+
+基本就是 inorder traversal 反过来 用queue 不是 stack
+
+
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -27,8 +36,6 @@ diagonal-traversal-of-binary-tree
  * }
  */
 
-queue
-[1, 3, 7 ,9]
 
 class Solution {
     public List<List<Integer>> diagonalTraversal(TreeNode root) {
