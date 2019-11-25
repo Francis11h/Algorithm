@@ -189,8 +189,55 @@ https://leetcode.com/problems/word-search-ii/discuss/59780/Java-15ms-Easiest-Sol
 
 
 
+2019.11.25 重写 dfs部分
 
-
-
+class Solution {
+    Set<String> ans = new HashSet<>();          //一定要用 set 因为 后面搜的时候 难免会有重复
+    public List<String> findWords(char[][] board, String[] words) {
+        if (board == null || board.length == 0 || board[0].length == 0) return new ArrayList<>();
+        if (words == null || words.length == 0) return new ArrayList<>();
+        int m = board.length, n = board[0].length;
+        //auxiliary array to avoid repeated traversal
+        boolean[][] visited = new boolean[m][n];
+        // build Trie by using each word of words list
+        Trie trie = new Trie();
+        for (String word : words) {
+            trie.insert(word);
+        }
+        //  we can start searching at every point
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                dfs(board, i, j, visited, "", trie);
+            }
+        }
+        return new ArrayList<>(ans);
+    }
+    
+    //parameters that our dfs needs: 1.board 2.x 3.y 4.visited 5.current str 6.Trie
+    // we don't need specific word cause we will search our prefix current str in the trie 
+    // where has all words' information, so by searching in trie we can search every word in the list
+    private void dfs(char[][] board, int x, int y, boolean[][] visited, String cur, Trie trie) {
+         // out of bounds or repeated traversal
+        int m = board.length, n = board[0].length;
+        if (x >= m || x < 0 || y >= n || y < 0 || visited[x][y]) return;
+        
+        // modify our current str  这个一定要在 tire search的前面 必须先改 再判断才有意义
+        cur += board[x][y];
+        
+        // prefix not found
+        if (!trie.startWith(cur)) return;
+        // found, add it to ans
+        if (trie.search(cur)) ans.add(cur);
+        
+        // mark visited and do next level dfs
+        visited[x][y] = true;
+        dfs(board, x + 1, y, visited, cur, trie);
+        dfs(board, x - 1, y, visited, cur, trie);
+        dfs(board, x, y + 1, visited, cur, trie);
+        dfs(board, x, y - 1, visited, cur, trie);
+        //backtracking
+        visited[x][y] = false;
+    }
+}
 
 
