@@ -160,3 +160,12 @@ class Solution {
 
 
 
+
+Building Trie needs O(n * k), and validation needs O(n * k), 
+where n is for the size of "words", k is for the size of a single word.
+
+
+
+
+
+
