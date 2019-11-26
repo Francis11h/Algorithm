@@ -241,3 +241,74 @@ class Solution {
 }
 
 
+
+
+
+2019.11.25 重写 建Trie
+class TrieNode {
+    boolean isWord;
+    Map<Character,TrieNode> children;
+    TrieNode() {    
+        this.isWord = false;
+        this.children = new HashMap<>();
+    }
+}
+
+
+class Trie {
+    // one trie tree must maintain a root node 
+    TrieNode root;
+    // constructor must initialize the root node
+    Trie() {
+        this.root = new TrieNode();
+    }
+    // insert a String word
+    public void insert(String word) {
+        TrieNode cur = root;
+        for (int i = 0; i < word.length(); i++) {
+            char ch = word.charAt(i);
+            if (!cur.children.containsKey(ch)) {            //是 cur.children. 不是 cur 因为 cur.children才是那个 HashMap
+                cur.children.put(ch, new TrieNode());
+            }
+            cur = cur.children.get(ch);
+        }
+        cur.isWord = true;
+    }
+
+    // search by using prefix string, core function of trie, return a node
+    public TrieNode searchNode(String prefix) {
+        TrieNode cur = root;
+        for (int i = 0; i < prefix.length(); i++) {
+            char ch = prefix.charAt(i);
+            if (!cur.children.containsKey(ch)) return null;
+            cur = cur.children.get(ch);
+        }
+        return cur;
+    }
+
+    public boolean startWith(String word) {
+        return searchNode(word) != null;
+    }
+
+    public boolean search(String word) {
+        if (searchNode(word) == null || !searchNode(word).isWord) return false;
+        return true;
+    }
+}
+
+
+
+
+T: O(M*N * 4 * 3 ^ (L - 1))
+
+ 
+M * Nis the number of cells in the board and 
+L is the Maximum length of words.
+
+
+Space Complexity: O(MN + L..), where 
+
+L is the total "number of letters" in the dictionary. (list 的长度)
+The main space consumed by the algorithm is the "Trie data structure "we build.
+In the worst case where there is no overlapping of prefixes among the words, the Trie would have as many nodes as the letters of all words. 
+And optionally, one might keep a copy of words in the Trie as well. As a result, we might need 2L space for the Trie.
