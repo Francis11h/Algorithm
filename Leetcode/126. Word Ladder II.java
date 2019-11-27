@@ -507,3 +507,107 @@ class Solution {
         return nextWords;
     }
 }
+
+
+
+
+
+
+
+2019 .11.27 又写一遍
+
+class Solution {
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        List<List<String>> ans = new ArrayList<>();
+        Set<String> dict = new HashSet<>(wordList);
+        // first we need to calculate the minimum length ot the transformation by using bfs
+        // bfs should return boolean to indicate whether there is a sequence
+        // bfs also need to build a graph and a distance map, cause our dfs need to use them 
+        Map<String, List<String>> graph = new HashMap<>();
+        Map<String, Integer> distance = new HashMap<>();
+        if (bfs(beginWord, endWord, dict, graph, distance)) {
+            //then we can do dfs to generate all possible kinds of 
+            dfs(beginWord, endWord, 0, new ArrayList<>(Arrays.asList(beginWord)), graph, distance, ans);
+        }
+        
+        return ans;
+    }
+    
+    // parameters : 1.startnode 2.endnode 3.graph to build 4.diatance to remove repeated traversal and record the node distance to the startnode 
+    private boolean bfs(String beginWord, String endWord, Set<String> dict, Map<String, List<String>> graph, Map<String, Integer> distance) {
+        
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginWord);
+        distance.put(beginWord, 0);
+        int step = -1;
+        boolean isReach = false;
+        
+        // do the level traversal cause we need to calculate the smallest step
+        while (!queue.isEmpty()) {
+            step++;
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                String cur = queue.poll();
+                graph.put(cur, new ArrayList<>());
+                for (String nei : getNextWords(cur, dict)) {
+                    // build graph by adding edge that from cur to nei
+                    graph.get(cur).add(nei);
+                    if (nei.equals(endWord)) {
+                        isReach = true;
+                    }
+                    // we need the minimum distance 
+                    // So only record the distance when we first discover a node 
+                    // only add the node to queue when we first discover a node --> bfs
+                    if (!distance.containsKey(nei)) {
+                        distance.put(nei, step + 1);
+                        queue.offer(nei);
+                    }
+                }
+                // if in this level we reached, we can break cause we just need the minimum step
+                if (isReach) break;
+            }
+            
+        }
+        return isReach;
+    }
+    
+    // parameters : 1.startnode 2.endnode 3. current step 4 current 5.graph 6.distance 7.ans
+    private void dfs(String beginWord, String endWord, int step, List<String> cur, Map<String, List<String>> graph, Map<String, Integer> distance, List<List<String>> ans) {
+        if (beginWord.equals(endWord)) {
+            ans.add(new ArrayList<>(cur));
+            return;
+        }
+        for (String nei : graph.get(beginWord)) {
+            cur.add(nei);
+            if (distance.get(nei) == step + 1) {        
+                // only the distance of nei to origin is current step + 1, go into next level dfs
+                dfs(nei, endWord, step + 1, cur, graph, distance, ans);
+            }
+            cur.remove(cur.size() - 1);
+        }
+    }
+   
+    
+    private List<String> getNextWords(String word, Set<String> dict) {
+        List<String> ans = new ArrayList<>();
+
+        if (word == null || word.length() == 0) return ans;
+        // for each word, every char
+        for (int i = 0; i < word.length(); i++) {
+            char[] array = word.toCharArray();
+            for (char ch = 'a'; ch <= 'z'; ch++) {
+                if (word.charAt(i) == ch) continue;
+                array[i] = ch;
+                String now = String.valueOf(array);
+                if (dict.contains(now)) {
+                    ans.add(now);
+                }
+            }
+        }
+        return ans;
+    }
+}
+
+T: O (list.length * wordLength * 25 + )
+
+DFS: I suppose the time complexity of DFS part depends on how many shortest paths that can start from beginWord and ends at endWord.
