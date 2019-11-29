@@ -366,11 +366,15 @@ prev ----> cur -----> qwer
 
 
 错误代码 因为node中没有存key 就走不通了 
+class Node {
+    int val;
+    Node next, prev;
+    Node (int val) {
+        this.val = val;
+    }
+}
+
 class LRUCache {
-    // cause we need to get a value in O(1) and add a key in O(1), we need to maintain a HashMap
-    // but just use a int to represent the value, we cant do the LRU operations, so we need a new class Node
-    // a Node must have 1. value 2. next ptr 3.prev ptr 
-    // all of the nodes will form a linked list, which has the head and tail, where we can do offer and pop 
     Map<Integer, Node> map;
     int capacity;
     Node head;          // head: points to the most recently used element
@@ -393,11 +397,6 @@ class LRUCache {
         moveToHead(node);
         return node.val;
     }
-    
-    // 1. search whether there existed this key  by using get()
-    // 2. if exists, update the val + move the node to the head 
-    // 3. if not exists, insert a new node at tail + move the new node to the head points to.
-    // 3.1 if the capacity is full, evicts the node which the tail points to.
     public void put(int key, int value) {
         if (get(key) != -1) {
             map.get(key).val = value;
@@ -421,22 +420,21 @@ class LRUCache {
     }
 }
 
-class Node {
-    int val;
-    Node next, prev;
-    Node (int val) {
-        this.val = val;
-    }
-}
 
 
 修改了 Node 其中加上对应value的key
 但还是 错误的代码 因为  初始化 没有考虑 就是 最开始 head tail 的指针 都没有初始化
+class Node {
+    int key,val;
+    Node next, prev;
+    Node (int key, int val) {
+        this.key = key;
+        this.val = val;
+    }
+}
+
 class LRUCache {
-    // cause we need to get a value in O(1) and add a key in O(1), we need to maintain a HashMap
-    // but just use a int to represent the value, we cant do the LRU operations, so we need a new class Node
-    // a Node must have 1. value 2. next ptr 3.prev ptr 
-    // all of the nodes will form a linked list, which has the head and tail, where we can do offer and pop 
+
     Map<Integer, Node> map;
     int capacity;
     Node head;          // head: points to the most recently used element
@@ -446,6 +444,7 @@ class LRUCache {
         this.capacity = capacity;
         this.head = new Node(0, 0);
         this.tail = new Node(0, 0);
+        //////////////////这里少了初始化//////。。。。。。。。。。
     }
     
     // 1. get the value of the key 2. return -1 if the key not exists 3.move the node to the head
@@ -460,10 +459,6 @@ class LRUCache {
         return node.val;
     }
     
-    // 1. search whether there existed this key  by using get()
-    // 2. if exists, update the val + move the node to the head 
-    // 3. if not exists, insert a new node at tail + move the new node to the head points to.
-    // 3.1 if the capacity is full, evicts the node which the tail points to.
     public void put(int key, int value) {
         if (get(key) != -1) {
             map.get(key).val = value;
@@ -488,6 +483,11 @@ class LRUCache {
     }
 }
 
+
+
+
+
+正确的代码
 class Node {
     int key,val;
     Node next, prev;
@@ -496,10 +496,6 @@ class Node {
         this.val = val;
     }
 }
-
-
-
-正确的代码
 class LRUCache {
     // cause we need to get a value in O(1) and add a key in O(1), we need to maintain a HashMap
     // but just use a int to represent the value, we cant do the LRU operations, so we need a new class Node
@@ -565,6 +561,15 @@ class LRUCache {
     }
 }
 
+
+
+
+
+
+
+2019.11.29
+更精简的代码
+确的代码
 class Node {
     int key,val;
     Node next, prev;
@@ -573,6 +578,71 @@ class Node {
         this.val = val;
     }
 }
+
+class LRUCache {
+    // cause we need to get a value in O(1) and add a key in O(1), we need to maintain a HashMap
+    // but just use a int to represent the value, we cant do the LRU operations, so we need a new class Node
+    // a Node must have 1. value 2. key(for us to delete on map) 3. next ptr 4.prev ptr 
+    // all of the nodes will form a linked list, which has the head and tail, where we can do offer and pop 
+    Map<Integer, Node> map;
+    int capacity;
+    Node head;          // head: points to the most recently used element
+    Node tail;          // tail: points to the least recently used element
+    public LRUCache(int capacity) {
+        this.map = new HashMap<>();
+        this.capacity = capacity;
+        this.head = new Node(0, 0);
+        this.tail = new Node(0, 0);
+        head.next = tail;
+        tail.prev = head;
+    }
+    
+    // 1. get the value of the key 2. return -1 if the key not exists 3.move the node to the head
+    public int get(int key) {
+        if (!map.containsKey(key)) return -1;
+        Node node = map.get(key);
+        
+        remove(node);
+        moveToHead(node);
+        return node.val;
+    }
+    
+    // 1. search whether there existed this key  by using get()
+    // 2. if exists, update the val + move the node to the head 
+    // 3. if not exists, insert a new node at tail + move the new node to the head points to.
+    // 3.1 if the capacity is full, evicts the node which the tail points to.
+    public void put(int key, int value) {
+        if (get(key) != -1) {
+            map.get(key).val = value;
+            return;
+        }
+        if (map.size() == capacity) {
+            map.remove(tail.prev.key);       // 通过特定value 瞬间找key 因为本身node就存了 key
+            remove(tail.prev);
+        }
+
+        Node node = new Node(key, value);
+        map.put(key, node);
+        moveToHead(node);
+    }
+
+    // delete the node from the list
+    private void remove(Node node) {
+        if (node == null) return;
+        node.next.prev = node.prev;
+        node.prev.next = node.next;
+    }
+    //move the node to the head
+    private void moveToHead(Node node) {
+        if (node == null) return;
+        node.prev = head;
+        node.next = head.next;
+        head.next = node;
+        node.next.prev = node;
+    }
+}
+
+
 
 
 
