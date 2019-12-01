@@ -16,14 +16,16 @@ dp[i][i] = true
     0 b  1 a  2 b  3 a   4 d
 0 b   T    F    T    F    F              bab    
 
-1 a        T    F    T    F              aba
+1 a        T    F    "T"  F              aba
 
-2 b             T    F    F
+2 b             "T"  F    F
 
 3 a                  T    F
 
 4 d                       T
 
+    从 右下 i=len- 1 到 右上 
+    一行一行 从 j=i 开始 
 
 
 错误的 计算顺序 
