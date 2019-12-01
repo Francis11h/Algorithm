@@ -83,7 +83,36 @@ class Solution {
 
 
 
+2019.12.1 没有一次过。。再写
 
 
+
+class Solution {
+    public String longestPalindrome(String s) {
+        if (s == null || s.length() == 0) return "";
+        int len = s.length();        
+        String ans = null;
+        // 1. dp[i][j]: whether s.substring(i, j+1) is palindromic
+        boolean[][] dp = new boolean[len][len];
+        // // 2. base case
+        // for (int i = 0; i < len; i++) {
+        //     dp[i][i] = true;
+        // }
+        // 3. deduce & calculation order 
+        // calculate each row, from bottom to up, left to right 
+        for (int i = len - 1; i >= 0; i--) {
+            for (int j = i; j < len; j++) {
+                // only if 
+                if (s.charAt(i) == s.charAt(j)) {
+                    dp[i][j] = j - i < 3 || dp[i + 1][j - 1];
+                }
+                if (dp[i][j] && (ans == null || (j - i + 1 > ans.length()))) {
+                    ans = s.substring(i, j + 1);
+                }
+            }
+        }
+        return ans;
+    }
+}
 
 
