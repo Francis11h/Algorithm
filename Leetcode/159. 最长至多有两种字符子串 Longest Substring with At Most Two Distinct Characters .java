@@ -69,3 +69,36 @@ class Solution {
         return ans;
     }
 }
+
+
+2019.11.30 一遍过
+
+// we can use two pointers one moves first until the substring has 3 distinct chars
+// then move another to reduce the distinct to 2
+// record the length during the process
+// use map or int[256] to record the char, and use a int variable dist to count distinct
+class Solution {
+    public int lengthOfLongestSubstringTwoDistinct(String s) {
+        if (s == null || s.length() == 0) return 0;
+        int left = 0, right = 0;
+        int ans = 0;
+        int dist = 0;
+        // Map<Character, Integer> map = new HashMap<>();
+        int[] count = new int[256];
+        while (right < s.length()) {
+            char ch = s.charAt(right);
+            count[ch]++;
+            if (count[ch] == 1) dist++;
+            
+            while (dist > 2) {
+                char rmv = s.charAt(left);
+                count[rmv]--;
+                if (count[rmv] == 0) dist--;
+                left++;
+            }
+            ans = Math.max(ans, right - left + 1);
+            right++;
+        }
+        return ans;
+    }
+}
