@@ -25,17 +25,39 @@ Union-Find
 
 并查集 标准模版 :
 
-1. 初始化 father数组
+1. 初始化 father数组 每个元素的父亲节点都设为其自身
 private int[] father = null;
 
-2. find 是一种两趟方法，当它递归时， 第一趟 沿着 查找路径向上直到找到根
-		第二趟 沿着搜索树 向下更新每个节点，使其直接指向根。
+for (int i = 0; i < n; i++)	father[i] = i;	
+	
+	// 不一定直接在这里赋值， 一般进主函数 grid/board 中 赋值
+	// 这个例子 
+	for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '1') {
+                    res++;
+                    father[i * n + j] = i * n + j;
+                }
+            }
+        }
+
+2. find 是一种两趟方法， 第一趟 沿着 查找路径向上直到找到根
+		当它递归时， 第二趟 沿着搜索树 向下更新每个节点，使其直接指向根。
 private int find(int x) {
 	if (father[x] == x) {
 		return x;
 	}
 	return father[x] = find(father[x]);
 }
+
+//两种写法都行
+private int find(int x) {
+	if (father[x] != x) {
+	    father[x] = find(father[x]);
+	}
+	return father[x];
+}
+
 
 O(n)
 
