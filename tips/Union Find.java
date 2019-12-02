@@ -57,6 +57,14 @@ private int find(int x) {
 	}
 	return father[x];
 }
+// 优化之 解决尾递归
+private int find(int x) {
+        while (father[x] != x) {
+            father[x] = father[father[x]];
+            x = father[x];
+        }
+        return x;
+    }
 
 
 O(n)
