@@ -55,3 +55,32 @@ class Solution {
 
 590. N-ary Tree Postorder Traversal
 
+
+
+
+2019.12.2 
+真正意义上的 postorder Traversal, 用 stack.peek();
+
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> ans = new LinkedList<>(); 
+        if (root == null) return ans;
+
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        Set<TreeNode> set = new HashSet<>();
+        while (!stack.isEmpty()) {
+            TreeNode cur = stack.peek();
+            if (cur.left != null && !set.contains(cur.left)) {
+                stack.push(cur.left);
+            } else if (cur.right != null && !set.contains(cur.right)) {
+                stack.push(cur.right);
+            } else {
+                stack.pop();
+                ans.add(cur.val);
+                set.add(cur);
+            }
+        }
+        return ans;
+    }
+}
