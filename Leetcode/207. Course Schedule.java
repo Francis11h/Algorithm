@@ -142,3 +142,47 @@ S: O(2V + E)     List-Array(V) + indegree(V) +  total Adjacency-Lists(E)
 
 T: O(2V + 2E)    buildGraph(V + E) + bfs(V + E)
 
+
+
+
+2019.12.2 List<Integer>[] graph 建图 就不用 再 Object 转 int 了 目前最优解
+
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        List<Integer>[] graph = new ArrayList[numCourses];
+        int[] indegree = new int[numCourses];
+        
+        for (int i = 0; i < numCourses; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        
+        for (int[] pre : prerequisites) {
+            int from = pre[1], to = pre[0];
+            // add edge for our directed graph
+            // there are no duplicate edges in the input prerequisites.
+            graph[from].add(to);
+            indegree[to]++;
+        }
+        // do bfs
+        
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (indegree[i] == 0) {
+                queue.add(i);
+            }
+        }
+        int count = 0;
+        while (!queue.isEmpty()) {
+            int from = queue.poll();
+            count++;
+            for (int k = 0; k < graph[from].size(); k++) {
+                int to = graph[from].get(k);
+                indegree[to]--;
+                if (indegree[to] == 0) {
+                    queue.offer(to);
+                }
+            }
+        }
+        return count == numCourses;
+    } 
+}
