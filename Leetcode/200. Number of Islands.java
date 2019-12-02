@@ -117,9 +117,66 @@ class Solution {
 
 
 
-union find
+
+
+union find solution
 
 
 
+class Solution {
+    
+    private int[] father = null;
+    
+    private int find(int x) {
+        if (father[x] == x) {
+            return x;
+        }
+        return father[x] = find(father[x]);
+    }
+    
+    private void union(int a, int b) {
+        int rootA = find(a), rootB = find(b);
+        if (rootA != rootB) {
+            father[rootA] = rootB;
+            res--;      //每一次 union 就少一个 独立的岛 就减去1
+        }
+    }
+    
+    int res = 0;
+    
+    public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) {
+            return 0;
+        }
+        
+        int m = grid.length, n = grid[0].length;
+        father = new int[m * n];
+        
+        //先把 所有 '1' 先拿出来 并且 构建father数组 初始father节点都是其本身
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '1') {
+                    res++;
+                    father[i * n + j] = i * n + j;
+                }
+            }
+        }
 
+        int[] dirs = {-1, 0, 1, 0, -1};
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '1') {
+                    for (int k = 0; k < 4; k++) {
+                        int nx = i + dirs[k], ny = j + dirs[k + 1];
+                        if (nx >= 0 && nx < m && ny >= 0 && ny < n && grid[nx][ny] == '1') {
+                            union(i * n + j, nx * n + ny);
+                        }
+                    }
+                }
+            }
+        }
+        
+        return res;
+    }
+}
 
