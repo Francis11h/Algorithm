@@ -99,6 +99,68 @@ O(V+E)
 
 
 
+
+
+这么建图 就不用 再转 object to int
+
+List<Integer>[] graph 即 这里直接规定了 List里面存的是 Integer
+
+
+
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        List<Integer>[] graph = new ArrayList[numCourses];
+        int[] indegree = new int[numCourses];
+        int[] ans = new int[numCourses];
+        
+        for (int i = 0; i < numCourses; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        
+        for (int[] pre : prerequisites) {
+            int from = pre[1], to = pre[0];
+            // add edge for our directed graph
+            // there are no duplicate edges in the input prerequisites.
+            graph[from].add(to);
+            indegree[to]++;
+        }
+        // do bfs
+        
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (indegree[i] == 0) {
+                queue.add(i);
+            }
+        }
+        
+        int index = 0;
+        while (!queue.isEmpty()) {
+            int from = queue.poll();
+            ans[index++] = from;
+            
+            for (int k = 0; k < graph[from].size(); k++) {
+                int to = graph[from].get(k);
+                indegree[to]--;
+                if (indegree[to] == 0) {
+                    queue.offer(to);
+                }
+            }
+        }
+        return index == numCourses ? ans : new int[0];
+    } 
+}
+
+
+
+
+
+
+
+
+
+
+
+
 //不把图表示出来   34ms 反而慢
 // 慢的原因是 每次while 要遍历一遍prerequisites，这个可能很长，冗余
 class Solution {
