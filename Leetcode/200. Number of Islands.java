@@ -96,6 +96,7 @@ class Solution {
         //when we do bfs, we will initialize a queue first 
         Queue<int[]> queue = new LinkedList<>();
         queue.offer(new int[] {x, y});
+        visited[x][y] = true;
         // directions array
         int[] dirs = new int[] {1, 0, -1, 0, 1};
         
