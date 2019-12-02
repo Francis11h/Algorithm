@@ -16,7 +16,7 @@ Is there an edge from i to j		O(1)					O(logk)
 
 临街表建图 实例 List[], 之后 每个index 都要new出来 list 对象
 
-	List[] graph = new ArrayList[numCourses];
+	List<Integer>[] graph = new ArrayList[numCourses];
         int[] indegree = new int[numCourses];
         
         for (int i = 0; i < numCourses; i++) {
