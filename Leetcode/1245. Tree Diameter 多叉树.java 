@@ -76,3 +76,49 @@ JAVA 中变量不能以数字开头   一开始写的是  int 1st = 0, 2nd = 0; 
 
 
 
+
+不是 那么优秀的解法 用了 set 去重 
+
+class Solution {
+
+    int diameter = 0;
+
+    public int treeDiameter(int[][] edges) {
+        if (edges == null) return 0;
+        int n = edges.length;
+        List<Integer>[] tree = new LinkedList[n + 1]; // vertex - 1 = edge --> cause it is a tree
+        for (int i = 0; i <= n; i++) {
+            tree[i] = new LinkedList<>();
+        }
+        for (int[] edge : edges) {
+            int a = edge[0], b = edge[1];
+            tree[a].add(b);
+            tree[b].add(a);
+        }
+        Set<Integer> visited = new HashSet<>();
+        depth(0, visited, tree);
+        return diameter;
+    }
+    
+    private int depth(int root, Set<Integer> visited, List<Integer>[] tree) {
+        visited.add(root);
+        int D1st = 0, D2nd = 0;
+        for (int child : tree[root]) {
+            if (!visited.contains(child)) {
+                int depthOfChild = depth(child, visited, tree);
+
+                if (depthOfChild > D1st) {
+                    D2nd = D1st;
+                    D1st = depthOfChild;
+                } else if (depthOfChild > D2nd) {
+                    D2nd = depthOfChild;
+                }
+            }
+        }
+        int longestPathThroughRoot = D1st + D2nd;
+        diameter = Math.max(diameter, longestPathThroughRoot);
+        // return the root's depth = deepest depth of child + 1
+        return D1st + 1;
+    }
+}
+
