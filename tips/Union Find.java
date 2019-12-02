@@ -50,6 +50,15 @@ private int find(int x) {
 	return father[x] = find(father[x]);
 }
 
+//两种写法都行
+private int find(int x) {
+	if (father[x] != x) {
+	    father[x] = find(father[x]);
+	}
+	return father[x];
+}
+
+
 O(n)
 
 3. union 其中包含find
