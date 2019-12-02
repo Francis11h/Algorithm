@@ -69,9 +69,11 @@ class Solution {
 
 
 
+Time complexity : O(m*n). In worst case(skewed tree) traverse function takes O(m*n)time.
+
+Space complexity : O(n). The depth of the recursion tree can go upto n. n refers to the number of nodes in s.
 
 
 
-
-
-
+实际应用？？
+https://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=574764&extra=page%3D2%26filter%3Dsortid%26sortid%3D311%26orderby%3Ddateline%26sortid%3D311%26orderby%3Ddateline
