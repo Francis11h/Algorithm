@@ -14,7 +14,7 @@ Is there an edge from i to j		O(1)					O(logk)
 
 
 
-临街表建图实例 List<Integer>[], 之后 每个index 都要new出来 list 对象
+临接表建图实例 List<Integer>[], 之后 每个index 都要new出来 list 对象
 
 	List<Integer>[] graph = new ArrayList[numCourses];
         int[] indegree = new int[numCourses];
@@ -32,7 +32,7 @@ Is there an edge from i to j		O(1)					O(logk)
         }
 
 
-临街表建图实例 Map<Integer, Set<Integer>> 用map表示图
+临接表建图实例 Map<Integer, Set<Integer>> 用map表示图
 
 	Map<Integer, Set<Integer>> map = new HashMap<>();
 
