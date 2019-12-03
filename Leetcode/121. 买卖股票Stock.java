@@ -1,6 +1,6 @@
 121. Best Time to Buy and Sell Stock
 
-you were only permitted to complete at most one transaction
+you were only permitted to complete "at most one" transaction
 总共只能买卖一次
 you cannot sell a stock before you buy one.
 
@@ -44,6 +44,9 @@ O(n ^ 2) loop runs n(n-1)/2
 O(1)
 
 
+
+
+
 2. 仅一遍遍历 找到 peek 和 valley 即可
 
 贪心: 我们想要在最低的价格买入，然后在最高的价格卖出. 但是 最高的价格必须在最低价之后，所以 这个最高是相对的。
@@ -60,16 +63,17 @@ O(1)
 
 class Solution {
     public int maxProfit(int[] prices) {
-        int ans = 0;
-        int minPrice = Integer.MAX_VALUE;
-        
-        for (int i = 0; i < prices.length; i++) {
-            if (prices[i] < minPrice) 
-                minPrice = prices[i];
-            else if (prices[i] - minPrice > ans) 
-                ans = prices[i] - minPrice;
+        if (prices == null) return 0;
+        int maxProfit = 0;
+        int min = Integer.MAX_VALUE;
+        for (int price : prices) {
+            if (price < min) {
+                min = price;
+            } else if (price - min > maxProfit) {
+                maxProfit = price - min;
+            }
         }
-        return ans;
+        return maxProfit;
     }
 }
 
@@ -82,4 +86,52 @@ We keep track of the minimum price we want to buy at through the variable minBuy
 
 At every step I keep greedily picking the maximum profit and keep track of the maximum Profit,
 which is either a profit previously seen or the current price subtracted from the minimum price we bought at (selling on this day).
+
+
+
+
+
+
+
+
+Follow Up: 要求写清楚什么时候买， 什么时候卖，买卖时候的价钱和最后最大的收入
+
+
+
+记录下即可
+
+class Solution {
+    public static int maxProfit(int[] prices) {
+        if (prices == null) return 0;
+        int maxProfit = 0;
+        int min = Integer.MAX_VALUE;
+
+        int buyTime = 0, sellTime = 0, buyPrice = 0, sellPrice = 0;
+        for (int i = 0; i < prices.length; i++) {
+            int price = prices[i];
+            if (price < min) {
+                min = price;
+                buyTime = i;
+                // buyPrice = min;
+            } else if (price - min > maxProfit) {
+                maxProfit = price - min;
+                sellTime = i;
+                sellPrice = price;
+            }
+        }
+        System.out.println("Buy on day " + buyTime + " with price: " + min);
+        System.out.println("Sell on day " + sellTime + " with price: " + sellPrice);
+        System.out.println("maxProfit is " + maxProfit);
+        return maxProfit;
+    }
+
+    public static void main(String[] args) {
+        int[] arr1 = new int[] {7,1,5,3,6,0,90};
+        System.out.println(maxProfit(arr1));
+    }
+}
+
+
+
+
 
