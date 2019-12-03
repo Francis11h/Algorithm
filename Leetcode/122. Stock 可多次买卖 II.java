@@ -18,11 +18,26 @@ Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-
 
 class Solution {
     public int maxProfit(int[] prices) {
+        if (prices == null) return 0;
         int maxProfit = 0;
+
         for (int i = 0; i < prices.length - 1; i++) {
-            if (prices[i + 1] > prices[i])
+            if (prices[i + 1] > prices[i]) {
                 maxProfit += prices[i + 1] - prices[i];
+            }
         }
         return maxProfit;
     }
 }
+
+
+
+就 只要 有上升的 折线 就加到最后的maxProfit里面
+
+
+The key point is we need to consider Every peak Immediately following a valley to maximize the profit. 
+In case we skip one of the peaks 如果我们跳过其中的一个peek, we will end up losing 最终会损失 the profit over one of the transactions leading to an overall lesser profit.
+
+
+
+
