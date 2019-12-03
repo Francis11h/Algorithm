@@ -1,5 +1,9 @@
 188. Best Time to Buy and Sell Stock IV
 
+Design an algorithm to find the maximum profit. You may complete at most k transactions.
+k次 买卖
+
+
 You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
 手头上只能有 一支股票
 
