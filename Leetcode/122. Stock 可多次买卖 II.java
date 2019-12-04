@@ -2,7 +2,11 @@
 
 可多次买卖
 
-
+Note:
+You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
+但是 每次买之前要先把手头的卖了 即 只能同时持有一支股票
+  
+  
 Input: [7,1,5,3,6,4]
 Output: 7
 Explanation: Buy on day 2 (price = 1) and sell on day 3 (price = 5), profit = 5-1 = 4.
