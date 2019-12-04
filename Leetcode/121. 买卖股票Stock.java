@@ -3,7 +3,7 @@
 you were only permitted to complete "at most one" transaction
 总共只能买卖一次
 you cannot sell a stock before you buy one.
-
+只能同时持有一支股票
 
 
 
