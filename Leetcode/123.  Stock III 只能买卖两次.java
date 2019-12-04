@@ -1,6 +1,10 @@
 123. Best Time to Buy and Sell Stock III
 
-Design an algorithm to find the maximum profit. You may complete at most two transactions.
+Design an algorithm to find the maximum profit. You may complete "at most two transaction"s.
+
+Note: You may not engage in multiple transactions at the same time 
+	(i.e., you must sell the stock before you buy again).
+
 
 Example 1:
 
@@ -19,10 +23,10 @@ Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-
              engaging multiple transactions at the same time. You must sell before buying again.
 Example 3:
 
-Input: [7,6,4,3,1]
-Output: 0
-Explanation: In this case, no transaction is done, i.e. max profit = 0.
-
+Input: [1,1,5,9]
+Output: 8
+Explanation: In this case, only one transaction is done
+			cause we must sell the stock before you buy again
 
 
 
