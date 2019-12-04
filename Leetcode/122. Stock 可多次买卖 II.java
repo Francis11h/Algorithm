@@ -19,6 +19,7 @@ Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-
              engaging multiple transactions at the same time. You must sell before buying again.
 
 
+Greedy solution
 
 class Solution {
     public int maxProfit(int[] prices) {
