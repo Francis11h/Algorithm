@@ -182,3 +182,29 @@ class Solution {
         return null;
     }
 }
+
+
+
+
+
+2019.12.5 重新写 一遍过 
+
+
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) return null;
+        if (root == p || root == q) return root;
+        // the root is neither p nor q, recursively call the function on root's children
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        
+        if (left == null && right == null) return null;
+        if (left != null && right != null) return root;
+        if (left != null) return left;
+        if (right != null) return right;
+        return null;
+    }
+}
+
+// how can we search the tree, what parameters should we pass in, what should we return
+// use dfs; input root, p, q; return the LCA node of the p q in this tree whose root is root
