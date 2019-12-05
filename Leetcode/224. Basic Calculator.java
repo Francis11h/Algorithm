@@ -31,7 +31,7 @@ Finally if there is only one number, from the above solution, we haven‘t add t
 number表示当前的操作数, sign表示当前的操作数应该被加还是被减, result表示结果
 
 public int calculate(String s) {
-    Stack<Integer> stack = new Stack<Integer>();
+    Stack<Integer> stack = new Stack<>();
     int result = 0;
     int number = 0;
     int sign = 1;
@@ -133,13 +133,88 @@ Ideas
 
 
 
+2019.12.5
+Calculator 通用解法
+       prev, num, sum, prevOp
+核心思想是 "calculate delay"
+
+
+class Solution {
+    public int calculate(String s) {
+        if (s == null || s.length() == 0) return 0;
+        Queue<Character> q = new LinkedList<>();
+        //preprocessing remove whitespaces
+        for (char c : s.toCharArray()) {
+            if (c != ' ')
+                q.offer(c);
+        }
+        // add place holder otherwise the last operator will be omission
+        q.offer(' ');
+        return helper(q);
+    }
+    
+    private int helper(Queue<Character> q) {
+        int prev = 0, num = 0, sum = 0;
+        char prevOp = '+';
+        while (!q.isEmpty()) {
+            char c = q.poll();
+            if (Character.isDigit(c)) {
+                num = num * 10 + c - '0';
+            } else if (c == '(') {
+                num = helper(q);
+            } else {
+                switch(prevOp) {
+                    case '+':
+                        sum += prev;
+                        prev = num;
+                        break;
+                    case '-':
+                        sum += prev;
+                        prev = -num;
+                        break;
+                }
+                if (c == ')') break;
+                prevOp = c;
+                num = 0;
+            }
+        }
+        return sum + prev;
+    }
+}
 
 
 
+//when c is a operator, do calculation according to prevOp (previous!!!!)
+    //+-
+    //if the previous operator is +, merge(add) the prev to sum, then assign num to prev
+    //if the previous operator is -, merge(add) the prev to sum, then assign -num to prev
+    //*/ 
+    //do not modify the sum cause "3+2*2" when we first meet * wo can't deal with the prev, which is 2
+    //if the previous operator is *, modify the prev by multiplying the prev by num
+    //if the previous operator is /, modify the prev by dividing the prev by num
+    //''
+    //placeholder, calculate the remain previous operator, then break;
+    //and then update the prevOp
 
 
 
+// "3-(1-2)" ---> "0+3-(1-2) "
+// q       prev    num     sum     prevOp
+// begin   0       0       0       '+'
+// 3       0       3       0       '+'
+// -       3       0       0       '-' 
+// "0+3- -1 "
+// -1      3       -1      0       '-'
+// ' '     1       0       3       ' ' 
+// return sum + prev = 3 + 1 = 4
 
-
-
+// call stack
+// "0+1-2) "
+// q       prev    num     sum     prevOp
+// begin   0       0       0       '+'
+// 1       0       1       0       '+'
+// -       1       0       0       '-' 
+// 2       1       2       0       '-'
+// )       -2      0       1
+//return sum+prev = -1 
 
