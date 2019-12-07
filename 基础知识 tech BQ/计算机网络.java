@@ -614,17 +614,63 @@ network links have MTU: largest possible link-level Frame.
 
 
 
+-------
+Ip 地址
+-------
+IP address: 32-bit identifier for host, router interface
+Interface: connection between host/router and physical link (router含多个, host含1-2个)
 
+IP addresses associated with each interface. 即先要给物理接口(eth0, eth1...)分配ip地址 对应好了才能用
+
+
+----------
+子网 Subnet
+----------
+IP地址的划分:
+    1.subnet part - high order bits
+    2.host part - low order bits
+什么是子网:
+    device interfaces with "same subnet part" of IP address
+    拥有相同子网部分的  接口(eth0,eth1.) 
+    can physically reach each other without intervening router
+    可以直接物理通信, 不需要通过 router
+
+确定子网，将每个接口与其主机或路由器分离，创建隔离的网络孤岛，每个孤岛是一个子网
+    to determine the subnets, detach each interface from its host or router, 
+    creating islands of isolated networks，each isolated network is called a subnet
+
+子网掩码
+    subnet mask: /24
+    前24位 确定一个子网, 它表明 32 比特中的最左侧 24 位特定义了子网地址. 
+
+    3 台主机以及它们连接的路由器的"接口"都有一个形如 223.1.1.x/24 的 IP 地址
+
+    IP地址比如 分别为  223.1.1.1 223.1.1.2 223.1.1.3 223.1.1.4 
+        
+        因此子网 223.1.1.1/24 是由 3 台主机"接口"和 1 个路由器"接口"组成的。
+
+        互连这 3台主机的"接口"与路由器的一个"接口"的网络形成一个子网, 
+        注意 子网 是由 接口 Interface地址(MAC地址) 构成 而不是
+
+        一个子网的 IP 定义并不局限干连接多台主机到一台路由器接口的以太网段。路由器端口之间的点对点链路也可以构成子网。
+
+
+          subnet part              |  host part
+        11001000 00010111 00010000 |  00000000
+
+
+
+----------------------
+How does a host get IP address
+----------------------
 
 7. 如何实现透明传输。
 10. 分组转发算法。
-11. IP报文的格式，格式的各个字段的含义要理解。
-12. MTU的概念，啥叫路径MTU？MTU发现机制，TraceRoute(了解)。
 13. RIP协议的概念 及算法。
 
 16. Ping协议的实现原理，ping命令格式。
-17.子网划分的概念，子网掩码。
-18.IP地址的分类，如何划分的，及会计算各类地址支持的主机数。
+
+
 30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
 
 
@@ -724,11 +770,6 @@ Switch vs Router
  
 
 
-
-
-----------------
-
-----------------
 
 
 
