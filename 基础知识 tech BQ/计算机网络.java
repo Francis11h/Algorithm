@@ -695,6 +695,36 @@ DHCP can return more than just allocated IP address on subnet:
 
 
 
+--------------------------------
+NAT: network address translation
+--------------------------------
+ipv4协议提供的IP地址是有限的,为了解决IP地址不足的问题,于是就有了网络地址转换(NAT)
+它的思想就是给"一个局域网络"分配"一个IP地址"就够了
+
+motivation: 
+    1.只需/能从ISP申请一个IP地址 IPv4地址耗尽
+        range of addresses not needed from ISP: just one IP address for all devices
+    2.本地网络设备IP地址的变更，无需通告外界网络
+        can change addresses of devices in local network without notifying outside world
+    3.变更ISP时，无需修改内部网络设备IP地址
+        can change ISP without changing addresses of devices in local network
+    4.内部网络设备对外界网络不可见，即不可直接寻址(安全)
+        devices inside local net not explicitly addressable, visible by outside world (a security plus)
+
+实现:
+    1. 所有离开本地网络去往Internet的数据报的源IP地址需替换为
+            相同的NAT IP地址: 138.76.29.7 以及不同的端口号。
+            all datagrams leaving local network have same single source NAT IP address: 138.76.29.7,different source port numbers
+    2. 本地网络内通信的IP数据报的源与目的IP地址均在子网 10.0.0/24 内。
+        datagrams with source or destination in this network have 10.0.0/24 address for source, destination
+
+
+
+
+
+
+
+
 
 
 
@@ -810,9 +840,7 @@ Switch vs Router
 
 
 
-----------------
-NAT: network address translation
-----------------
+
 
 
 
