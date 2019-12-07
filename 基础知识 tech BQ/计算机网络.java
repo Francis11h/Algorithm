@@ -618,6 +618,91 @@ Switch vs Router
 
 
 
+------------------
+forwarding routing
+------------------
+网络层NetworkLayer有两种重要的功能: "转发forwarding"  "选路routing"
+
+Forwarding involves the transfer of a packet from an incoming link to an outgoing link Within a "single" router.
+转发 是 单个路由器内部 传数据包
+
+Routing involves "all" of a network‘s routers, whose collective interactions via routing protocols
+determine the "paths" that packets take on their trips "from source to destination" node.
+路由 是 从起点路由器到终点路由器的 多个 路由器之间 选择 最佳路径 的问题
+
+
+
+----------------
+
+----------------
+
+
+
+
+
+
+----------------
+
+----------------
+
+
+
+
+
+
+----------------
+
+----------------
+
+
+
+
+
+
+----------------
+
+----------------
+
+
+
+
+
+
+----------------
+
+----------------
+
+
+
+
+
+
+----------------
+
+----------------
+
+
+
+
+
+
+----------------
+
+----------------
+
+
+
+
+
+
+----------------
+
+----------------
+
+
+
+
+
 
 
 
