@@ -719,6 +719,26 @@ motivation:
         datagrams with source or destination in this network have 10.0.0/24 address for source, destination
 
 
+----
+Ipv6
+----
+IPv6 将 IP 地址长度从 32bit 增加到 128bit,这就确保再也不会用尽地址。
+
+Transition from IPv4 to IPv6:
+方法一: 最直接的引人IPv6节点的方法可能是双栈技术，即让IPv4节点也具有完整的Ipv6实现。
+
+方法二: 隧道法:IPv6数据报 被当作IPv4数据报中的 有效载荷 携带 在IPv4路由器之间 
+"tunneling": 
+    IPv6 datagram carried as "payload" in IPv4 datagram among IPv4 routers
+
+
+
+
+------------------------------
+Generalized Forwarding and SDN
+------------------------------
+
+
 
 
 
@@ -731,10 +751,7 @@ motivation:
 7. 如何实现透明传输。
 10. 分组转发算法。
 13. RIP协议的概念 及算法。
-
 16. Ping协议的实现原理，ping命令格式。
-
-
 30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
 
 
@@ -826,40 +843,6 @@ Switch vs Router
 --------------------------
 路由表Routering table 的内容
 --------------------------
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-----------------
-
-----------------
-
-
-
-
-
-
-----------------
-
-----------------
-
 
 
 
