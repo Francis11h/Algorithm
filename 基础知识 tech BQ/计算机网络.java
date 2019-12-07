@@ -633,10 +633,13 @@ determine the "paths" that packets take on their trips "from source to destinati
 
 
 ----------------
-
+Network Layer作用
 ----------------
-
-
+transfer segments from sending to receiving host.
+on sending side, encapsulates segments into datagrams.
+on receiving side, delivers segemnts to transport layer.
+network layer protocols in "every" host, router.
+router examines header fields in all IP datagrams passing through it
 
 
 
