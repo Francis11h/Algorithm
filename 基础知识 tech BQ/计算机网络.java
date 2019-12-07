@@ -660,9 +660,43 @@ IP地址的划分:
 
 
 
-----------------------
+------------------------------
 How does a host get IP address
-----------------------
+------------------------------
+主机 怎么获得 IP地址？ 每次请求server
+
+DHCP: Dynamic Host Configuration Protocol:
+
+goal: allow host to dynamically obtain its IP address from "network server" when it joins network
+
+
+DHCP overview:
+    1. host broadcasts “DHCP discover” msg [optional]
+    2. DHCP server responds with “DHCP offer” msg [optional]
+    3. host requests IP address: “DHCP request” msg
+    4. DHCP server sends address: “DHCP ack” msg
+
+DHCP can return more than just allocated IP address on subnet:
+返回的不仅仅是个IP地址 还有其他的信息
+    1. address of "first-hop router "for client
+    2. name and IP address of "DNS sever"
+    3. network mask (indicating network versus host portion of address)
+
+具体步骤
+    connecting laptop needs its IP address, addr of first-hop router, addr of DNS server: use DHCP
+    DHCP request encapsulated in "UDP", encapsulated in "IP", encapsulated in "802.1 Ethernet".
+    Ethernet frame broadcast "(dest: FFFFFFFFFFFF)" on LAN, received at router running DHCP server
+    Ethernet demuxed to IP demuxed, UDP demuxed to DHCP
+    DCP server formulates(定制 制作) DHCP ACK containing client’s IP address, IP address of first-hop router for client, name & IP address of DNS server
+        encapsulation of DHCP server, frame forwarded to client, demuxing up to DHCP at client
+    client now knows its IP address, name and IP address of DSN server, IP address of its first-hop router
+
+
+
+
+
+
+
 
 7. 如何实现透明传输。
 10. 分组转发算法。
@@ -777,7 +811,7 @@ Switch vs Router
 
 
 ----------------
-
+NAT: network address translation
 ----------------
 
 
