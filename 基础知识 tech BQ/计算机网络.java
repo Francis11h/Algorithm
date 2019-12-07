@@ -651,6 +651,8 @@ router examines header fields in all IP datagrams passing through it
 ----------------
 Inside a Router
 ----------------
+查找interface + switching fabric + queuing + discard policy
+
 第一步Datagram Network(look up)
 
     longest prefix matching
@@ -679,7 +681,7 @@ Inside a Router
             2.4 Weighted Fair Queuing: each class gets weighted amount of service in each cycle
 
 
-            
+
 ----------------
 
 ----------------
