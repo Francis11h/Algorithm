@@ -517,6 +517,121 @@ HTTPS过程
     HTTPS相比于HTTP，虽然提供了安全保证，但是势必会带来一些时间上的损耗，如握手和加密等过程，是否使用HTTPS需要根据具体情况在安全和性能方面做出权衡。
 
 
+
+
+
+
+
+
+
+
+
+传输层 + 应用层 及以上 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+网络层 + 链路层 及以下
+
+
+
+
+
+
+------------------
+forwarding routing
+------------------
+网络层NetworkLayer有两种重要的功能: "转发forwarding"  "选路routing"
+
+Forwarding involves the transfer of a packet from an incoming link to an outgoing link Within a "single" router.
+转发 是 单个路由器内部 传数据包
+
+Routing involves "all" of a network‘s routers, whose collective interactions via routing protocols
+determine the "paths" that packets take on their trips "from source to destination" node.
+路由 是 从起点路由器到终点路由器的 多个 路由器之间 选择 最佳路径 的问题
+
+
+
+----------------
+Network Layer作用
+----------------
+https://zhuanlan.zhihu.com/p/61845038
+
+transfer segments from sending to receiving host.
+on sending side, "encapsulates" segments into "datagrams".
+on receiving side, "extracts" the transport-layer segments, delivers segemnts to transport layer.
+network layer protocols in "every" host, router.
+router examines header fields in all IP datagrams passing through it
+
+
+网络层向上之提供简单灵活，无连接connectionless的，尽最大努力交付的数据报datagram服务。
+网络层不提供服务质量的承诺。
+    也就是说，所传送的分组都有可能出错，丢失，重复和失序（即不按序到达终点），当然也不保证分组交换的时限，这就使网络中的路由器比较简单，且价格低廉。
+
+----------------
+Inside a Router
+----------------
+查找interface + switching fabric + queuing + discard policy
+
+第一步Datagram Network(look up)
+
+    longest prefix matching
+    找 特定目的地 对应的 Link Interface 时 采用 最长前缀匹配
+    when looking for "forwarding table" entry for given destination address, 
+    use longest address prefix that matches destination address.
+
+第二步Switching fabrics(forwarding)
+
+    1.Switching via "memory": packet Copied to system’s memory, speed limited by memory bandwidth (2 bus crossings per datagram)
+    2.via "bus":    datagram from input port memory to output port memory via a shared bus, switching speed limited by bus bandwidth(bus contention竞争)
+    3.via "interconnection network": overcome bus bandwidth limitations.
+                fragmenting datagram into fixed length cells, switch cells through the fabric.
+第三步queuing(queuing)
+    Input ports:
+        when: fabric Slower than input ports combined -> queueing may occur at input queues
+                then -----> queueing delay and loss due to "input buffer overflow"!
+
+    Output ports:
+        1.buffering when arrival rate via switch exceeds output line speed  到达速度超过出口速度时 缓冲buffer！
+
+        2.Scheduling: choose next packet to send on link
+            2.1 FIFO: send in order of arrival to queue
+            2.2 Priority: send highest priority queued packet
+            2.3 Round Robin: sending one complete packet from each class
+            2.4 Weighted Fair Queuing: each class gets weighted amount of service in each cycle
+
+
+----------------------------
+IP fragmentation + reassembly
+----------------------------
+network links have MTU: largest possible link-level Frame.
+                   最大传输单元(Maximum Transmission Unit)
+
+    中间层 全部拆分, 最后才合并, IP header 用来复原顺序
+
+    large IP datagram divided (“fragmented”) within net
+    reassembled” Only at Final destination
+    IP header bits used to identify, order related fragments
+
+
+
+
+
+
+7. 如何实现透明传输。
+10. 分组转发算法。
+11. IP报文的格式，格式的各个字段的含义要理解。
+12. MTU的概念，啥叫路径MTU？MTU发现机制，TraceRoute(了解)。
+13. RIP协议的概念 及算法。
+
+16. Ping协议的实现原理，ping命令格式。
+17.子网划分的概念，子网掩码。
+18.IP地址的分类，如何划分的，及会计算各类地址支持的主机数。
+30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
+
+
+
+
+
+
 ------------------------
 组播和多播的概念, IGMP 的用途
 ------------------------
@@ -604,89 +719,9 @@ Switch vs Router
 
 
 
-7. 如何实现透明传输。
-10. 分组转发算法。
-11. IP报文的格式，格式的各个字段的含义要理解。
-12. MTU的概念，啥叫路径MTU？MTU发现机制，TraceRoute(了解)。
-13. RIP协议的概念 及算法。
-
-16. Ping协议的实现原理，ping命令格式。
-17.子网划分的概念，子网掩码。
-18.IP地址的分类，如何划分的，及会计算各类地址支持的主机数。
-30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
 
 
-
-
-------------------
-forwarding routing
-------------------
-网络层NetworkLayer有两种重要的功能: "转发forwarding"  "选路routing"
-
-Forwarding involves the transfer of a packet from an incoming link to an outgoing link Within a "single" router.
-转发 是 单个路由器内部 传数据包
-
-Routing involves "all" of a network‘s routers, whose collective interactions via routing protocols
-determine the "paths" that packets take on their trips "from source to destination" node.
-路由 是 从起点路由器到终点路由器的 多个 路由器之间 选择 最佳路径 的问题
-
-
-
-----------------
-Network Layer作用
-----------------
-https://zhuanlan.zhihu.com/p/61845038
-
-transfer segments from sending to receiving host.
-on sending side, "encapsulates" segments into "datagrams".
-on receiving side, "extracts" the transport-layer segments, delivers segemnts to transport layer.
-network layer protocols in "every" host, router.
-router examines header fields in all IP datagrams passing through it
-
-
-网络层向上之提供简单灵活，无连接connectionless的，尽最大努力交付的数据报datagram服务。
-网络层不提供服务质量的承诺。
-    也就是说，所传送的分组都有可能出错，丢失，重复和失序（即不按序到达终点），当然也不保证分组交换的时限，这就使网络中的路由器比较简单，且价格低廉。
-
-----------------
-Inside a Router
-----------------
-查找interface + switching fabric + queuing + discard policy
-
-第一步Datagram Network(look up)
-
-    longest prefix matching
-    找 特定目的地 对应的 Link Interface 时 采用 最长前缀匹配
-    when looking for "forwarding table" entry for given destination address, 
-    use longest address prefix that matches destination address.
-
-第二步Switching fabrics(forwarding)
-
-    1.Switching via "memory": packet Copied to system’s memory, speed limited by memory bandwidth (2 bus crossings per datagram)
-    2.via "bus":    datagram from input port memory to output port memory via a shared bus, switching speed limited by bus bandwidth(bus contention竞争)
-    3.via "interconnection network": overcome bus bandwidth limitations.
-                fragmenting datagram into fixed length cells, switch cells through the fabric.
-第三步queuing(queuing)
-    Input ports:
-        when: fabric Slower than input ports combined -> queueing may occur at input queues
-                then -----> queueing delay and loss due to "input buffer overflow"!
-
-    Output ports:
-        1.buffering when arrival rate via switch exceeds output line speed  到达速度超过出口速度时 缓冲buffer！
-
-        2.Scheduling: choose next packet to send on link
-            2.1 FIFO: send in order of arrival to queue
-            2.2 Priority: send highest priority queued packet
-            2.3 Round Robin: sending one complete packet from each class
-            2.4 Weighted Fair Queuing: each class gets weighted amount of service in each cycle
-
-
-
-----------------
-
-----------------
-
-
+ 
 
 
 
