@@ -635,24 +635,51 @@ determine the "paths" that packets take on their trips "from source to destinati
 ----------------
 Network Layer作用
 ----------------
+https://zhuanlan.zhihu.com/p/61845038
+
 transfer segments from sending to receiving host.
-on sending side, encapsulates segments into datagrams.
-on receiving side, delivers segemnts to transport layer.
+on sending side, "encapsulates" segments into "datagrams".
+on receiving side, "extracts" the transport-layer segments, delivers segemnts to transport layer.
 network layer protocols in "every" host, router.
 router examines header fields in all IP datagrams passing through it
 
 
-
+网络层向上之提供简单灵活，无连接connectionless的，尽最大努力交付的数据报datagram服务。
+网络层不提供服务质量的承诺。
+    也就是说，所传送的分组都有可能出错，丢失，重复和失序（即不按序到达终点），当然也不保证分组交换的时限，这就使网络中的路由器比较简单，且价格低廉。
 
 ----------------
-
+Inside a Router
 ----------------
+第一步Datagram Network(look up)
+
+    longest prefix matching
+    找 特定目的地 对应的 Link Interface 时 采用 最长前缀匹配
+    when looking for "forwarding table" entry for given destination address, 
+    use longest address prefix that matches destination address.
+
+第二步Switching fabrics(forwarding)
+
+    1.Switching via "memory": packet Copied to system’s memory, speed limited by memory bandwidth (2 bus crossings per datagram)
+    2.via "bus":    datagram from input port memory to output port memory via a shared bus, switching speed limited by bus bandwidth(bus contention竞争)
+    3.via "interconnection network": overcome bus bandwidth limitations.
+                fragmenting datagram into fixed length cells, switch cells through the fabric.
+第三步queuing(queuing)
+    Input ports:
+        when: fabric Slower than input ports combined -> queueing may occur at input queues
+                then -----> queueing delay and loss due to "input buffer overflow"!
+
+    Output ports:
+        1.buffering when arrival rate via switch exceeds output line speed  到达速度超过出口速度时 缓冲buffer！
+
+        2.Scheduling: choose next packet to send on link
+            2.1 FIFO: send in order of arrival to queue
+            2.2 Priority: send highest priority queued packet
+            2.3 Round Robin: sending one complete packet from each class
+            2.4 Weighted Fair Queuing: each class gets weighted amount of service in each cycle
 
 
-
-
-
-
+            
 ----------------
 
 ----------------
