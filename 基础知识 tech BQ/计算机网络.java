@@ -1009,7 +1009,7 @@ IGMP（Internet Group Management Protocol）
                     problem is NP-complete
                     not used in practice:1.computational complexity 2.monolithic: rerun whenever a router needs to join/ leave
                     
-
+                center-based approach 选个点当中心
 
 
 
