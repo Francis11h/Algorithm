@@ -734,14 +734,38 @@ Transition from IPv4 to IPv6:
 
 
 
-------------------------------
-Generalized Forwarding and SDN
-------------------------------
+-----------------
+Routing protocols
+-----------------
+determine “good” paths (equivalently, routes), from sending hosts to receiving host, through network of routers
+
+“link state” algorithms: net topology, link costs known to "all" nodes 得全知道
+
+“distance vector” algorithms: router knows "physically-connected" neighbors, link costs to "neighbors"
 
 
 
 
+--------
+Dijsktra
+--------
+Dijkstra 算法是迭代算法，经算法的第 k 次迭代后，可知道到 k 个目的节点的最低费用路径。
 
+Initialization:
+    N‘={u}
+    for all nodes v
+        if v adjacent to u then D(v) = c(u,v)
+        else D(v) = ∞
+Loop:
+    find w not in N‘ such that D(w) is a minimum (use minHeap)
+        add w to N’
+    update D(v) for all v adjacent to w and not in N‘: 
+        D(v) = min( D(v), D(w) + c(w,v) )
+    /* new cost to v is either old cost to v or known shortest path cost to w plus cost from w to v */
+    until all nodes in N’
+
+
+T : O(VlogV+ElogV)
 
 
 
