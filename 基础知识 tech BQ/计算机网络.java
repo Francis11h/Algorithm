@@ -955,6 +955,62 @@ three classes of OpenFlow messages:
 
 
 
+--------------
+广播和多播, IGMP 
+--------------
+https://www.cnblogs.com/xujian2014/p/5072215.html
+
+广播 broadcast
+--------------
+    Flooding
+        实现广播的最显而易见的技术是使用洪泛方法,该方法要求源节点向它的"所有"邻居发送一个分组的拷贝。
+            当某节点接收了一个广播分组时，它复制该分组并向它的"所有"邻居转发。
+    Spanning Tree
+        首先对网络节点构造出一棵生成树。
+            each node sends unicast join message to center node, message forwarded until it arrives at "a node already belonging to spanning tree".
+        当一个源节点要发送一个广播分组时,它向所有属于该生成树的特定链路发送分组
+        接收广播分组的节点则向生成树中的所有邻居转发该分组(它接收该分组的邻居除外)。
+        生成树不仅"消除了冗余广播分组"，而且"能够被任何节点用于开始"广播分组
+
+    广播协议在实践中通常被用于应用层和网络层
+
+多播 multicast
+-------------
+    多播服务可以将多播分组"仅"交付给网络节点的一个"子集subset"
+
+    问题
+        1.how to identify the receivers of a multicast packet;
+        2.how to address a packet sent to these receivers.
+
+    goal: find a tree (or trees) connecting routers having local multicast group members.
+
+
+在因特网中,表示一组接收方的单一标识就是一个 D类 多播地址. 与一个 D类地址相关联的多个接收方称为一个多播组.
+多播组抽象是很简单的,但需要解决"组的形成"、"终结"问题, "组地址的选择"问题, "新主机如何加入组"(要么作为发送方，要么作为接收方)的问题, "组成员资格"问题等等。
+对于因特网,多播组的管理由因特网组管理协议(Internet Group Management Protocol)实现.
+
+IGMP（Internet Group Management Protocol）
+----------------------------------------
+    运行在一台主机与其直接相连的路由器之间
+    IGMP 为一台主机提供了手段: 可让它通知与其相连的路由器,在本主机上运行的一个应用程序"如何加入"一个特定的多播组.
+
+    多播选路算法:
+
+        1.使用一棵"基于源的树"(source based) 进行多播选路
+            为多播组中的每个源构建一棵多播选路树(Dijkstra’s algorithm)
+            在实践中,使用 RPF(Reverse path forwarding)算法 来构造一棵多播转发树,以用于转发来自源节点的多播数据报。
+                if (mcast datagram didnot received on incoming link on shortest path back to center) ignore/block the datagram.
+                    prune(forwarding tree contains "subtrees" with no mcast group members, no need to forward datagrams down subtree)
+
+        2.使用一棵 "组共享树"(group shard tree) 进行多播选路
+            在使用基于中心方法来构造多播选路树, 具有属于多播组相连主机的边缘路由器向中心节点(经单播)发送加入消息.
+            一个加入报文使用单播选路朝着中心转发,直到它到达已经属于多播树的一台路由器或到达这个中心
+                steiner tree: minimum cost tree connecting all routers with attached group members
+                    problem is NP-complete
+                    not used in practice:1.computational complexity 2.monolithic: rerun whenever a router needs to join/ leave
+                    
+
+
 
 
 
@@ -972,17 +1028,6 @@ three classes of OpenFlow messages:
 10. 分组转发算法。
 16. Ping协议的实现原理，ping命令格式。
 30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
-
-
-
-------------------------
-组播和多播的概念, IGMP 的用途
-------------------------
-https://www.cnblogs.com/xujian2014/p/5072215.html
-
-
-
-
 
 
 
