@@ -875,16 +875,35 @@ routing among the ISPs: BGP
 自治系统之间选路使用 BGP(Border Gateway Protocol，边界网关协议)。
 inter-AS routing: routing among AS’es
 
+the "de facto" (实际上) inter-domain routing protocol
 
 
+BGP 使用 eBGP 和 iBGP 向 AS 中的所有路由器发布路由。
+根据这种发布，路由器可能获 得到达某个路由器的多条路径，在这种情况下，路由器必须在可能的路径中选择一条。
 
 
+eBGP: "obtain获得" subnet reachability information from neighboring ASes.
+iBGP: "propagate传播" reachability information to all AS-internal routers.
 
-7. 如何实现透明传输。
-10. 分组转发算法。
+gateway routers run both eBGP and iBGP protools
 
-16. Ping协议的实现原理，ping命令格式。
-30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
+
+BGP 顺序地调用下列规则进行路由选择:  switch case 4选1 优先级逐次降低
+
+•路由被指派一个本地偏好值作为它们的属性之一，通俗地说就是由该 AS 的网络管理员设定一种策略。
+    local preference value attribute: policy decision 
+•在剩下的路由(所有都具有相同的本地偏好值)中，将选择具有最短 AS-PATH 的路由。
+    shortest AS-PATH
+•在剩下的路由(所有都具有相同的本地偏好和相同的 AS-PATH 长度)中，将选择最靠近 NEXT-HOP 路由器的路由。
+    closest NEXT-HOP router: hot potato routing
+•如果仍余下多条路由，路由器使用 BGP 标识符来选择路由
+    additional criteria
+
+
+prefix + attributes = “route”
+    AS-PATH: list of ASes through which prefix advertisement has passed
+    NEXT-HOP: indicates specific internal-AS router to next-hop AS
+
 
 
 
@@ -893,6 +912,16 @@ inter-AS routing: routing among AS’es
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 链路层 及以下
+
+
+
+
+
+
+7. 如何实现透明传输。
+10. 分组转发算法。
+16. Ping协议的实现原理，ping命令格式。
+30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
 
 
 
