@@ -908,6 +908,46 @@ prefix + attributes = “route”
 
 
 
+
+
+---------------------------------
+Software defined networking (SDN)
+---------------------------------
+组成:
+    Interface, abstractions for network control apps
+        "network graph","RESTful API", "intent" 
+            ------------------------------
+            "statistics", "flow tables"
+    Network-wide distributed, robust state management(a distributed Database)
+        "Link-state info","host info", "switch info"
+            ------------------------------
+                "OpenFlow" "SNMP"
+    Communication to/from controlled devices
+    
+
+OpenFlow protocol
+---------------
+operates between controller, switch
+TCP
+
+three classes of OpenFlow messages:
+1.controller-to-switch
+        features: controller queries switch features, switch replies
+        configure: controller queries/ sets switch configuration parameters
+        modify-state: add, delete, modify flow entries in the OpenFlow tables
+        packet-out: controller can send this packet out of specific switch port
+2.asynchronous (switch to controller)
+    packet-in: transfer packet (and its control) to controller. See packet- out message from controller
+    flow-removed: flow table entry deleted at switch
+    port status: inform controller of a change on a port.
+3.symmetric (misc)
+
+
+
+
+
+
+
 网络层 及以上 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
