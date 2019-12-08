@@ -913,6 +913,14 @@ prefix + attributes = “route”
 ---------------------------------
 Software defined networking (SDN)
 ---------------------------------
+Combines "connection-oriented networking" and "routing overlay" technologies
+优点:
+1.Perform classification in "hardware", not software
+2.Use high-speed forwarding "hardware", not software for forwarding packets
+3.Avoid using routing protocols, allow managers to "specify" how to handle/route each flow
+4.For "scalability", allow management applications, not humans, to configure and control the network devices
+
+
 组成:
     Interface, abstractions for network control apps
         "network graph","RESTful API", "intent" 
@@ -927,7 +935,9 @@ Software defined networking (SDN)
 
 OpenFlow protocol
 ---------------
+OpenFlow: Provides a standard interface for programming the data plane switches
 operates between controller, switch
+
 TCP
 
 three classes of OpenFlow messages:
