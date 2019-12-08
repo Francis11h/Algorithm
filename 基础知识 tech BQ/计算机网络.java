@@ -740,15 +740,18 @@ Routing protocols
 determine “good” paths (equivalently, routes), from sending hosts to receiving host, through network of routers
 
 “link state” algorithms: net topology, link costs known to "all" nodes 得全知道
+在 LS 算法中，每个节点(经广播)与所有其他节点交换信息(with n nodes, E links, O(nE) msgs sent)
+            但它仅告诉它们与它直接 相连链路的费用。
 
 “distance vector” algorithms: router knows "physically-connected" neighbors, link costs to "neighbors"
+在 DV 算法中，每个节点仅与它的直接相连邻居交换信息(exchange between neighbors only)
+            但它为它的邻居提供了从其 自己到网络中(它所知道的)所有其他节点的最低费用"估计"。
 
 
 
-
---------
-Dijsktra
---------
+----------------------
+Dijsktra:   link state
+----------------------
 Dijkstra 算法是迭代算法，经算法的第 k 次迭代后，可知道到 k 个目的节点的最低费用路径。
 
 Initialization:
@@ -766,6 +769,51 @@ Loop:
 
 
 T : O(VlogV+ElogV)
+
+
+-----------------------------
+Bellman-Ford: distance vector
+-----------------------------
+动态规划
+距离矢量算法是一种 "迭代的iterative"、"异步asynchronous" 和 "分布式distributed"的算法。
+
+from time-to-time, each node sends its own distance vector "estimate" to "neighbors"
+when x receives "new" DV estimate from neighbor, it updates its own DV using B-F equation
+    Dx(y) ← min v{c(x,v) + Dv(y)} for each node y ∊ N
+    方程中的 min，是指取遍 x 的"所有"邻居。
+
+
+
+distributed:  each node notifies neighbors only when its DV changes
+
+Bellman-Ford()
+    Set all predecessors and distance estimates to undefined            O(V)
+    Set source distance to zero
+    //Relax everything enough times to find all shortest paths.
+    for V – 1 iterations                                O(V) * O(E)
+        for each edge i -> j 
+            relax edge i -> j
+    //See if there are any edges that could still relax 
+    for each edge i -> Just                             O(E)
+        if j.distance > i.distance + weight[ i ][ j ]
+            return false
+return true
+
+T: O(VE)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
