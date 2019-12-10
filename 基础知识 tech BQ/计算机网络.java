@@ -1177,9 +1177,19 @@ Switch vs Router
 简而言之 Switch交换机 是看门大爷,Router路由 是邮局
 
 
+Switch 有 self-learning功能
+    frame destination, A’, location unknown: "flood"
+    destination A location known: "selectively" send on just one link
 
 
-7. 如何实现透明传输。
+
+
+
+
+
+
+
+
 16. Ping协议的实现原理，ping命令格式。
 30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
 
