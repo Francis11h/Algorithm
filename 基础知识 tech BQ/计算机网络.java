@@ -425,11 +425,26 @@ file divided into 256Kb chunks
 peers in torrent send / receive file chunks
 
 
+
+
+
+
+
+
+应用层 及以上 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+传输层 及以下
+
+
+
 --------------------------------
 Transport services and protocols
 --------------------------------
+传输层为运行在不同主机上的"进程"之间提供了"逻辑通信", 而网络层则提供了主机之间的逻辑通信
+传输层协议是在"端系统"中而不是在网络路由器中实现的
 
-provide Logical Communication between app processes running on different Hosts
+provide Logical Communication between app "processes" running on different Hosts
 
     send side: breaks app messages into Segments, passes to network layer
     rcv side: Reassembles segments into messages, passes to app layer
@@ -437,6 +452,7 @@ provide Logical Communication between app processes running on different Hosts
 -----------------------------
 Multiplexing, Demultiplexing
 -----------------------------
+多路复用与多路分解
 multiplexing at sender
     handle data from multiple sockets, add transport header to network layer
 
