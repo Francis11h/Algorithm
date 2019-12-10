@@ -452,13 +452,41 @@ provide Logical Communication between app "processes" running on different Hosts
 -----------------------------
 Multiplexing, Demultiplexing
 -----------------------------
-多路复用与多路分解
+多路复用 与 多路分解
+即 将网络层所提供的 主机到主机交付服务 扩展到 为在主机上运行的应用程序所提供的 "进程到进程"交付服务。
+
+    假定你正坐在计算机前下载Web页面，同时还在运行一个FTP会话。
+    此时你就有2个网络应用进程在运行，即一个FTP进程和一个HTTP进程。
+    当计算机的传输层从底层的网络层接收数据时，它需要将所接收到的数据定向到这2个进程中的一个.
+
+接收主机中的传输层通过一个 Socket 来传递数据。由于在任何一个时刻接收主机上可能有多个Socket，所以每个Socket都必须有唯一的标识符。
+在每个传输层报文段datagram中包含了两个端口号Port字段，在接收端，传输层检查这些字段Port并标识出接收Socket，然后将报文段定向到该Socket
+
+可以将一个Socket理解成两小段内存空间: 1.发送缓存和2.接收缓存,这两段存储空间通过Socket的变量名来标识
+
+
+从源主机的不同Socket中收集数据块，
+    井为每个数据块封装上首部信息(在多路分解时使用)从而生成报文段，
+        然后将报文段传递到网络层的工作称为多路复用(multiplexing)
+
+将传输层报文段中的数据放置到正确的Socket的工作称为多路分解(demultiplexing)，
+    确切地说，多路分解其实是多路分发，或者说是数据流的分解。
+    数据交付到特定Socket的工作也就是将数据放到正确的存储位置的过程。
+
+
+
+传输层多路复用的要求:
+    1.Socket有唯一标识符
+    2.每个报文段有特殊字段来指示该报文段所要交付的Socket。
+    这些特殊字段最重要的是源端口号字段("source Port number" field) 和 目的端口号字段("destination port number" field)。
+
 multiplexing at sender
     handle data from multiple sockets, add transport header to network layer
 
 demultiplexing at receiver
     use header info to deliver received segments to correct socket
         host uses IP addresses & Port numbers to direct segment to appropriate socket
+
 
 
 ---------------------
