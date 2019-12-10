@@ -1205,6 +1205,70 @@ initial goal: high-speed IP forwarding using "fixed length label" (instead of IP
 
 
 
+--------------------------
+更完整版的 点击网页 涉及 IP寻址
+--------------------------
+
+第一大部分 DHCP, UDP, IP and Ethernet       
+-----------------------------------
+ (Dynamic Host Configuration Protocol)
+要知道自己的IP:DHCP
+
+1.connecting laptop needs to get its own "IP address", "addr of first-hop router", "addr of DNS server": use DHCP
+2.DHCP request encapsulated in UDP, encapsulated in IP, encapsulated in 802.3 Ethernet
+3.Ethernet frame broadcast (dest: FFFFFFFFFFFF) on LAN, received at router running DHCP server
+4.Ethernet demuxed to IP demuxed, UDP demuxed to DHCP
+5.DHCP server formulates定制 DHCP ACK containing client’s IP address, IP address of first-hop router for client, name & IP address of DNS server
+6.encapsulation at DHCP server, frame forwarded ("switch learning") through LAN, demultiplexing at client
+7.DHCP client receives DHCP ACK reply
+
+---->   Client now has IP address, knows name & addr of DNS server, IP address of its first-hop router
+
+
+第二大部分 DNS and ARP
+--------------------
+要知道对方的IP: DNS
+要知道网卡地址: ARP (Address Resolution Protocol)
+
+1.before sending HTTP request, need "IP address of www.google.com": DNS
+2.DNSquery created, encapsulatedin UDP, encapsulated in IP, encapsulated in Eth. 
+3.To send frame to router, need "MAC address of router interface": ARP
+4.ARPquery broadcast,receivedby router, which replies with ARP reply giving MAC address of router interface
+5.client now knows "MAC address of first hop router", so can now send frame containing DNS query
+
+
+第三大部分 Intra-Domain Routing to the DNS server
+------------------------------------------------
+要创建 route table: RIP, OSPF, IS-IS and/or BGP
+
+1. IP datagram containing DNSquery forwarded via LAN switch from client to 1st hop router.
+2. IP datagram forwarded from campus network into comcast network, 
+    routed (tables created by "intra-domain" RIP, OSPF, IS-IS and/or
+                              "inter-domain" BGP routing protocols) to DNS server
+3. demuxed分解 to DNSserver
+4. DNSserver replies to client with IP address of www.google.com 
+
+
+
+第四大部分 同上面了 TCP + HTTP
+---------------------------
+
+1. to send HTTP request, client first opens TCP socket to web server
+2. TCP SYN segment (step 1 in 3-way handshake) inter-domain routed to web server
+3. web server responds with TCP SYN ACK (step 2 in 3-way handshake)
+4. TCP connection established!
+5. HTTP request sent into TCP socket
+6. IP datagram containing HTTP request routed to www. google. com
+7. web server responds with HTTP reply (containing web page)
+8. IP datagram containing HTTP reply routed back to client
+
+
+
+
+
+
+
+
 
 
 16. Ping协议的实现原理，ping命令格式。
@@ -1222,17 +1286,6 @@ initial goal: high-speed IP forwarding using "fixed length label" (instead of IP
 
 
 
---------------------------
-路由表Routering table 的内容
---------------------------
-
-
-
-
-
-----------------
-
-----------------
 
 
 
