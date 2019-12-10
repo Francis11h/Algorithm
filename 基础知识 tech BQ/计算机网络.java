@@ -257,38 +257,6 @@ Addressing processes
 identifer includes both IP address and Port.
 just IP address is not suffice cause that many processes can be running on the same host.
 
------
-Port
------
-
-端口,  Ip 地址 是房子, Port 是进房子的门, 一个Ip可以有 65536 (2 ^ 16) 个 端口 (0 - 65535 整数).
-
-
-一台拥有IP地址的主机可以提供许多服务, HTTP（万维网服务）, FTP（文件传输）, SMTP（电子邮件）等
-主机是怎样区分不同的网络服务呢?
-显然不能只靠IP地址,因为IP地址与网络服务的关系是 一对多的关系
-实际上是通过'IP地址+端口号'来区分不同的服务的
-
-
-
-
-
------------------------------
-TCP与UDP的概念, 相互的区别及优劣  TCP vs UDP
------------------------------
-
-
-    TCP service : 1. Reliable Transport  between sending and receiving process.
-                  2. Flow Control        sender won‘t overwhelm receiver.
-                  3. Congestion Control  throttle（截住）sender when network overloaded.
-                  4. Connection-Oriented setup required between client and server processes
-                  5. But Doesnot Provide timing, minimum throughput guarantee, security
-
-    UDP service : Unreliable data transfer between sending and receiving process
-    
-
-    Securing TCP :  SSL （改进的tcp）
-
 
 -------------------
 non-persistent HTTP
@@ -426,6 +394,38 @@ peers in torrent send / receive file chunks
 
 
 
+-------------
+HTTP vs HTTPS
+-------------
+
+    HTTP报文是包裹在TCP报文中发送的，服务器端收到TCP报文时会解包提取出HTTP报文。
+    但是这个过程中存在一定的风险，HTTP报文是明文，如果中间被截取的话会存在一些信息泄露的风险。
+    那么在进入TCP报文之前对HTTP做一次加密就可以解决这个问题了。HTTPS协议的本质就是HTTP + SSL(or TLS)。
+    在HTTP报文进入TCP报文之前，先使用 SSL 对HTTP报文进行加密。(加密过程处在TCP 和 HTTP之间)
+
+HTTPS过程
+    HTTPS在传输数据之前需要客户端与服务器进行一个握手(TLS/SSL握手), 在握手过程中将确立双方加密传输数据的密码信息。
+    TLS/SSL使用了非对称加密，对称加密以及hash等。
+
+
+    对称加密 非对称加密
+        对称 : 在加密和解密时使用相同的密钥，或是使用两个可以简单地相互推算的密钥 (DES)
+        非对称 :
+        需要一对密钥, 一个是私人密钥, 另一个则是公开密钥.
+        私钥只能由一方安全保管，不能外泄，而公钥则可以发给任何请求它的人。
+        非对称加密使用这对密钥中的一个进行加密，而解密则需要另一个密钥。
+        比如，你向银行请求公钥，银行将公钥发给你，你使用公钥对消息加密，那么只有私钥的持有人--银行才能对你的消息解密。
+        与对称加密不同的是，银行不需要将私钥通过网络发送出去，因此安全性大大提高.
+
+    SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。
+    HTTPS相比于HTTP，虽然提供了安全保证，但是势必会带来一些时间上的损耗，如握手和加密等过程，是否使用HTTPS需要根据具体情况在安全和性能方面做出权衡。
+
+
+
+
+
+
+
 
 
 
@@ -543,10 +543,85 @@ TCP segment structure
 ----------------------
 reliable data transfer
 ----------------------
+仅考虑在一般情况下可靠数据传输的问题，仅考虑单向数据传输的情况，即数据传输是从发送方到接收方的
+
+1.完全可靠信道上的可靠数据传输:rdt1.0
+2.具有比特差错信道上的可靠数据传输:rdt2.0
+    在分组的传输、传播或缓存的过程中，这种比特差错通常会出现在网络的物理部件中。
+
+3.但是确认信息本身出错、引起重复的传输怎么办呢? 因此产生rdt2.1
+    如果ACK/NAK出错，那么发送者直接 "重传当前的数据报", 发送者为数据报 添加字段:序号(sequence number)
+        接收者抛弃重复的数据报
+
+4.具有比特差错的丢包信道上的可靠数据传输:rdt3.0
+    现在假定除了比特受损外，底层信道还会"丢包"。
+
+    发送者等待ACK足够的时间,然后重传(假如还是没有ACK)
+    如果"数据包(orACK)"延迟(但没有丢失):  重传导致重复,"顺序号"的使用可以处理这种情况
+    但是接收者必须指定所确认数据包的顺序号
+    一般使用倒数的定时器(timer)
+
+    可靠数据传输协议的要点:校验和、序号、定时器、肯定确认和否定确认、重传。
+
+5. 流水线(pipelining)可靠数据传输协议 
+    流水线技术对可靠数据传输协议提出了新的要求:
+        必须增加序号范围: 因为每个传输的分组(不计算重传的)必须有一个唯一的序号，而且也许有多个在传输中的未确认的分组
+        协议的发送方和接收方必须缓存多个分组: 发送方最低限度应当能缓冲那些已发送但没有确认的分组。接收方也需要缓存那些已正确接收的分组
+
+        解决流水线的差错恢复有两种基本方法:"回退N步 GBN"和"选择重传"
+
+   GBN
+   在GBN协议中，允许发送方发送多个分组(当有多个分组可用时)而不需等待确认，但它也受限于在流水线中未确认的分组数不能超过某个最大允许数N
+   当有超时事件发生，出现丢失和过度时延分组时，发送方将"重传所有已发送但还未被确认"的分组。
+
+   选择重传(SR)
+   协议通过让发送方"仅重传那些它怀疑在接收方出错(即丢失或受损)的分组"而避免了不必要的重传。
+   这种个别的、按需的重传要求接收方逐个地确认正确接收的分组。它也用"窗口长度N"来限制流水线中未完成、未被确认的分组数。
+
+
+
+
 TCP通过哪些措施，保证传输可靠
 
 flow control
 congestion control
+
+
+
+
+-----
+Port
+-----
+
+端口,  Ip 地址 是房子, Port 是进房子的门, 一个Ip可以有 65536 (2 ^ 16) 个 端口 (0 - 65535 整数).
+
+
+一台拥有IP地址的主机可以提供许多服务, HTTP（万维网服务）, FTP（文件传输）, SMTP（电子邮件）等
+主机是怎样区分不同的网络服务呢?
+显然不能只靠IP地址,因为IP地址与网络服务的关系是 一对多的关系
+实际上是通过'IP地址+端口号'来区分不同的服务的
+
+
+
+
+
+-----------------------------
+TCP与UDP的概念, 相互的区别及优劣  TCP vs UDP
+-----------------------------
+
+
+    TCP service : 1. Reliable Transport  between sending and receiving process.
+                  2. Flow Control        sender won‘t overwhelm receiver.
+                  3. Congestion Control  throttle（截住）sender when network overloaded.
+                  4. Connection-Oriented setup required between client and server processes
+                  5. But Doesnot Provide timing, minimum throughput guarantee, security
+
+    UDP service : Unreliable data transfer between sending and receiving process
+    
+
+    Securing TCP :  SSL （改进的tcp）
+
+
 
 
 ---------------------------------------
@@ -558,38 +633,6 @@ Internet控制报文协议,它是TCP/IP协议簇的一个子协议
 
 这些控制消息虽然并不传输用户数据, 但是对于用户数据的传递起着重要的作用
 ICMP使用IP的基本支持, 就像它是一个更高级别的协议, 但是, ICMP实际上是IP的一个组成部分, 必须由每个IP模块实现.
-
-
-
--------------
-HTTP vs HTTPS
--------------
-
-    HTTP报文是包裹在TCP报文中发送的，服务器端收到TCP报文时会解包提取出HTTP报文。
-    但是这个过程中存在一定的风险，HTTP报文是明文，如果中间被截取的话会存在一些信息泄露的风险。
-    那么在进入TCP报文之前对HTTP做一次加密就可以解决这个问题了。HTTPS协议的本质就是HTTP + SSL(or TLS)。
-    在HTTP报文进入TCP报文之前，先使用 SSL 对HTTP报文进行加密。(加密过程处在TCP 和 HTTP之间)
-
-HTTPS过程
-    HTTPS在传输数据之前需要客户端与服务器进行一个握手(TLS/SSL握手), 在握手过程中将确立双方加密传输数据的密码信息。
-    TLS/SSL使用了非对称加密，对称加密以及hash等。
-
-
-    对称加密 非对称加密
-        对称 : 在加密和解密时使用相同的密钥，或是使用两个可以简单地相互推算的密钥 (DES)
-        非对称 :
-        需要一对密钥, 一个是私人密钥, 另一个则是公开密钥.
-        私钥只能由一方安全保管，不能外泄，而公钥则可以发给任何请求它的人。
-        非对称加密使用这对密钥中的一个进行加密，而解密则需要另一个密钥。
-        比如，你向银行请求公钥，银行将公钥发给你，你使用公钥对消息加密，那么只有私钥的持有人--银行才能对你的消息解密。
-        与对称加密不同的是，银行不需要将私钥通过网络发送出去，因此安全性大大提高.
-
-    SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。
-    HTTPS相比于HTTP，虽然提供了安全保证，但是势必会带来一些时间上的损耗，如握手和加密等过程，是否使用HTTPS需要根据具体情况在安全和性能方面做出权衡。
-
-
-
-
 
 
 
