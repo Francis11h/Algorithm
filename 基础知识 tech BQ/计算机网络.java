@@ -1115,18 +1115,6 @@ Link layer services(in each and every host)
 
 
 
-
-
-
-
-
-
-7. 如何实现透明传输。
-16. Ping协议的实现原理，ping命令格式。
-30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
-
-
-
 ------------------------
 硬件(MAC)地址的概念及作用
 ------------------------
@@ -1143,10 +1131,14 @@ MAC address = LAN address = pyhsical address  是 Link-Layer address
 想要联网 必须得有这个 MAC 地址 
 Each Interface connected to a LAN has a unique MAC address
 
+
+
+
 ------------------------------------
 ARP协议的用途 及算法, 在哪一层上会使用arp
 ------------------------------------
 ARP是 Link-Layer 数据链路层 上的
+ARP 协议模块将使用一个 ARP 表, 取 "IP地址"作为输入 ====> 查表得到相应 的 "MAC地址"。
 
 Address Resolution Protocol
     provides a mechanism to translate network layer address(IP address) to link-layer address(MAC address)
@@ -1162,6 +1154,20 @@ ARP resolving is analogous to DNS.
 
  但是 不同的 subnet之间 怎么传？
     用 router 一个router 有多个 IP 及对应的 MAC, 同时还有 "router table" 就可以了
+
+
+
+
+
+
+
+7. 如何实现透明传输。
+16. Ping协议的实现原理，ping命令格式。
+30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
+
+
+
+
 
 
 
