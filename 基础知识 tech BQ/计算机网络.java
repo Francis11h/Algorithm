@@ -487,6 +487,23 @@ demultiplexing at receiver
     use header info to deliver received segments to correct socket
         host uses IP addresses & Port numbers to direct segment to appropriate socket
 
+    ====>
+    无连接的多路复用与多路分解
+    ---------------------
+    "UDP Socket" 是由一个包含 "目的IP地址 destination" 和 "目的端口号Port" 的二元组 来标识的
+
+    因此，如果两个UDP报文段有不同的源IP地址或源端口号，但具有相同的目的IP地址和目的端口号，
+        那么这两个报文段将通过"相同"的目的Socket定向到相同的目的进程。
+
+    面向连接的多路复用与多路分解
+    -----------------------
+    "TCP Socket "是由一个四元组(源IP地址，源端口号，目的IP地址，目的端口号)来标识的
+
+        server host may support many simultaneous TCP sockets: 
+        服务器 要区分请求从哪里来, 所以需要源ip和源头port
+
+
+
 
 
 ---------------------
