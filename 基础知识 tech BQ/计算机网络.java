@@ -1157,23 +1157,6 @@ ARP resolving is analogous to DNS.
 
 
 
-
-
-
-
-7. 如何实现透明传输。
-16. Ping协议的实现原理，ping命令格式。
-30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
-
-
-
-
-
-
-
-
-
-
 ----------------
 Switch vs Router
 ----------------
@@ -1192,6 +1175,23 @@ Switch vs Router
             路由配置比交换机复杂。
 
 简而言之 Switch交换机 是看门大爷,Router路由 是邮局
+
+
+
+
+7. 如何实现透明传输。
+16. Ping协议的实现原理，ping命令格式。
+30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
+
+
+
+
+
+
+
+
+
+
 
 
 
