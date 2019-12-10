@@ -548,16 +548,24 @@ reliable data transfer
 1.完全可靠信道上的可靠数据传输:rdt1.0
 2.具有比特差错信道上的可靠数据传输:rdt2.0
     在分组的传输、传播或缓存的过程中，这种比特差错通常会出现在网络的物理部件中。
+    error detection: checksum
+    feedback: control msgs (ACK,NAK) from receiver to sender
+    本质是 stop and wait protocol
 
-3.但是确认信息本身出错、引起重复的传输怎么办呢? 因此产生rdt2.1
+3. rdt2.0有致命缺陷--> 确认信息(ACK, NAK)本身出错、引起重复的传输怎么办呢? 因此产生rdt2.1
     如果ACK/NAK出错，那么发送者直接 "重传当前的数据报", 发送者为数据报 添加字段:序号(sequence number)
         接收者抛弃重复的数据报
+    sender
+        seq # added to pkt(two seq. #’s (0,1) will suffice)
+        must check if received ACK/NAK corrupted
+    receiver
+         must check if received packet is duplicate
 
-4.具有比特差错的丢包信道上的可靠数据传输:rdt3.0
+4.具有比特bit差错的丢包"lose packet"信道上的可靠数据传输:rdt3.0
     现在假定除了比特受损外，底层信道还会"丢包"。
 
     发送者等待ACK足够的时间,然后重传(假如还是没有ACK)
-    如果"数据包(orACK)"延迟(但没有丢失):  重传导致重复,"顺序号"的使用可以处理这种情况
+    如果"数据包(orACK)"延迟(但没有丢失):  重传导致重复,"顺序号 seq# "的使用可以处理这种情况
     但是接收者必须指定所确认数据包的顺序号
     一般使用倒数的定时器(timer)
 
@@ -570,14 +578,15 @@ reliable data transfer
 
         解决流水线的差错恢复有两种基本方法:"回退N步 GBN"和"选择重传"
 
-   GBN
-   在GBN协议中，允许发送方发送多个分组(当有多个分组可用时)而不需等待确认，但它也受限于在流水线中未确认的分组数不能超过某个最大允许数N
-   当有超时事件发生，出现丢失和过度时延分组时，发送方将"重传所有已发送但还未被确认"的分组。
+   GBN (receiver only sends "cumulative ack")
+       在GBN协议中，允许发送方发送多个分组(当有多个分组可用时)而不需等待确认，但它也受限于在流水线中未确认的分组数不能超过某个最大允许数N
+       sender can have up to "N unacked packets" in pipeline
+       当有"超时timeout"发生，出现丢失和过度时延分组时，发送方将"重传所有已发送但还未被确认"的分组。
 
-   选择重传(SR)
-   协议通过让发送方"仅重传那些它怀疑在接收方出错(即丢失或受损)的分组"而避免了不必要的重传。
-   这种个别的、按需的重传要求接收方逐个地确认正确接收的分组。它也用"窗口长度N"来限制流水线中未完成、未被确认的分组数。
-
+   选择重传(SR) (rcvr sends "individual ack" for each packet)
+       协议通过让发送方"仅重传那些它怀疑在接收方出错(即丢失或受损)的分组"而避免了不必要的重传。
+       这种个别的、按需的重传要求接收方逐个地确认正确接收的分组。它也用"窗口长度N"来限制流水线中未完成、未被确认的分组数。
+       ---> out-of-order: "buffer"
 
 
 
