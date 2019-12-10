@@ -1023,9 +1023,40 @@ IGMP（Internet Group Management Protocol）
 
 
 
+--------
+链路层概述
+--------
+
+data-link layer has responsibility of transferring datagram from one node to "physically adjacent" node over a link
+
+Link layer services(in each and every host)
+    服务: 1.成帧 2.链路接入 3.可靠交付 4.流量控制 5.差错检测+纠正 6.半双工和全双工通信
+    e.g.: framing, link access:
+        链路层协议交换的数据单元称为"帧frame"，帧封装了一个网络层的"数据报datagram"。
+        encapsulate datagram into "frame", adding header, trailer
+    e.g.: reliable delivery between adjacent nodes
+
+链路层协议的例子如"以太网"、"802.11 无线 LAN(也称为 WiFi)"、"PPP" 协议。
+
+-------------
+链路层在何处实现
+-------------
+1.在"路由器Router"中链路层是在"线路接口卡(network interface card NIC)"中实现的。
+2.在"主机host"的链路层主体部分是在"网络适配器(network adapter)"中实现的，网络适配器也称为"网卡"，网络适配器的内核是链路层控制器芯片.
+  
+    在发送方，控制器取得了 IP 层的数据报，在链路层帧中封装该数据报，然后遵循链路接入协议将该传进通信链路中。
+    在接收端，控制器接收整个帧，提取出网络层数据报。 链路层通常还包括软件部分，实现较高层次的链路层功能，如从网络层接收数据报，装配链路层寻址信息以及激活控制器硬件。
+
+    因此，主机中链路层是一种"硬件(网卡)和软件(网卡驱动)的结合体".
+
+
+
+
+
+
+
 
 7. 如何实现透明传输。
-10. 分组转发算法。
 16. Ping协议的实现原理，ping命令格式。
 30. 阻塞方式和非阻塞方式，阻塞connect与非阻塞connect。(比较难，有兴趣可以了解)
 
