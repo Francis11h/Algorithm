@@ -1186,6 +1186,23 @@ Switch 有 self-learning功能
 
 
 
+--------------------- 
+链路虚拟化: 网络作为链路层
+--------------------- 
+多协议标签交换 MPLS
+Multiprotocol Label Switching 
+
+通过来自虚电路网络的一个关键概念—"固定长度标签",可以改善 IP 路由器的转发速度。 
+其目标是使用转发 IP 数据报的路由设备, 但却是基于固定长度标签和虚电路的技术,
+让路由器"根据固定长度的标签"转发数据报(而不是目的地 IP 地址) ----> 从而加快转发速度("标签长度固定"、"较小的标签空间"这两个特点加快了查表速度)。
+
+initial goal: high-speed IP forwarding using "fixed length label" (instead of IP address)
+
+
+
+
+
+
 
 
 
