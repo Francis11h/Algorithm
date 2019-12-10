@@ -526,19 +526,6 @@ UDP 首部只有 4 个字段，源和目的端口号、长度和校验和，每�
          application data 
             (payload)
 
----------------------
-TCP segment structure
----------------------
-
-        src port # | dest port #
-            sequence number
-        acknowledgement number
-    head U A P R S F receive window
-        checksum ...
-
-            application data 
-            (variable length)
-
 
 ----------------------
 reliable data transfer
@@ -590,13 +577,41 @@ reliable data transfer
 
 
 
+
+
+---------------------
+TCP segment structure
+---------------------
+sequence number: byte stream “number” of first byte in segment’s data
+                    The sequence number increase with the # of bytes that each segment sent to the pipeline, 
+                    which means sequence number plus one indicates the byte number has be transmitted plus one
+                是该报文段"首字节"在"字节流"中的编号, 即该字节流已经传送了多少 byte的数据 32位的 seq 总共能代表传 2^32 byte个数据
+acknowledgement number:        
+                主机B填充进报文段的确认号ACK是"主机B期望从主机A收到的下一报文段首字节的序号"
+
+        src port # | dest port #
+            sequence number
+        acknowledgement number
+    head U A P R S F receive window
+        checksum ...
+
+            application data 
+            (variable length)
+
+------------------------
 TCP通过哪些措施，保证传输可靠
+------------------------
+retransmissions triggered by: 重传
+    1.timeout events
+    2.duplicate acks
 
-flow control
-congestion control
-
-
-
+flow control: 防止接收端buffer溢出
+     receiver controls sender, so sender won’t overflow receiver’s buffer by transmitting too much, too fast
+congestion control: 传输介质受不了了
+    too many sources sending too much data too fast for network to handle
+    表现:
+        lost packets (buffer overflow at routers)
+        long delays (queueing in router buffers)
 
 -----
 Port
