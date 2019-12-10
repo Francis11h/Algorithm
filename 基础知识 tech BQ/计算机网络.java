@@ -1081,6 +1081,45 @@ Link layer services(in each and every host)
 
 
 
+-------------------------------------- 
+多路访问协议 (Multiple access protocols)
+--------------------------------------  
+
+有两种类型的网络链路:点对点(point-to-point)链路 和 广播(broadcast)链路
+下面说的都是广播
+因为所有的节点都能够传输帧，两个以上的节点可能会同时传输帧。当发生这种情况时， 传输的帧在所有的接收方处"碰撞"了。碰撞的结果是帧的丢失，以及广播信道的浪费。
+所以 如何"安排信道" 就无比重要了
+    1 信道划分协议    channel partitioning
+        1.1 时分多路复用(TDM)按时间分配
+        1.2 频分多路复用(FDM)按频率分配
+    2 随机接入协议    random access
+        在随机接入协议中，一个传输节点总是以信道的全部速率进行发送。
+        当有碰撞时，涉及 碰撞的每个节点反复地重发它的帧，直到该帧顺利发送为止
+        how to detect collisions
+
+        how to recover from collisions (e.g., via delayed retransmissions)
+
+        2.1 Slotted ALOHA
+            //https://zhuanlan.zhihu.com/p/69263154
+            N 个活跃节点时，时隙 ALOHA 的效率是 Np(1-p)^(N-1)
+        2.2 ALOHA
+        2.3 CSMA, CSMA/CD(collision detection) used in Ethernet, CSMA/CA(collision avoidance) used in 802.11
+            发送前侦听信道
+            如果与他人同时开始发送，则停止发送
+
+    3 轮流协议    taking turns
+        3.1 轮询协议 polling
+            master node “invites” slave nodes to transmit in turn
+        3.2 令牌传递协议 token passing
+            control token passed from one node to next sequentially.
+
+
+
+
+
+
+
+
 
 7. 如何实现透明传输。
 16. Ping协议的实现原理，ping命令格式。
