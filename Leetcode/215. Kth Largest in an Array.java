@@ -3,7 +3,8 @@
 Solution 1 Sort
     O(NlogN) O(1)
 
-improve time complexity by using additional space
+
+improve time complexity "by using additional space"
 
 Solution 2 minHeap
 
