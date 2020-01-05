@@ -93,7 +93,39 @@ improvement : if num belongs to one of the side we just add it into the releated
 
 
 
+2020.1.5 重新写
+
+minHeap to store larger part of stream, maxHeap to store smaller part of the stream
+
+if num belongs to one of the side we just add it into the releated heap 
+                and then balance the two heap (difference of size at most 1)
 
 
-
+class MedianFinder {
+    PriorityQueue<Integer> maxHeap;
+    PriorityQueue<Integer> minHeap;
+    /** initialize your data structure here. */
+    public MedianFinder() {
+        maxHeap = new PriorityQueue<>((n1, n2) -> (n2 - n1));
+        minHeap = new PriorityQueue<>();
+    }
+    
+    public void addNum(int num) {
+        if (minHeap.isEmpty() || num > minHeap.peek()) {
+            minHeap.offer(num);
+        } else {
+            maxHeap.offer(num);
+        }
+        if (minHeap.size() - maxHeap.size() > 1) maxHeap.offer(minHeap.poll());
+        if (maxHeap.size() - minHeap.size() > 1) minHeap.offer(maxHeap.poll());
+    }
+    
+    public double findMedian() {
+        if (minHeap.size() == maxHeap.size()) {
+            return (minHeap.peek() + maxHeap.peek()) / 2.0;
+        } else {
+            return minHeap.size() > maxHeap.size() ? minHeap.peek() : maxHeap.peek();
+        }
+    }
+}
 
