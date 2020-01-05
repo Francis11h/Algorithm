@@ -114,7 +114,7 @@ class Solution {
         while (index < n) {
             int totalChars = words[index].length();
             int last = index + 1;
-
+            //这里是 最后一个字符要在界限内 而不是 totalChars < maxWidth， 这么写last会越界
             while (last < n) {
                 if (totalChars + 1 + words[last].length() > maxWidth) break;
                 //sum up
@@ -125,6 +125,7 @@ class Solution {
             int gaps = last - index - 1;
             StringBuilder sb = new StringBuilder();
             // corner case last line or just one words
+            // 是 last == n 当然不是 index == n
             if (last == n || gaps == 0) {
                 for (int i = index; i < last; i++) {
                     sb.append(words[i]);
@@ -140,8 +141,8 @@ class Solution {
                 //last - 1 是因为 最后不能有空格
                 for (int i = index; i < last - 1; i++) {
                     sb.append(words[i]);
-                    sb.append(' ');
-                    //有些时候要多加一个 
+                    sb.append(' '); // 这里 要加 因为算totalChars的时候加了1
+                    //有些时候要多加几个 
                     for (int j = 0; j < spaces + (i - index < rest ? 1 : 0); j++) {
                       sb.append(' ');
                     }
