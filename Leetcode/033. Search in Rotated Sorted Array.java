@@ -84,25 +84,24 @@ class Solution {
             if (nums[mid] == target)
                 return mid;
 
-            if (nums[left] < nums[mid]) {
-                if (target >= nums[left] && target < nums[mid])         //这里的等号很关键。target >= nums[left]
+            if (nums[mid] > nums[left]) {                               // mid 在 xxxx 里面    xxxxxMidxxxooooooo
+                if (nums[mid] > target && target >= nums[left])         // xxxTxMidxxxooooooo   就 target 卡在 left 与 mid 之间  递增
                     right = mid;
-                else 
+                else                                                    // xxxxxMidxxxooToooo 或者 xxxxxMidxTxooooooo  
+                    left = mid;                         
+            } else {                                                    // mid 在 oooo 里面    xxxxxoooooMidoooo
+                if (nums[mid] < target && target <= nums[right])        // xxxxxoooMidoooTo
                     left = mid;
-            } else {
-                if (target > nums[mid] && target <= nums[right])        //这里的等号很关键。 target <= nums[right] 
-                    left = mid;
-                else 
+                else                                                    // xxxxxoToMidooooo   或者 xxTxxoooMidooooo
                     right = mid;
             }
         }
-        if (nums[left] == target)
-            return left;
-        if (nums[right] == target)
-            return right;
+        if (nums[left] == target) return left;
+        if (nums[right] == target) return right;
         return -1;
     }
 }
+
 
 
 
@@ -222,3 +221,14 @@ class Solution {
         return -1;
     }
 }
+
+
+
+
+
+
+
+2020.1.5 写的版本 有错误
+
+千万不要 直接先比 nums[mid] > target 因为 我 mid 在那边 都不确定 直接先比 nums[mid] 与 target 毫无意义。。。
+妈的 浪费一小时搞这东西 
