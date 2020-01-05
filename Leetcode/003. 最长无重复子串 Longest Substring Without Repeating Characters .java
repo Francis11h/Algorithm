@@ -106,7 +106,7 @@ follow up: instead of returning count, return the longest substring itself
 
 class Solution {
     public List<String> lengthOfLongestSubstring(String s) {
-        if (s == null || s.length() == 0) return 0;
+        if (s == null || s.length() == 0) return new ArrayList<>();
         int left = 0, right = 0;
         Map<Character, Integer> map = new HashMap<>();
         int max = 0;
