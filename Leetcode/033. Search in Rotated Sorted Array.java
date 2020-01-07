@@ -232,3 +232,35 @@ class Solution {
 
 千万不要 直接先比 nums[mid] > target 因为 我 mid 在那边 都不确定 直接先比 nums[mid] 与 target 毫无意义。。。
 妈的 浪费一小时搞这东西 
+
+
+
+
+
+
+2020.1.6 
+
++ - 1 版本的 binary search
+
+class Solution {
+    public int search(int[] nums, int target) {
+        if (nums == null || nums.length == 0) return -1;
+        int left = 0, right = nums.length - 1;
+        
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) return mid;
+            if (nums[mid] >= nums[left]) {   // 2,3,4,5,6,7,0,1      =等号是 这个 test case "[3,1] 1"
+                if (nums[mid] > target && target >= nums[left]) right = mid - 1;
+                else left = mid + 1;
+            } else {                        //  6,7,0,1,2,3,4,5
+                if (nums[mid] < target && target <= nums[right]) left = mid + 1;
+                else right = mid - 1;
+            }
+        }
+
+        return -1;
+    }
+}
+
+
