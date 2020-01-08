@@ -16,7 +16,8 @@ Hard:
 https://stackoverflow.com/questions/52562585/maximal-value-among-shortest-distances-in-a-matrix
 重点说一下这道题，目前没有找到特别高效的算法解决。
 如同其他帖子提到的，这道题input规模很小，因此楼主个人采用的暴力解（真的很暴力，但全过）：
-1. 找出所有可能的office组合。input grid有w * h个cell，那么用一个一维array/vector/list保存他们（类似flattened matrix), 然后找出 0 至 w * h - 1里，n个idx的组合。算法参照：力扣气时妻，这样可以通过一个vector<pair<int, int>> 或者list(tuple)保存映射关系。
+1. 找出所有可能的office组合。input grid有 w * h 个cell，那么用一个一维array/vector/list保存他们（类似flattened matrix), 然后找出 0 至 w * h - 1里，n个idx的组合。
+算法参照：力扣气时妻，这样可以通过一个vector<pair<int, int>> 或者list(tuple)保存映射关系。
 2. 初始化grid, 对于第一步里的排列，grid对应初始化为0， 其他cell初始化为INT_MAX
 3. 对于第二步的每一个grid，进行BFS，计算所有停车场离最近的office的距离，且将当前最小值和全局的最大值作比较，如果更大，更新这个全局最大值。（Maximal value among shortest distances in a matrix）
 4. 返回。
@@ -56,6 +57,11 @@ HireVue
 4. Time availability, graduation date.  Time limited: 1:30 mins
 
 
+
+
+
+
+
 （1）数学题跟challenge B的题库不一样，15mins，下面是不完全回忆：
 ·····   5黑3白球，一次拿一个无放回，问第二次拿到白球概率
 ·····   In a certain town, 60 families own tv sets, 85 own scooters, 70 own refrigerators, and 95 own radio sets. One hundred and thirty families own exactly one of these items. What is the maximum possible number of families in that town?
@@ -70,10 +76,10 @@ math:
 5. 需要多少比赛才能得到冠军
 
 
+https://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=553689&highlight=mathwork
 
 
-
-
+https://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=552029&highlight=mathwork
 
 
 
