@@ -61,7 +61,7 @@ class Solution {
 
 class Solution {
     public ListNode reverseBetween(ListNode head, int m, int n) {
-        
+        if (m == n) return head;
         ListNode start = head, end = null;
         ListNode mNode = head, nNode = head;
         
@@ -90,7 +90,40 @@ class Solution {
     }
 }
 
-test case [5] 1,1 过不了
+test case [3,5] 1,2 过不了
 
+改进 加一个 dummy
 
-
+class Solution {
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        if (m == n) return head;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        
+        ListNode start = dummy, end = null;
+        ListNode mNode = null, nNode = dummy;
+        
+        for (int i = 0; i < m - 1; i++) {
+            start = start.next;
+        }
+        mNode = start.next;
+        
+        for (int i = 0; i < n; i++) {
+            nNode = nNode.next;
+        }
+        end = nNode.next;
+        
+        ListNode prev = mNode, cur = prev.next;
+        
+        while (cur != end) {
+            ListNode temp = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = temp;
+        }
+        start.next = nNode;
+        mNode.next = end;
+        
+        return dummy.next;
+    }
+}
