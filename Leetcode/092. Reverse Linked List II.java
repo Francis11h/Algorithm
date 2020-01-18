@@ -50,3 +50,47 @@ class Solution {
 		return dummy.next;
 	}
 }
+
+
+
+
+
+
+2020.1.17 没有一遍过
+
+
+class Solution {
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        
+        ListNode start = head, end = null;
+        ListNode mNode = head, nNode = head;
+        
+        for (int i = 1; i < m - 1; i++) {
+            start = start.next;
+        }
+        mNode = start.next;
+        
+        for (int i = 1; i < n; i++) {
+            nNode = nNode.next;
+        }
+        end = nNode.next;
+        
+        ListNode prev = mNode, cur = prev.next;
+        
+        while (cur != end) {
+            ListNode temp = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = temp;
+        }
+        start.next = nNode;
+        mNode.next = end;
+        
+        return head;
+    }
+}
+
+test case [5] 1,1 过不了
+
+
+
