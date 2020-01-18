@@ -20,6 +20,8 @@ p   c
                         p    c
 
 
+
+2020.1.17 一遍过
 /**
  * Definition for singly-linked list.
  * public class ListNode {
@@ -28,17 +30,17 @@ p   c
  *     ListNode(int x) { val = x; }
  * }
  */
+
 class Solution {
     public ListNode reverseList(ListNode head) {
         if (head == null) return null;
+        ListNode cur = head, prev = null;
         
-        ListNode prev = null;
-        ListNode cur = head;
         while (cur != null) {
-            ListNode tmp = cur.next;
+            ListNode temp = cur.next;
             cur.next = prev;
             prev = cur;
-            cur = tmp;
+            cur = temp;
         }
         return prev;
     }
@@ -75,22 +77,19 @@ what should the recursion return? --->  the head of the reverseList
 
 
 
+2020.1.17 一遍过
 class Solution {
-  public ListNode reverseList(ListNode head) {
-      return reverseListRecurisvely(head);
-  }
-  // return the head of the reversedlinkedlist 
-  public ListNode reverseListRecurisvely(ListNode cur) {
-      // boundary case1 empty list
-      if (cur == null) return null;
-      // boundary case2, cur is the last node, which should be the head of the reversed list, so we. should return cur
-      if (cur.next == null) return cur;
-      // then we will do the reverse recurisvely
-      ListNode newHead = reverseListRecurisvely(cur.next);
-      cur.next.next = cur;
-      cur.next = null;
-      return newHead;
-  }
+    public ListNode reverseList(ListNode head) {    // return the head of the reversedlinkedlist 
+        if (head == null) return null;        // boundary case1 empty list
+        if (head.next == null) return head;   // boundary case2, cur is the last node, which should be the head of the reversed list, so we. should return cur
+        
+        ListNode newHead = reverseList(head.next);    // then we will do the reverse recurisvely
+        
+        head.next.next = head;
+        head.next = null;
+        
+        return newHead;
+    }
 }
 
 
