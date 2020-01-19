@@ -31,61 +31,69 @@ Well for some problems, the best way really is to come up with some algorithms f
 Basically, you need to simulate what the problem asks us to do.
 
 hint 2:
-We go boundary by boundary and move inwards. 
+We go boundary by boundary and move inwards向内. 
 That is the essential operation. 
 First row, last column, last row, first column and 
 then we move "inwards" by 1 and then repeat. 
 That‘s all, that is all the simulation that we need.
 
-hint 3:
-Think about when you want to switch the progress on one of the indexes. 
-If you progress on
-i
-out of
-[i, j]
-, you‘d be shifting in the same column. 
-
-Similarly, by changing values for
-j
-, you’d be shifting in the same row. 
-
-Also, keep track of the end of a boundary so that you can move inwards and then keep repeating. 
-It‘s always best to run the simulation on edge cases like a single column or a single row to see if anything breaks or not.
 
 
 
-不完全正确的代码 
+
+
+
+https://leetcode-cn.com/problems/spiral-matrix/solution/luo-xuan-ju-zhen-by-leetcode/
+
+层数 划分 
+数字代表层数
+
+[[1, 1, 1, 1, 1, 1],        
+ [1, 2, 2, 2, 2, 1],
+ [1, 2, 3, 3, 2, 1],
+ [1, 2, 2, 2, 2, 1],
+ [1,'1''1''1''1',1]]
+
+
+拨洋葱 一层一层 左上角(r1,c1) 右下角(r2,c2)
+top: (r1, c1 -> c2)   
+right: (c2, r1 + 1 -> r2)
+bottom: (r2, c2 - 1 -> c1 + 1)       下面的 四个黄色'1'
+left: (c1, r2 -> r1 + 1)
+
+
+
+
+
 
 class Solution {
     public List<Integer> spiralOrder(int[][] matrix) {
-        List<Integer> ans = new ArrayList<>();
+         List<Integer> ans = new ArrayList<>();
         if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return ans;
-
-        int rowBegin = 0;
-        int rowEnd = matrix.length - 1;
-        int colBegin = 0;
-        int colEnd = matrix[0].length - 1;
-
-        while (rowBegin <= rowEnd && colBegin <= colEnd) {
-        	for (int j = colBegin; j <= colEnd; j++) {
-        		ans.add(matrix[rowBegin][j]);
-        	}
-        	rowBegin++;
-
-        	for (int i = rowBegin; i <= rowEnd; i++) {
-        		ans.add(matrix[i][colEnd]);
-        	}
-        	colEnd--;
-
-        	for (int j = colEnd; j >= colBegin; j--) {
-        		ans.add(matrix[rowEnd][j]);
-        	}
-        	rowEnd--;
-
-        	for (int i = rowEnd; i >= rowBegin; i--) {
-        		ans.add(matrix[i][colBegin]);
-        	}
-        	colBegin++;
+        
+        //  拨洋葱 一层一层 左上角(r1,c1) 右下角(r2,c2)
+        // top: (r1, c1->c2)
+        // right: (c2, r1 + 1 -> r2)
+        // bottom: (r2, c2 -1 -> c1 + 1)
+        // left: (c1, r2 -> r1 + 1)
+        int r1 = 0, c1 = 0;
+        int r2 = matrix.length - 1, c2 = matrix[0].length - 1;
+        
+        // last point r1 == r2 && c1 == c2 ---> then end loop
+        while (r1 <= r2 && c1 <= c2) {
+            for (int c = c1; c <= c2; c++) ans.add(matrix[r1][c]);
+            for (int r = r1 + 1; r <= r2; r++) ans.add(matrix[r][c2]);
+            if (r1 < r2 && c1 < c2) {   
+                // remove duplicate for test case: [1,2,3] only one row 
+                // for only one col [[1], [2], [3]] one col
+                for (int c = c2 - 1; c >= c1 + 1; c--) ans.add(matrix[r2][c]);
+                for (int r = r2; r >= r1 + 1; r--) ans.add(matrix[r][c1]);
+            }
+            // update boundary
+            r1++;
+            c1++;
+            r2--;
+            c2--;
         }
         return ans;
     }
@@ -94,111 +102,4 @@ class Solution {
 
 
 
-Input
-[[1,2,3,4],
-[5,6,7,8],
-[9,10,11,12]]
-Output
-[1,2,3,4,8,12,11,10,9,5,6,7,6]
-Expected
-[1,2,3,4,8,12,11,10,9,5,6,7]
 
-
-Input
-[[3],[2]]
-Output
-[3,2,2]
-Expected
-[3,2]
-
-上面写的 有bug 即重复
-
-改了 还是 不完全对 
-class Solution {
-    public List<Integer> spiralOrder(int[][] matrix) {
-        List<Integer> ans = new ArrayList<>();
-        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return ans;
-
-        int rowBegin = 0;
-        int rowEnd = matrix.length - 1;
-        int colBegin = 0;
-        int colEnd = matrix[0].length - 1;
-
-        while (rowBegin <= rowEnd && colBegin <= colEnd) {
-        	for (int j = colBegin; j <= colEnd; j++) {
-        		ans.add(matrix[rowBegin][j]);
-        	}
-        	rowBegin++;
-
-        	for (int i = rowBegin; i <= rowEnd; i++) {
-        		ans.add(matrix[i][colEnd]);
-        	}
-        	colEnd--;
-
-        	if (rowBegin < rowEnd){
-	        	for (int j = colEnd; j >= colBegin; j--) {
-	        		ans.add(matrix[rowEnd][j]);
-	        	}
-	        	rowEnd--;
-	        }
-
-	        if (colBegin < colEnd) {
-	        	for (int i = rowEnd; i >= rowBegin; i--) {
-	        		ans.add(matrix[i][colBegin]);
-	        	}
-	        	colBegin++;
-	        }
-        }
-        return ans;
-    }
-}
-
-Input:
-[[2,5,8],[4,0,-1]]
-Output:
-[2,5,8,-1,4,0]
-Expected:
-[2,5,8,-1,0,4]
-
-
-
-完全正确的 加上等号。。。
-
-class Solution {
-    public List<Integer> spiralOrder(int[][] matrix) {
-        List<Integer> ans = new ArrayList<>();
-        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return ans;
-
-        int rowBegin = 0;
-        int rowEnd = matrix.length - 1;
-        int colBegin = 0;
-        int colEnd = matrix[0].length - 1;
-
-        while (rowBegin <= rowEnd && colBegin <= colEnd) {
-        	for (int j = colBegin; j <= colEnd; j++) {
-        		ans.add(matrix[rowBegin][j]);
-        	}
-        	rowBegin++;
-
-        	for (int i = rowBegin; i <= rowEnd; i++) {
-        		ans.add(matrix[i][colEnd]);
-        	}
-        	colEnd--;
-
-        	if (rowBegin <= rowEnd){
-	        	for (int j = colEnd; j >= colBegin; j--) {
-	        		ans.add(matrix[rowEnd][j]);
-	        	}
-	        	rowEnd--;
-	        }
-
-	        if (colBegin <= colEnd) {
-	        	for (int i = rowEnd; i >= rowBegin; i--) {
-	        		ans.add(matrix[i][colBegin]);
-	        	}
-	        	colBegin++;
-	        }
-        }
-        return ans;
-    }
-}
