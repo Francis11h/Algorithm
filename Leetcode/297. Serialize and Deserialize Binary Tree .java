@@ -7,6 +7,21 @@
 
 如何反序列化或序列化二叉树是没有限制的，你只需要确保可以将二叉树序列化为一个字符串，并且可以将字符串反序列化为原来的树结构
 
+定义:
+1. binary tree: 
+    is a tree data structure, in which each node has At Most two children.
+2. serialization:
+    is the process of converting a data structure or object into a "sequence of bits", 
+    so that it can be stored in a file or memory buffer, or transmitted across a network connection link
+    to be reconstructed later in the same or another computer environment.
+3. deserialization:
+    the process of reconstructing the sequence to the original data structure.
+
+
+
+
+
+
 
 You may serialize the following tree:
 
@@ -120,11 +135,24 @@ public class Codec {
 
 
 
+
+
+序列化的思想是利用dfs的preorder遍历得到一个完整地序列，遇到null的地方可以直接存储null即可
+反序列化的思想是利用list这个结构，每次都返回list的首元素，作为上一个节点的左节点和右节点，然后依次删除掉list的首元素
+
+ // Encodes a tree to a single string.
+    // use dfs to preorder traverse the tree, 
+    // denote the null node with '#', split nodes with ','
+    // and store the sequence in a stringbuilder
+
+// Decodes your encoded data to tree.
+    // use list to store the splited sequence, 
+    // return the first element of the list, which should be the left or right child of the previous node, then delete the first element of the list
+
 recurison
 
 public class Codec {
 
-    // Encodes a tree to a single string.
     public String serialize(TreeNode root) {
         StringBuilder sb = new StringBuilder();
         serial(root, sb);
@@ -142,7 +170,6 @@ public class Codec {
     }
     // [1, 2, n, n, 3, 4, n, n, 5, n, n]
 
-    // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
         if (data == null) return null;
         String[] str = data.split(",");
@@ -157,7 +184,7 @@ public class Codec {
             return null;
         }
         TreeNode root = new TreeNode(Integer.parseInt(nodeList.get(0)));
-        nodeList.remove(0);
+        nodeList.remove(0);             // 这行 太重要了。。。。。 
         root.left = deserial(nodeList);
         root.right = deserial(nodeList);
         return root;
