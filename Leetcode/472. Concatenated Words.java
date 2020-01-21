@@ -68,7 +68,7 @@ class TrieNode {
 
 class Trie {
     TrieNode root;
-    Trie() {
+    public Trie() {
         this.root = new TrieNode();
     }
     public void insert(String word) {
