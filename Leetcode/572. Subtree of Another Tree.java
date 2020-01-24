@@ -77,3 +77,23 @@ Space complexity : O(n). The depth of the recursion tree can go upto n. n refers
 
 实际应用？？
 https://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=574764&extra=page%3D2%26filter%3Dsortid%26sortid%3D311%26orderby%3Ddateline%26sortid%3D311%26orderby%3Ddateline
+
+
+
+
+
+2020.1.23 两遍过
+
+class Solution {
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        if (s == null && t == null) return true;
+        if (s == null) return false;
+        return isSame(s, t) || isSubtree(s.left, t) || isSubtree(s.right, t);
+    }
+
+    public boolean isSame(TreeNode s, TreeNode t) {
+        if (s == null && t == null) return true;
+        if (s == null || t == null) return false;
+        return s.val == t.val && isSame(s.left, t.left) && isSame(s.right, t.right);
+    }
+}
