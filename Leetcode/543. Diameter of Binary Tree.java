@@ -104,3 +104,84 @@ class Solution {
 
 Time complexity : O(n) - since every node in the tree is visited
 Space complexity : O(n) - space required for the HashMap and Stack
+
+
+
+
+
+
+
+1245. Tree Diameter     https://leetcode.com/problems/tree-diameter/
+
+The tree is given as an array of edges where edges[i] = [u, v] is a bidirectional edge between nodes u and v.  
+Each node has labels in the set {0, 1, ..., edges.length}.
+
+
+
+
+
+不再是 二叉树
+
+怎么办 即 可能有多条， 找最深的两条即可！！ ----> 维护两个变量
+
+还有一个点 给的是 edge list 怎么变成tree? ---> 临接表即可 --> 一个元素是 list的 数组 　List<Integer>[] = new LinkedList[n + 1]
+vertex  = edge + 1 // --> cause it is a tree
+这里 还得用 LinkedList 来 new, 因为List毕竟只是个 借口 需要具体的实现
+
+
+2020.1.24 
+
+class Solution {
+    int diameter = 0;
+    public int treeDiameter(int[][] edges) {
+        // how to build the tree? given is the edge list ---> adjacent list
+        // cause it is a tree, so (the # of vertex = the # of edge + 1)
+        if (edges == null) return 0;
+        int n = edges.length;
+        List<Integer>[] tree = new LinkedList[n + 1];
+        
+        for (int i = 0; i < tree.length; i++) {
+            tree[i] = new LinkedList<>();
+        }
+        
+        for (int[] edge : edges) {
+            int a = edge[0], b = edge[1];
+            tree[a].add(b);
+            tree[b].add(a);
+        }
+        // choose one random node as root, here we choose the # 0
+        depth(tree, 0, new HashSet<>());
+        return diameter;
+    }
+    
+    // calculate the depth of one node,the parameters that we nned is 
+    // 1. tree, 2. node 3. set to avoid duplicate cause we can just move from root to leaf
+    private int depth(List<Integer>[] tree, int root, Set<Integer> visited) {
+
+        visited.add(root);
+        int D1st = 0, D2nd = 0;
+        
+        for (Integer child : tree[root]) {
+            if (visited.contains(child)) continue;  // avoid stack overflow
+            int childDepth = depth(tree, child, visited);
+            
+            if (childDepth > D1st) {
+                D2nd = D1st;
+                D1st = childDepth;
+            } else if (childDepth > D2nd) {
+                D2nd = childDepth;
+            }
+        }
+        diameter = Math.max(diameter, D1st + D2nd);   
+        // 这里的  +1 很关键。。。 因为 root的 depth = max depth of its children + 1
+        return D1st + 1; 
+    }
+}
+
+
+
+
+
+
+
+
