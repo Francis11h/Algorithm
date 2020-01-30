@@ -12,6 +12,51 @@ Output: 4
 Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefore its length is 4.
 
 
+
+
+
+
+
+
+2020.1.29
+这才是 最应该 面试时候想出来的解法
+也是 放 set 里 然后 每次 检查其 +1 -1 在不在set 在的话移除长度+1即可
+
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        int ans = 0;
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) set.add(num);
+        // traverse all element in this set
+        // every time when we meet a new element, keep going to check its +1 / -1 
+        for (int num : nums) {
+            int len = 1;
+            if (set.contains(num)) {
+                int temp = num - 1;
+                while (set.contains(temp)) {
+                    set.remove(temp);
+                    len++;
+                    temp--;
+                }
+                temp = num + 1;
+                while (set.contains(temp)) {
+                    set.remove(temp);
+                    len++;
+                    temp++;
+                }
+                ans = Math.max(ans, len);
+            }
+        }
+
+        return ans;
+    }
+}
+
+
+
+
+
 Solution 1: set 
 
 全部都放进 hashSet 再从里面删除 应用的是   set.remove() 返回的是 boolean, 这个布尔太关键了, 就每次可以判断+/-1 的元素在不在set中
