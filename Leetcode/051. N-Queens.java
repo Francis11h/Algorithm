@@ -15,6 +15,85 @@ Output: [
 Explanation: There exist two distinct solutions to the 4-queens puzzle as shown above.
 
 
+
+
+2020.1.31
+根本 就是 用行row 来遍历 同时记录 列col 主对角线 diff 副对角线 sum 不能有重复 用set来表示这三个
+
+
+class Solution {
+    char[][] board;
+    Set<Integer> col = new HashSet<>();
+    Set<Integer> sum = new HashSet<>();
+    Set<Integer> diff = new HashSet<>();
+    List<List<String>> ans = new ArrayList<>();
+    public List<List<String>> solveNQueens(int n) {
+        if (n <= 0) return ans;
+        //build the chessboard
+        board = new char[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                board[i][j] = '.';
+            }
+        }
+        //search
+        dfs(0, n);
+        return ans;
+    }
+
+    private void dfs(int row, int n) {
+        if (row == n) {
+            List<String> cur = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                cur.add(String.valueOf(board[i]));
+            }
+            ans.add(new ArrayList<>(cur));
+            return;
+        }
+
+        //each column
+        for (int i = 0; i < n; i++) {
+            if (!col.contains(i) && !sum.contains(i + row) && !diff.contains(i - row)) {
+                board[row][i] = 'Q';
+                col.add(i);
+                sum.add(i + row);
+                diff.add(i - row);
+
+                dfs(row + 1, n);
+                // backtracking
+                board[row][i] = '.';
+                col.remove(i);
+                sum.remove(i + row);
+                diff.remove(i - row);
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class Solution {
     
     List<List<String>> results = new ArrayList<>();
