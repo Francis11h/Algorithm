@@ -49,6 +49,34 @@ O(N) O(N)
 
 
 
+2020.2.3
+解法2 从左往右正常的顺序加 就是多一个prev记录即可
+class Solution {
+    public Node connect(Node root) {
+        if (root == null) return null;
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(root);
+        
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            Node prev = new Node(0);
+            for (int i = 0; i < size; i++) {
+                Node cur = queue.poll();
+                if (i != 0) prev.next = cur;
+                if (cur.left != null) queue.offer(cur.left);
+                if (cur.right != null) queue.offer(cur.right);
+                prev = cur;
+            }
+        }
+        
+        return root;
+    }
+}
+
+
+
+
+
 // use only constant space ----> dfs queue is unacceptable 
 // recurisve approach is fine, implicit stack space does not count as extra space
 // ----> dfs
