@@ -149,9 +149,56 @@ class Solution {
 
 
 
+2020.2.6 重新写一遍 这是目前 最优雅的做法
+1. discard leading space
+2. check index is valid
+3. handle the first char
+4. handle the rest char
 
 
-
+class Solution {
+    public int myAtoi(String str) {
+        if (str == null || str.length() == 0) return 0;
+        int ans = 0;
+        // discard leading space
+        int index = 0;
+        for (; index < str.length(); index++) {
+            char ch = str.charAt(index);
+            if (ch != ' ') break;
+        }
+        // corner case "   "
+        if (index == str.length()) return 0;
+        // index is the beginging of our int, handle the first char
+        boolean isNegative = false;
+        char ch = str.charAt(index);
+        if (ch == '-') {
+            isNegative = true;
+            index++;
+        } else if (ch == '+') {
+            index++;
+        } else if (!Character.isDigit(ch)) {
+            return 0;
+        }
+        // handle the rest char
+        for (int i = index; i < str.length(); i++) {
+            ch = str.charAt(i);
+            if (!Character.isDigit(ch)) return ans;
+            // ch is digit, ans is not overflow
+            int num = ch - '0';
+            // + / -
+            if (!isNegative) {
+                if (ans > Integer.MAX_VALUE / 10 || (ans == Integer.MAX_VALUE / 10 && num > 7)) 
+                    return Integer.MAX_VALUE;
+                ans = ans * 10 + num;
+            } else {
+                if (ans < Integer.MIN_VALUE / 10 || (ans == Integer.MIN_VALUE / 10 && num > 8)) 
+                    return Integer.MIN_VALUE;
+                ans = ans * 10 - num;
+            }
+        }
+        return ans;
+    }
+}
 
 
 
