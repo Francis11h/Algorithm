@@ -28,19 +28,20 @@ class Solution {
         map.put('C', 100);
         map.put('D', 500);
         map.put('M', 1000);
-        
+        // algorithm is that, if cur < next, we minus cur, otherwise we add cur, 
+        // at the end, we add the last one.
+        int cur = map.get(s.charAt(0));
         int ans = 0;
-        int now = map.get(s.charAt(0));
         for (int i = 1; i < s.length(); i++) {
             int next = map.get(s.charAt(i));
-            if (now < next) {
-                ans -= now;
+            if (cur < next) {
+                ans -= cur;
             } else {
-                ans += now;
+                ans += cur;
             }
-            now = next;
+            cur = next;
         }
-        ans += now;
+        ans += cur;
         return ans;
     }
 }
