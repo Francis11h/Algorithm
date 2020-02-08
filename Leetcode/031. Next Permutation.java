@@ -1,5 +1,7 @@
 
 031. Next Permutation
+    同 第 556. Next Greater Element III
+
 
 Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
 
@@ -86,4 +88,58 @@ class Solution {
   // pivot
 
 
+
+
+
+
+
+
+
+
+
+556. Next Greater Element III
+class Solution {
+    public int nextGreaterElement(int n) {
+        // change int to string then change it to char array
+        char[] nums = String.valueOf(n).toCharArray();
+        // step 1 find the first not ascending number from right -> left
+        int index = -1;
+        for (int i = nums.length - 1; i > 0; i--) {
+            if (nums[i] > nums[i - 1]) {
+                index = i - 1;
+                break;
+            }
+        }
+        // the given is the largest permutation 
+        if (index == -1) return -1;
+        // step 2 swap this first not ascending number with the number just larger than it from right to it
+        for (int i = nums.length - 1; i > index; i--) {
+            if (nums[i] > nums[index]) {
+                swap(nums, i, index);
+                break;
+            }
+        }
+        // step 3 reverse the sting from index -> right
+        reverse(nums, index + 1, nums.length - 1);    
+        
+        //not overflow
+        long ans = Long.parseLong(String.valueOf(nums));
+        
+        return ans > Integer.MAX_VALUE ? -1 : (int) ans;
+    }
+    
+    private void reverse(char[] nums, int i, int j) {
+        while (i < j) {
+            swap(nums, i, j);
+            i++;
+            j--;
+        }
+    }
+    
+    private void swap(char[] nums, int i, int j) {
+        char temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
 
