@@ -11,6 +11,11 @@
 
 
 
+Calculator 通用解法
+       prev, num, sum, prevOp
+核心思想是 "calculate delay"
+
+
 
 class Solution {
     public int calculate(String s) {
@@ -77,3 +82,51 @@ class Solution {
     //placeholder, calculate the remain previous operator, then break;
     //and then update the prevOp
                 
+
+queue:  (3 + (4 - 2)) * 2 ''
+
+prev    num     sum     prevOp
+ 0       0       0       '+'            
+ 0      递归                             1.  '('
+
+
+queue:  3 + (4 - 2)) * 2 ''
+
+prev    num     sum     prevOp
+ 0       0       0       '+'            
+ 0       3       0       '+'             2.  '3'
+ 3       0       0       '+'             3.  '+'
+ 3      递归                              4.  '('
+
+
+
+queue:  4 - 2)) * 2 ''
+prev    num     sum     prevOp
+ 0       0       0       '+'             
+ 0       4       0       '+'             5.  '4'
+ 4       0       0       '+'             6.  '-' 
+ 4       2       0       '-'             7.  '2'
+ -2      0       4       ')'             8.  ')'
+
+return sum + prev = 2
+
+
+
+queue:  ) * 2 ''
+prev    num     sum     prevOp
+ 3    递归 = 2    0       '+'               4.  '('  
+ 2       0       3        ')'               9.   ')'
+
+ return sum + prev = 5
+
+
+
+queue:  * 2 ''
+prev    num     sum     prevOp
+ 0       0       0       '+'            
+ 0     递归 = 5   0       '+'                 1.  '('
+ 5       0       0       '*'                 10.  '*'
+ 5       2       0       '*'                 11. '2'
+ 10      0       0       ' '                 12.  ' ' (placeholder)
+ return sum + prev = 10
+
