@@ -236,3 +236,112 @@ return nums[j + 1] / nums[i - 1] = 1
 
 
 每一轮只减少一个 所以最坏情况是 O(N^2)  
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------
+2020.2.13
+
+
+
+带 pivot 的 快速选择写法
+
+[3, 2, 1, 5, 6, 4]
+k = 2, answer = 5 第2大的数字是5      这是 1-based
+现在 转换成 0-based
+即 第1大的数是5  即 第 6-2 = 4, 即第4小的数是5 这里的这个4就和pivot的下标能对上了
+
+https://leetcode-cn.com/problems/kth-largest-element-in-an-array/solution/shu-zu-zhong-de-di-kge-zui-da-yuan-su-by-leetcode/
+
+
+
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        if (nums == null || nums.length == 0) return -1;
+        // kth largest = (N - k)th smallest
+        return quickSelect(nums, 0, nums.length - 1, nums.length - k);
+    }
+
+    //find the k_th smallest element from the array
+    private int quickSelect(int[] nums, int left, int right, int k) {
+        if (left == right) return nums[left];
+
+        int pivot_index = partition(nums, left, right);
+
+        if (k == pivot_index) return nums[k];
+        else if (k < pivot_index) return quickSelect(nums, left, pivot_index - 1, k); 
+        return quickSelect(nums, pivot_index + 1, right, k);
+    }
+
+    //  after partitioning --> [small, pivot, large].  return the index of the pivot 
+    private int partition(int[] nums, int left, int right) {
+        //assume each time pivot is the last element of the array
+        int pivot = nums[right];
+
+        int final_pivot_index = left;
+        for (int i = left; i < right; i++) {
+            if (nums[i] < pivot) {
+                swap(nums, final_pivot_index, i);
+                final_pivot_index++;
+            }
+        }
+        swap(nums, final_pivot_index, right);
+        return final_pivot_index;
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+
+
+
+
+优化之 随机选取pivot
+
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        if (nums == null || nums.length == 0) return -1;
+        return quickSelect(nums, 0, nums.length - 1, nums.length - k);
+    }
+
+    private int quickSelect(int[] nums, int left, int right, int k) {
+        if (left == right) return nums[left];
+
+        Random rand = new Random();
+        int pivot_index = left + rand.nextInt(right - left);        // left +   这两个定不能少 
+        pivot_index = partition(nums, left, right, pivot_index);
+
+        if (k == pivot_index) return nums[k];
+        else if (k < pivot_index) return quickSelect(nums, left, pivot_index - 1, k); 
+        return quickSelect(nums, pivot_index + 1, right, k);
+    }
+
+
+    private int partition(int[] nums, int left, int right, int pivot_index) {
+        int pivot = nums[pivot_index];  
+        swap(nums, pivot_index, right);             // 先把随机 pivot 换到最右边 
+
+        int final_pivot_index = left;
+        for (int i = left; i < right; i++) {
+            if (nums[i] < pivot) {
+                swap(nums, final_pivot_index, i);
+                final_pivot_index++;
+            }
+        }
+        swap(nums, final_pivot_index, right);
+        return final_pivot_index;
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
