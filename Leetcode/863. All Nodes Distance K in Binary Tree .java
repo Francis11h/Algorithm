@@ -95,6 +95,11 @@ class Solution {
 
 解法1  
 不建图 最tricky 但是最diao
+存 从 root - target 这一条路径中 node到target的距离 于map
+再从root 直接dfs 传dist 
+    如果节点不在map里 就直接dist+1 如果在 dist更新为 map里的值
+
+https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/discuss/143798/1ms-beat-100-simple-Java-dfs-with(without)-hashmap-including-explanation
 
 class Solution {
     Map<TreeNode, Integer> map = new HashMap<>();
