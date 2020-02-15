@@ -72,6 +72,11 @@ class Solution {
 更屌的办法 预处理 用 stack 和 map
 O(n)
 
+栈 
+新的进来 里面比它小的全出来 放map里 
+把 新的入栈
+最后剩的就是 没有的 -1
+
 
 In this approach, we make use of pre-processing first so as to make the results easily available later on
 
