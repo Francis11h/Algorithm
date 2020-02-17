@@ -14,7 +14,7 @@ private static void getInputFromFile(String fileName) throws FileNotFoundExcepti
     try {
         Input = new ArrayList<>();
 
-        BufferedReader br = new BufferedReader(new FileReader("input\\" + fileName));
+        BufferedReader br = new BufferedReader(new FileReader("/Users/hanzirun/Desktop/Algorithm/OA/GoogleHashCode/input/" + fileName + ".in"));
         String line;
 
         while ((line = br.readLine()) != null) {
@@ -39,14 +39,12 @@ pw.close();
 
 
 
-
-
 private static void WriteIntoFile(String fileName) throws FileNotFoundException {
     try {
         Output = new ArrayList<>();
 
         System.out.println("\n------output " + fileName);
-        PrintWriter pw = new PrintWriter("output\\" + fileName + ".out", "UTF-8");
+        PrintWriter pw = new PrintWriter("/Users/hanzirun/Desktop/Algorithm/OA/GoogleHashCode/output/" + fileName + ".out", "UTF-8");
 
         pw.println(Output.size());
         System.out.println(Output.size());
