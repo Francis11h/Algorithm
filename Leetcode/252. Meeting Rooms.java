@@ -44,22 +44,22 @@ class Solution {
 
 一个是 Collections.sort
 一个是 Arrays.sort
-    Collection.sort是给List<T>进行排序，而Arrays.sort是给数组进行排序。
+    Collection.sort是给List<T>进行排序，而 Arrays.sort 是给数组 int[][] 进行排序。
 
 
 
 class Solution {
     public boolean canAttendMeetings(int[][] intervals) {
         if (intervals == null || intervals.length == 0) return true;
-
+        
         Arrays.sort(intervals, new Comparator<int[]>(){
-        	@Override
-        	public int compare(int[] a, int[] b) {
-        		return a[0] - b[0];
-        	}
+            @Override
+            public int compare(int[] a, int[] b) {
+                return a[0] - b[0];
+            }
         });
         for (int i = 0; i < intervals.length - 1; i++) {
-        	if (intervals[i][1] > intervals[i + 1][0]) return false;
+            if (intervals[i][1] > intervals[i + 1][0]) return false;
         }
         return true;
     }
