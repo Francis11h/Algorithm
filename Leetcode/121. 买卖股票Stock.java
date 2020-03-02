@@ -23,16 +23,15 @@ Explanation: In this case, no transaction is done, i.e. max profit = 0.
 
 1. bture force 枚举所有可能
 
+//brute force, find max (price[j] - price[i]) for every j > i 
 class Solution {
     public int maxProfit(int[] prices) {
+        if (prices == null || prices.length <= 1) return 0;
         int ans = 0;
         for (int i = 0; i < prices.length - 1; i++) {
             for (int j = i + 1; j < prices.length; j++) {
                 if (prices[j] > prices[i]) {
-                    int tmp = prices[j] - prices[i];
-                    if (ans < tmp) {
-                        ans = tmp;
-                    }
+                    ans = Math.max(ans, prices[j] - prices[i]);
                 }
             }
         }
@@ -61,19 +60,21 @@ O(1)
 
 
 
+// brute force, find max (price[j] - price[i]) for every j > i   O(n^2)
+// optimization: just find the peek and valley, and the peek must after the valley O(n)
 class Solution {
     public int maxProfit(int[] prices) {
-        if (prices == null) return 0;
-        int maxProfit = 0;
-        int min = Integer.MAX_VALUE;
-        for (int price : prices) {
-            if (price < min) {
-                min = price;
-            } else if (price - min > maxProfit) {
-                maxProfit = price - min;
+        if (prices == null || prices.length <= 1) return 0;
+        int ans = 0;
+        int valley = Integer.MAX_VALUE;
+        for (int i = 0; i < prices.length; i++) {
+            if (prices[i] < valley) {
+                valley = prices[i];
+            } else {
+                ans = Math.max(ans, prices[i] - valley);
             }
         }
-        return maxProfit;
+        return ans;
     }
 }
 
