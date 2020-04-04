@@ -105,3 +105,15 @@ class Node {
         this.node = node;
     }
 }
+
+
+
+
+
+
+Java Solution with explaination
+Obviously, I would rather use a BFS to solve this problem because if we do BFS as a level layer which means in each for loop, we visit every node in the same layer and determine the largest distance in this layer and compare the largest layer with return value.
+
+It first came to me that we could just found our path to the left and to the right bottom of this tree, but this idea is absolutely wrong. Becuase sometimes, it's not always the bottom layer who has the largest distance. So we have to go through every node and rule out every possible situation.
+
+Now we do BFS, but instead we put Node in our queue, we need to store a specific number to remember the position of this node among this layer.
