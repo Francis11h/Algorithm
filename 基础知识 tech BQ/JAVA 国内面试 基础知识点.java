@@ -374,9 +374,28 @@ public void synMethod(){
 synchronized和lock的区别
 ----------------------- 
 
+1. 原始构成
+synchronized是关键字, 属于JVM层面 系统级别的
+	汇编语言 
+	monitorenter(底层通过monitor对象 来完成的 其实 wait/notify等方法也依赖于monitor对象)
+	monitorexit
+Lock 是具体类 (java.util.Concurrent.Locks.lock) 是api层面的锁
 
+2. 使用方法
+	synchronized不需要手动释放, 当synchronized代码块儿执行完后 系统会自动让线程释放对锁的占用
+	ReentrantLock则需要用户手动去释放锁 没释放会deadlock try的上一行lock,finally里头unlock
 
+3. 等待是否可中断
+	synchronized不可中断 除非抛异常或者正常运行完成
+	ReentrantLock 可中断 1. 设置超时方法 tryLock(long timeout, TimeUnit unit)
+						2. lickInterruptibly() 放代码块儿中 调用interrupt()方法可中断
+4. 是否公平
+	synchronized默认非公平锁
+	ReentrantLock两者都可以 默认非公平 构造方法可以传boolean值 可设为公平
 
+5. 绑定多个条件的 Condition
+	synchronized无这个说法
+	ReentrantLock 用来实现分组唤醒需要唤醒的线程们 可以 精确唤醒 
 
 
 
