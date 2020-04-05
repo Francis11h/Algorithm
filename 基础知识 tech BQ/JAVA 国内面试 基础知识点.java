@@ -699,8 +699,21 @@ volatile JVM 提供的轻量级的"同步"机制 就是 乞丐版的 synchronize
 你在哪里使用过 volatile
 --------------------- 
 
-1. 单例模式 DCL double check lock 
-
+单例模式 DCL (double check lock)
+class Singleton {
+	private Singleton() {};
+	private static volatile Singleton instance;		// 加volatile
+	public static Singleton getInstance() {
+		if (instance == null) {						//synchronized 同步代码块儿 前后 都要检查
+			synchronized(Singleton.class) {
+				if (instance == null) {
+					instance = new Singleton();
+				}		 
+			}
+		}
+		return instance;
+	}
+}
 
 
 --- 
