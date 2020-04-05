@@ -143,14 +143,15 @@ Comparator
 -------
 Static
 -------
+static 关键字的作用 一句话: 可以在"没有创建对象的情况下"来"直接用类名"来调用 方法 or 变量
 
-Static Variables. 全局变量 = 类变量
-	Static variables are, essentially, global variables 就是全局变量
+Static Variables. 类变量 = 全局变量 
+	static variables are, essentially, global variables 本质上就是全局变量
 	All instances of the class share the same static variable. 一个类所有的实例共用这一个变量
 
 同时 static声明的方法 不能调用 非static 声明的方法或变量
 	static 方法 即为 类方法 就是说 调用之前 不需要创建出一个实例对象 可以直接通过 类名.该方法名的形式调用 例如 SingletonDemo.getInstance()
-	
+
 
 如果一个类要被声明为static的，只有一种情况，就是静态内部类 "static-nested-class"		Only nested classes can be static.
 
