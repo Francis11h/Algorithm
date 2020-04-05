@@ -149,6 +149,8 @@ Static Variables. 全局变量 = 类变量
 	All instances of the class share the same static variable. 一个类所有的实例共用这一个变量
 
 同时 static声明的方法 不能调用 非static 声明的方法或变量
+	static 方法 即为 类方法 就是说 调用之前 不需要创建出一个实例对象 可以直接通过 类名.该方法名的形式调用 例如 SingletonDemo.getInstance()
+	
 
 如果一个类要被声明为static的，只有一种情况，就是静态内部类 "static-nested-class"		Only nested classes can be static.
 
@@ -283,6 +285,12 @@ Iterators differ from enumerations in two ways:
 Java容器中，所有的Collection子类会实现 Iteratable接口 以实现 foreach 功能
 	Iteratable接口的实现 又依赖于 实现了Iterator的内部类
 
+
+------------
+== 与 equals
+------------
+
+== 比较的是 内存地址 
 
 
 
@@ -464,7 +472,7 @@ Java 7 及以前
 养老区 到 永久区 是没有路的 但凡 养老区内存满了 经过full-GC 也没办法回收内存的话 直接会报 OutOfMemoryError 内存溢出
 
 
-
+OOM
 "java.lang.OutOfMemoryError: Java heap space" 
 原因:
 1.  JVM的堆内存设置不够, 可以通过参数 -Xms(初始内存大小) -Xmx(最大内存大小) 来调整 （这两个参数也是参数调优中用得最多的两个）
@@ -691,6 +699,17 @@ volatile JVM 提供的轻量级的"同步"机制 就是 乞丐版的 synchronize
 --------------------- 
 
 1. 单例模式 DCL double check lock 
+
+
+
+--- 
+CAS
+--- 
+
+
+
+
+
 
 
 
