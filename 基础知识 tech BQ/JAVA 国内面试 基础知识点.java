@@ -709,8 +709,10 @@ java 13:
 4，程序执行了System.exit（）
 5，程序发生意外终止（被杀进程等）
  
-
+-------------------------- 
 GC-root(类比 linux 左斜杠 /)
+-------------------------- 
+
 就是一组必须活跃的 引用, 每次都是以 gc-root 为起点向下搜 对象不可达 则需要gc
 
 哪些对象可以作为 gc-root呢？ 
@@ -718,6 +720,28 @@ JVM 1.栈中的局部变量区 中的 引用对象
 2.方法区中 类的静态属性 引用的对象
 3.方法区中 常量 引用的对象
 4.本地方法栈 JNI(native方法) 引用的对象
+
+
+--------- 
+垃圾回收器
+--------- 
+
+1. Serial 	串行		为单线程环境设计 且只使用一个线程进行垃圾回收 会暂停所有的用户线程 所以不适合服务器环境
+2. Parallel 并行 	多个垃圾回收线程并行工作 程序还是要停
+3. CMS 		并发 Concurrent Mark Sweep		并发 程序不用停 用户线程和收集垃圾线程 不一定是并行 可能交替之行
+4. G1		G1。    G1 将堆内存分割成不同的区域 然后并发的对其进行垃圾回收
+
+
+--------------------
+怎么查看默认的 GC回收器
+
+命令行输这个命令 "java -XX:+PrintCommandLineFlags -version"
+
+输出结果的最后就是 -XX:InitialHeapSize=134217728 -XX:MaxHeapSize=2147483648 -XX:+PrintCommandLineFlags -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:+UseParallelGC 
+所以 java 8 默认的是 -XX:+UseParallelGC  并行parallel垃圾回收器
+
+java 的 gc 回收 主要的类型有
+UseSerialGC UseParallelGC UseConcMarkSweeoGC UseParNewGC  UseParallelOldGC UseG1GC  
 
 
 
