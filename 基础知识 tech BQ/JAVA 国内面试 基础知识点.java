@@ -908,7 +908,7 @@ public final int getAndAddInt(Object var1, long var2, int var4) {
 
 Java 中的 锁
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-公平锁, 非公平锁, 可重入锁, 递归锁, 自旋锁, 分段锁
+公平锁, 非公平锁, 可重入锁, 递归锁, 自旋锁, 独占锁（写锁）, 共享锁（读锁）, 互斥锁, 分段锁, 
 
 ----------------------------  
 公平锁 fair , 非公平锁 unfair
@@ -947,13 +947,48 @@ public synchronized void method02() {
 
 上述情况 只要获得了 method01的锁 method02的就自动获得 即可自由进出 method02
 
+ReentrantLock/synchronized 本身就是两个典型的可重入锁
 
 
 
 
 
+--------------- 
+自旋锁 spinlock
+--------------- 
+
+指的是 尝试获得锁的线程不会立即wait阻塞 而是采用循环的方式去获取锁 
+pros: 减少上下文切换的消耗
+
+一句话: 比如一个人去问老师问题, 看有别的同学在问老师问题, 下去抽根儿烟 再回来看看, 要是还有人问 下去买瓶水, 再回来... 如此循环
 
 
+
+
+------------------------- 
+独占锁（写锁）, 共享锁（读锁）
+------------------------- 
+即 read/write lock
+
+独占锁, 指该锁 只能被一个进程占用 ReentrantLock/synchronized 都是独占锁
+
+共享锁, 指该锁可以被多个线程持有
+对 ReentrantReadWriteLock 其读锁是共享锁, 其写锁是共享锁
+读写锁可以保证 并发读 是非常高效的, 读写 写读 写写的过程是互斥的
+
+//锁 一定是 代码模块儿话 自动化生成 不许手写。。
+rwLock.writeLock().lock();
+try {
+    System.out.println(Thread.currentThread().getName() + "\t 正在写入: " + key);
+    //模拟网络延迟 挺个0.3秒
+    try { TimeUnit.MICROSECONDS.sleep(300); } catch (InterruptedException e) { e.printStackTrace(); }
+    map.put(key, value);
+    System.out.println(Thread.currentThread().getName() + "\t 写入完成!!!! ");
+} catch (Exception e) {
+    e.printStackTrace();
+} finally {
+    rwLock.writeLock().unlock();
+}
 
 
 
