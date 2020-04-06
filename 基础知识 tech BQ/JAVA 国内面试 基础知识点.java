@@ -827,15 +827,69 @@ class Singleton {
 
 
 
+----------------------------
+CAS 比较并交换 compare and set
+----------------------------
+一句话: 比较 & 交换
+
+再接着  CAS 是一条 CPU并发原语 它的功能是 判断内存某个位置的值是否为预期值, 如果 是 则更改为新值, 如果 不是 则不能更改, 这个过程是原子的。
+CAS并发原语体现在JAVA语言中就是 sun.misc.Unsafe类中的各个方法
+调用Unsafe类中的CAS方法, JVM会帮我们实现 CAS汇编指令。 
+由于它是属于操作系统用语范畴, 是由若干条指令组成的, 用于完成某个功能的一个过程, 
+并且原语的执行必须是连续的 在执行过程中不允许被中断(类比习大大的车队 谁敢加塞儿？), 所以不会造成数据不一致的问题 保证了原子性
+
+cons: 
+1. 因为有个 do while 
+			如果 cas失败会一直进行尝试 如果长时间不成功 可能给CPU带来很大开销
+2. 只能保证一个共享变量的原子操作
+	对于 多个共享变量操作时 循环CAS无法保证 这时候可以用锁Lock来保证
+3. "ABA" 问题
+	"CAS ----> Unsafe ----> CAS底层思想 ----> ABA ----> 原子引用更新 ----> 如何规避ABA问题"
+
+	一句话: 狸猫换太子再换回 中间太子受了伤害
+
+	ABA 问题: CAS要取出数据并比较替换 但是 这是有一个时间差的 在这个时间差里数据会变化
+			  比如 一个线程 one 从位置V取出A 
+			  这时另一个线程two也从内存中同样位置取出A 并且线程two进行了操作将值变成了B 然后线程two又将位置V的数据变成A
+			  此时线程one进行CAS操作发现内存中仍然是A 比较操作成功 然后线程one操作成功。 
+			  此时 线程one 以为数据没有被人动过 但其实这个过程有猫腻 
+	如何解决:
+		理解 原子引用  atomicStampledReference
+			+ 新增一种机制, 即修改版本号(类似时间戳)
+
+		e.g.
+
+			 A 	 版本号		A	版本号	  A	   版本号
+		T1  100    1					  2020   2
+		T2  100    1       101    2       100    3 
+
+		但是 虽然 A 还是 100, 但是版本号 2 < 3 所以无法更改 
+
+--------------------------------------
+底层原理呢 为什么要用CAS而不是synchronized 
+
+只需要说两点
+1. 自旋锁
+2. unsafe类
+
+"getAndIncrement() 源码"
+public final int getAndIncrement() {
+	// this = 当前对象, valueOffset = 内存偏移量, 1 = 固定值 + 1
+    return unsafe.getAndAddInt(this, valueOffset, 1);
+}
+
+"getAndAddInt()源码 "
+//先获取 再加  var1 = this, var2 = valueOffset var4 = 1
+public final int getAndAddInt(Object var1, long var2, int var4) {
+    int var5;
+    do {	// 先do 是因为要先获得
+        var5 = this.getIntVolatile(var1, var2);		//解决get操作 从主物理内存拿值
+    } while(!this.compareAndSwapInt(var1, var2, var5, var5 + var4));	// 如果 var2 == var5 则可以修改 如果修改成功 就跳出循环
+
+    return var5;
+}
 
 
-
-
-
-
---- 
-CAS
---- 
 
 
 
