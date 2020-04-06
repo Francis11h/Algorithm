@@ -1010,6 +1010,61 @@ try {
 
 
 
+Java 中的 线程池
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------
+java中4种创建线程的方式
+--------------------
+1. extends Thread
+2. implements Runnable run()  但Runnable接口没有返回值 不抛异常 
+3. 实现 Callable接口  call()    有返回值 会抛异常 
+4. 通过线程池
+
+
+线程池的作用 
+线程复用, 因为 new Thread() 完后 都要GC 用线程池就可以复用, 同时 控制最大并发数量
+
+线程池的底层就是 ThreadPollExecutor 类
+
+Executor 
+Executors 是其 工具类 类比 (Array Arrays, Collection Collections)
+
+Executor 类比 Collection
+	我们一般不用 一般用 Executor 下面细分的 ExecutorService
+ExecutorService  类比 List
+
+
+e.g.
+
+ExecutorService threadPool = Executors.newFixedThreadPool();		// 一池固定数线程
+ExecutorService threadPool = Executors.newSingleThreadExecutor()	// 一池一线程
+ExecutorService threadPool = Executors.newCachedThreadPool()		// 一池可变数线程
+
+
+//  模拟 10个用户来办理业务 每来一个用户就是一个来自外部的请求线程  线程只有5个 可以复用
+ExecutorService threadPool = Executors.newFixedThreadPool(5);		
+try {
+    for (int i = 1; i <= 10; i++) {
+        threadPool.execute(() -> {
+            System.out.println(Thread.currentThread().getName() + "\t 办理业务");
+        });
+    }
+} catch (Exception e) {
+    e.printStackTrace();
+} finally {
+    threadPool.shutdown();
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
