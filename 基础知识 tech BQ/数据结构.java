@@ -63,7 +63,29 @@ HashMap 在并发时可能出现的问题
 --------------------
 HashMap如何保证线程安全
 --------------------
-ConcurrentHashMap : 因为它包含一个 segment 数组, 将数据分段存储, 给每一段数据配一把锁,也就是所谓的锁分段技术.
+ConcurrentHashMap : 因为它包含一个 segment 数组, 将数据分段存储, 给每一段数据配一把锁,也就是所谓的 "分段锁" 技术.
+
+验证 为何hashMap线程不安全 
+
+public class MapNotSafe {
+    public static void main(String[] args) {
+        Map<String, String> map = new HashMap<>();
+        for (int i = 0; i < 10; i++) {
+            new Thread(() -> {
+                map.put(Thread.currentThread().getName(), UUID.randomUUID().toString().substring(0, 8));
+                System.out.println(map);
+            }, String.valueOf(i)).start();
+        }
+    }
+}
+会报错 java.util.ConcurrentModificationException
+
+
+
+
+
+
+
 
 
 -------
