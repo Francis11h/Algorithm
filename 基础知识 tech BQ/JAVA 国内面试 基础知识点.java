@@ -950,7 +950,16 @@ public synchronized void method02() {
 ReentrantLock/synchronized 本身就是两个典型的可重入锁
 
 
+Lock lock = new ReentrantLock();
 
+lock.lock();
+try {
+    // To Do
+} catch (Exception e) {
+    e.printStackTrace();
+} finally {
+    lock.unlock();
+}
 
 
 --------------- 
