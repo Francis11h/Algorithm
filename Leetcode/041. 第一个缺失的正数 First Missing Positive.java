@@ -1,4 +1,4 @@
-41. First Missing Positive
+41. 第一个缺失的正数 First Missing Positive
 
 Given an unsorted integer array, find the smallest missing positive integer.
 
@@ -150,6 +150,7 @@ class Solution {
 
 2020.4.7 目前的最优解
 
+Consider it from the number/scale of the operations, in this case, 每个数 最多只能被换一次 each number will be swapped at most once, so it is O(n)
 
 class Solution {
     public int firstMissingPositive(int[] nums) {
@@ -196,5 +197,20 @@ class Solution {
 // [1, -1, 3, 4]
 
 // output = 2
+
+
+
+
+
+follow up:
+
+一个无序数组，从小到大找到第一个缺的数，比如[8 2 4 3 6 9 7 11 12],第一个缺的就是5
+
+
+
+
+
+
+
 
 
