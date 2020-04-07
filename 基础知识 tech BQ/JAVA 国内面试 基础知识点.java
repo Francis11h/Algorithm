@@ -1035,6 +1035,30 @@ try {
 
 
 
+--------- 
+Condition
+--------- 
+相当于 一把锁里有三把备用钥匙
+private Lock lock  = new ReentrantLock();
+private Condition c1 = lock.newCondition();
+private Condition c2 = lock.newCondition();
+private Condition c3 = lock.newCondition();
+
+阻塞 await()
+唤醒 signal()
+
+
+// 1 判断
+while (number != 1) {
+    c1.await();
+}
+// 2 干活
+for (int i = 1; i <= 5; i++) {
+    System.out.println(Thread.currentThread().getName() + "\t" + i);
+}
+// 3 通知
+number = 2;
+c2.signal();
 
 
 
