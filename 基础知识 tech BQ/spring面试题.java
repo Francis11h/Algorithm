@@ -7,7 +7,7 @@ SpringBoot 是什么
 -----------------
 
 SpringBoot 
-1.简化 Spring的开发的一个框架 整个spring技术栈的大整合 J2EE开发的一站式解决方案 
+1.简化 Spring的开发的一个框架 整个spring技术栈的大整合 J2EE （Java 2 Platform Enterprise Edition）java平台企业版 开发的一站式解决方案 
 2.使用嵌入式 Servlet容器 无需打成 war 包 可以直接打成jar包 用java命令 不需要单独安装Tomcat这类容器服务器了，maven 打出jar包直接跑起来就是个网站
 3.有很多的 starters (启动器), 进行 自动的 依赖管理和版本控制		
 	 
@@ -26,7 +26,7 @@ Spring 框架就像一个家族，有众多衍生产品例如 boot、security、
 但他们的基础都是Spring 的 "ioc" 和 "aop" 
 ioc-------提供了依赖注入的容器 
 aop-------解决了面向横切面的编程，
-然后在此两者的基础上实现了其他延伸产品的高级功能。
+然后在此两者的基础上实现了其他延伸产品的高级功能。	"Spring的灵魂 : IOC 和 AOP"
 
 Spring MVC是基于 Servlet 的一个 MVC 框架 主要解决 WEB 开发的问题，因为 Spring 的配置非常复杂，各种XML、 JavaConfig、hin处理起来比较繁琐。于是为了简化开发者的使用，从而创造性地推出了Spring boot，约定优于配置，简化了spring的配置流程
 
@@ -55,23 +55,91 @@ SpringBoot使用的一个全局配置文件
 
 
 
+
+
+
+-----------
+IoC 依赖反转
+-----------
+一句话: 不再new对象了 直接注入进来。。
+
+工厂模式
+
+IOC = Inversion of Control 反转资源获取的方向
+DI Dependency Injection 依赖注入     是实现 IoC的一种方式
+
+通俗/代码解释
+
+原来: 我的service 需要调用 DAO(repository), service 就需要创建 DAO
+现在: Spring 发现 你的 service 依赖于 dao, 于是 直接把 dao 注入到你的 service 里面 
+	当前对象如果需要依赖另一个对象，只要打一个"@Autowired"注解，Spring就会自动帮你安装上。
+
+
+核心原理: 就是 "工厂模式 + 反射 + 配置文件"
+	就是 我需要的配置文件 通过反射 放到容器里(工厂里可以创建不同的容器(说白了就是个map))
+
+
+----
+Bean
+----
+
+spring进行IOC实现时使用的有两个概念：context上下文和bean。
+如中间图所示，所有被spring管理的、由spring创建的、用于依赖注入的对象，就叫做一个bean。
+Spring创建并完成依赖注入后，所有bean统一放在一个叫做context的上下文中进行管理。
+
+
+
 -------------------------------
-java的动态代理机制是怎样的？ 
+AOP java的动态代理机制是怎样的？ 
 -------------------------------
+AOP 就是 面向切面编程
+
+核心原理: 使用 "动态代理模式" 的方式 在执行前后或出现异常后 做相关逻辑
+
+
+使用 AOP来做
+1. 事务处理
+2. 权限判断
+3. 日志
+
+
+https://www.zhihu.com/question/48427693/answer/691483076
+
+AOP就是面向切面编程。如右面的图，一般程序执行流程是从controller层调用service层、然后service层调用DAO层访问数据，最后在逐层返回结果。
+这个是图中向下箭头所示的按程序执行顺序的纵向处理。
+但是，一个系统中会有多个不同的服务，例如用户服务、商品信息服务等等，
+每个服务的controller层都需要验证参数，都需要处理异常，如果按照图中红色的部分，
+对不同服务的纵向处理流程进行"横切"，在每个切面上完成通用的功能，例如身份认证、验证参数、处理异常等等、
+这样就不用在每个服务中都写相同的逻辑了，这就是AOP思想解决的问题。
+
+AOP以功能进行划分，对服务顺序执行流程中的不同位置进行横切，完成各服务共同需要实现的功能。
 
 
 
 -----------
-IOC 依赖反转
+面试中经常问到的bean的生命周期
 -----------
-不再new对象了 直接注入进来。。
+先看绿色的部分，bean的创建过程：
+第1步：调用bean的构造方法创建bean；
+第2步：通过反射调用setter方法进行属性的依赖注入；
+第3步：如果实现BeanNameAware接口的话，会设置bean的name；
+第4步：如果实现了BeanFactoryAware，会把bean factory设置给bean；
+第5步：如果实现了ApplicationContextAware，会给bean设置ApplictionContext；
+第6步：如果实现了BeanPostProcessor接口，则执行前置处理方法；
+第7步：实现了InitializingBean接口的话，执行afterPropertiesSet方法；
+第8步：执行自定义的init方法；
+第9步：执行BeanPostProcessor接口的后置处理方法。
+这时，就完成了bean的创建过程。
+
+在使用完bean需要销毁时，
+会先执行DisposableBean接口的destroy方法，
+然后在执行自定义的destroy方法。
+
+这部分也建议阅读源码加深理解。
 
 
 
 
------------
-AOP
------------
 
 
 
@@ -80,15 +148,11 @@ AOP
 
 
 
-
-什么是Spring框架？Spring框架有哪些主要模块？
-
-
-使用Spring框架有什么好处？
 什么是控制反转（IOC）？什么是依赖注入？
 
 
 请解释下Spring中的IOC？
+
 BeanFactory和ApplicationContext有什么区别？
 将Spring配置到你的应用中共有几种方法？
 
