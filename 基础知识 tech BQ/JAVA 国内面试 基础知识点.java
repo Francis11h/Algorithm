@@ -89,6 +89,36 @@ Java 继承 inheritance		Son extends Father 	||  Dog extends Animal
 
 
 
+-------------------------
+匿名类，以及虚拟机内部的实现
+-------------------------
+anonymous class 是一种特殊的内部类
+1. 它没有类名 在定义类的同时就生成 该类的一个实例对象
+2. 一次性使用的类
+
+编译器会给一个 xxxx$1这样一个类名,它是编译器给定的名称
+
+
+使用 
+1. 不取名字 直接使用其父类或接口的名字
+	也就是说 该类是父类的子类 or 实现了一个接口
+
+Arrays.sort(intervals, new Comparator<int[]>(){
+    public int compare(int[] a, int[] b) {
+        return a[0] - b[0];
+    }
+});
+
+这里的 new Comparator 就是一个 匿名类。。。。。
+
+new Runnable() {
+	public void run() {
+			//.....
+	}
+}
+new Runnable 也是 一个匿名类
+
+
 
 
 

@@ -72,16 +72,22 @@
 
             2xx：成功–表示请求已被成功接收、理解、接受。
                 200 Ok  request succeeded,requested object later in this msg
+                204     服务器成功处理了请求 但是没有返回任何内容
 
             3xx：重定向–要完成请求必须进行更进一步的操作
-                301 Moved Permanently
+                301 Moved Permanently       请求的网页已永久移动到新的位置
+                302 Moved Temporarily       请求的网页 "临时" 移动到新的位置 
 
-            4xx：客户端错误–请求(request)有 语法错误 或 请求无法实现。
+            4xx：客户端client错误–请求(request)有 语法错误 或 请求无法实现。
                 400 Bad Request request msg not understood by server
-                403 Forbidden                                           //服务器收到请求，但是拒绝提供服务
+                403 Forbidden                                           服务器收到请求，但是拒绝提供服务
                 404 Not Found requested document not found on this server
 
-            5xx：服务器端错误–服务器未能实现合法的请求。
+            5xx：服务器server 错误–服务器未能实现合法的请求。
+                500 Internal Server Error   服务器内部错误
+                502 Bad Gateway             一般来讲 都是 代理 (Nginx等 向下请求 web 服务器宕机/不响应)
+                503 Server Unavailable      服务当前不可用 服务器超载 or 停机维护
+                504 Gateway Timeout         网关超时 也跟代理有关
                 505 HTTP Version Not Supported
 
         响应报头 ：  常见的响应报头字段有: Server, Connection...。
@@ -1399,6 +1405,32 @@ initial goal: high-speed IP forwarding using "fixed length label" (instead of IP
 6. IP datagram containing HTTP request routed to www. google. com
 7. web server responds with HTTP reply (containing web page)
 8. IP datagram containing HTTP reply routed back to client
+
+
+
+
+
+
+
+--------------
+tomcat + nginx
+--------------
+
+
+Tomcat运行在JVM之上，它和HTTP服务器一样，绑定IP地址并监听TCP端口，同时还包含以下指责：
+管理Servlet程序的生命周期
+将URL映射到指定的Servlet进行处理
+与Servlet程序合作处理HTTP请求——根据HTTP请求生成HttpServletResponse对象并传递给Servlet进行处理，将Servlet中的HttpServletResponse对象生成的内容返回给浏览器
+
+虽然Tomcat也可以认为是HTTP服务器，但通常它仍然会和Nginx配合在一起使用：
+
+动静态资源分离——运用Nginx的反向代理功能分发请求：所有动态资源的请求交给Tomcat，
+而静态资源的请求（例如图片、视频、CSS、JavaScript文件等）则直接由Nginx返回到浏览器，这样能大大减轻Tomcat的压力。
+
+负载均衡，当业务压力增大时，可能一个Tomcat的实例不足以处理，那么这时可以启动多个Tomcat实例进行水平扩展，
+而Nginx的负载均衡功能可以把请求通过算法分发到各个不同的实例进行处理
+
+
 
 
 
