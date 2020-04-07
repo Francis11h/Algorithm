@@ -2,7 +2,7 @@
 
 Given an unsorted integer array, find the smallest missing positive integer.
 
-寻找从1开始第一个缺失的正数
+寻找从1开始第一个缺失的正数 如果正好是 1到n 输出 n+1
 
 Input: [1,2,0]
 Output: 3
@@ -12,6 +12,7 @@ Output: 2
 
 Input: [7,8,9,11,12]
 Output: 1
+
 
 Your algorithm should run in O(n) time and uses constant O(1) extra space.
 
@@ -147,5 +148,53 @@ class Solution {
 
 
 
+2020.4.7 目前的最优解
+
+
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        if (nums == null || nums.length == 0) return 1;
+        for (int i = 0; i < nums.length; i++) {
+            while (nums[i] > 0 && nums[i] <= nums.length && nums[nums[i] - 1] != nums[i]) {
+                //swap 
+                int temp = nums[nums[i] - 1];
+                nums[nums[i] - 1] = nums[i];
+                nums[i] = temp;
+            }
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != i + 1) return i + 1;
+        }
+        return nums.length + 1;
+    }
+}
+
+// bucket sort
+// index    val
+// 0   ->   1
+// 1   ->   2
+// 2   ->   3
+// 3   ->   4
+// nums[nums[i] - 1] = nums[i]
+
+
+// [0, 1, 2, 3]
+
+// [3, 4, -1, 1]
+// i = 0   nums[0] = 3   nums[2] != 3  swap  nums[i] = -1 出 while
+// [-1, 4, 3, 1]
+
+// i = 1   nums[1] = 4   nums[3] !=  4  swap 
+// [-1, 1, 3, 4]  
+// nums[i] = 1  nums[0] != 1 swap    nums[i] = -1 出 while
+// [1, -1, 3, 4]
+
+// i = 2   nums[2] = 3  nums[2] = 3 不swap
+// i = 3   nums[3] = 4  nums[3] = 4 不swap
+
+// 最终
+// [1, -1, 3, 4]
+
+// output = 2
 
 
