@@ -1,4 +1,4 @@
-287. Find the Duplicate Number
+287. 找重复的数字 Find the Duplicate Number
 
 Input: [1,3,4,2,2]
 Output: 2

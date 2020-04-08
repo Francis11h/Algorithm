@@ -206,9 +206,28 @@ follow up:
 
 一个无序数组，从小到大找到第一个缺的数，比如[8 2 4 3 6 9 7 11 12],第一个缺的就是5
 
+找到 最小值 然后 + / - min 即可
 
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        if (nums == null || nums.length == 0) return 1;
+        int min = Integer.MAX_VALUE;
+        for (int num : nums) if (min > num) min = num;
 
-
+        for (int i = 0; i < nums.length; i++) {
+            while (nums[i] > min && nums[i] <= nums.length + min && nums[nums[i] - 1 - min] != nums[i]) {
+                //swap 
+                int temp = nums[nums[i] - 1 - min];
+                nums[nums[i] - 1 - min] = nums[i];
+                nums[i] = temp;
+            }
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != i + 1 + min) return i + 1 + min;
+        }
+        return nums.length + 1 + min;
+    }
+}
 
 
 
