@@ -265,6 +265,25 @@ protected int next(int bits) {
 
 
 
-
-
-
+随机生成 0-99 放入数组
+class Solution {
+    public static void main(String[] args) {
+        int[] nums=new int[100];
+        for (int i=0;i<nums.length;i++){    //生成数据
+            nums[i]=i;
+        }
+        Random ran=new Random();
+        for (int i=0;i<nums.length;i++){
+            int j=ran.nextInt(nums.length); //打乱顺序
+            swap(nums,i,j);
+        }
+        for (int i:nums){
+            System.out.print(i+"\t");
+        }
+    }
+    public static void swap(int nums[],int i,int j){
+        int temp=nums[i];
+        nums[i]=nums[j];
+        nums[j]=temp;
+    }
+}

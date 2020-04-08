@@ -38,6 +38,8 @@ HashMap vs HashTable
 	It is not-thread safe and can’t be shared between many threads without proper synchronization code 
 	whereas Hashtable is synchronized. It is thread-safe and can be shared with many threads.
 
+	为什么Hashtable是线程安全的，因为它的remove,put，get做成了同步方法(前面加了 synchronized 重锁)，保证了Hashtable的线程安全性
+
 2.HashMap allows one null key and multiple null values whereas Hashtable doesn’t allow any null key or value.
 	why ? 
 	To successfully store and retrieve objects from a HashTable, 
