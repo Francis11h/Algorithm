@@ -1102,7 +1102,7 @@ pros: 减少上下文切换的消耗
 ------------------------- 
 即 read/write lock
 
-独占锁, 指该锁 只能被一个进程占用 ReentrantLock/synchronized 都是独占锁
+独占锁, 指该锁 只能被一个进程占用 ReentrantLock/synchronized 都是独占锁/互斥锁
 
 共享锁, 指该锁可以被多个线程持有
 对 ReentrantReadWriteLock 其读锁是共享锁, 其写锁是共享锁
@@ -1185,9 +1185,9 @@ for ( 1 -> 7 ) {
 
 
 
---------------- 
+---------- 
 Semaphore
---------------- 
+---------- 
 一句话: 抢车位
 
 它的作用: 1.用于 多个共享资源的互斥使用 (多对多)(6个车抢3个车位) 2.另一个用于 并发线程数的控制 
@@ -1199,6 +1199,37 @@ semaphore.acquire();				// -1
 semaphore.release();				// +1
 
 他们三个 配上 线程池 可以打造功能很强的 高并发系统
+
+
+--------------------------------- 
+与 synchronized/ReentrantLock 区别 
+
+synchronized/ReentrantLock 都是“互斥锁” 相当于只存在一个临界资源,因此同时最多只能给一个线程提供服务.
+在实际复杂的多线程应用程序中，可能存在"多个临界资源"，这时候我们可以借助Semaphore信号量来完成多个临界资源的访问
+
+
+
+---------------------  
+到底什么时候 该用什么锁？？
+---------------------  
+
+1.synchronized：
+
+在资源竞争不是很激烈的情况下，偶尔会有同步的情形下，synchronized是很合适的。
+原因在于，编译程序通常会尽可能的进行优化synchronize，另外可读性非常好。
+
+2.ReentrantLock:
+在资源竞争不激烈的情形下，性能稍微比synchronized差点点。
+但是当同步非常激烈的时候，synchronized的性能一下子能下降好几十倍，而ReentrantLock确还能维持常态。
+
+"高并发量情况下使用ReentrantLock。"
+
+3. Semaphore
+存在"多个临界资源"，这时候我们可以借助Semaphore信号量来完成多个临界资源的访问
+
+4. Atomic
+和上面的类似，不激烈情况下，性能比synchronized略逊，而激烈的时候，也能维持常态。激烈的时候，Atomic的性能会优于ReentrantLock一倍左右。但是其有一个缺点，就是只能同步一个值，一段代码中只能出现一个Atomic的变量，多于一个同步无效。因为他不能在多个Atomic之间同步
+
 
 
 
