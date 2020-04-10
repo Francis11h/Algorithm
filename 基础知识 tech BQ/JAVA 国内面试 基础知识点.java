@@ -1,13 +1,124 @@
 JAVA 国内面试 基础知识点
 
-Java支持多继承么
-	绝不
 
------------
-Abstraction
------------
-In java, abstraction is achieved by interfaces and abstract classes
 
+
+------------------------
+面向对象 面向过程, OOD的优点
+------------------------
+面向对象是什么: 面向对象是一种 "对现实世界理解和抽象的方法"，是计算机编程技术发展到一定阶段后的产物。
+面向过程 (Procedure Oriented): 是一种 "以过程为中心" 的编程思想。
+	这些都是以什么正在发生为主要目标进行编程，不同于面向对象的是谁在受影响。
+	缺点 就出来了 "复用性不佳" "拓展性不易" "耦合度太高"
+	与面向对象明显的不同就是 "封装 Encapsulation"、"继承 Inheritance"、"类 Class"。
+
+面向过程:	 定义函数, 定义数据 然后各种函数 数据的操作
+随着软件变得越来越大,代码量越来越多 ----> 带来两个问题  1.命名冲突 2.代码重复 ----> 解决
+
+代码重复--->我们可以用 函数里面调用函数 (把某些通用功能的代码抽出来成一个独立函数) ---->  封装 模块儿化
+命名冲突--->我们就把这一堆函数们进行分类, 比如 整数 小数 分数...等 ----> "类 Class" 的概念 就呼之欲出了
+
+----------------- 
+Encapsulation 封装
+-----------------
+封装 encapsulation 也就是把客观事物封装成抽象的类.
+
+封装的好处:
+1. 功能被封装成了类，通过基类与派生类之间的一些机制（组合和继承），来提高代码的"复用性" (这一条就是 OOD最明显的优点),可以 模块儿化
+2. 隐藏实现细节，提供公共的访问方式
+	改变 可访问的权限  private 修饰成员变量 ---> 为什么 用private --> 可以在赋值之前应该先对数据进行判断 保证安全性
+		public 修饰 getter() & setter() 方法
+
+
+-----------------
+Inheritance   继承 
+-----------------
+Java 继承 inheritance		Son extends Father 	||  Dog extends Animal
+继承的概念: 
+	它可以使用现有类的所有功能，并在无需重新编写原来类的情况下对这些功能进行扩展。
+	通过继承创建的新类称为「子类」或「派生类」，被继承的类称为「基类」、「父类」或「超类」
+
+继承的好处:
+1.继承是传递的，"易于在现有代码的基础上构造和扩充"。
+2.简化对事物的描绘，使得"层次"更加清晰。
+3.减少代码冗余。
+4.提高可维护性。
+
+
+
+例子:
+
+Number 数 {
+    检测
+    加
+    减
+    乘
+    除
+}
+Integer 整数 {
+    沿用上面数的设计
+}
+Decimal 小数 {
+    沿用上面数的设计
+}
+
+所谓继承inheritance，就是把 数 这个类的整体设计，沿用给 整数，分数小数 这些类，
+作为他们的 编写大纲 去编写加减乘除这些函数的 具体代码。
+根据整数，分数，小数各自的性质，做出各自的调整
+
+这时 数 这个类，如果你给它里面的加减乘除函数的写了一些很粗糙简单的代码，就叫做"父类 parent class"
+子类们 继承extends 了父类（把代码进行了复杂化）
+如果没写，那这个类其实就只是个设计图，叫做"抽象类 abstract class"
+子类们 实现implements 了抽象类（把空空的设计变成了具体代码）
+
+如果我们需要一个能自动实现结果四舍五入的小数计算类，同时又需要一个不需要的，怎么办呢，难道要写两个类吗？不要。
+所以做出了("Object" = "instance" "实例对象")这一东西
+
+小数类 {
+    标识变量：是否四舍五入
+    标识变量：是否限定小数点后位数
+    构造函数 Constructor（设置上面的标识）
+    加（会根据上面两个标识变量输出不同结果）
+    减（会根据上面两个标识变量输出不同结果）
+    乘（会根据上面两个标识变量输出不同结果）
+    除（会根据上面两个标识变量输出不同结果）
+}
+这样，我们就写一个类，但是通过构造函数，把一份代码，构造出了行为稍微有点不同的两个实例供我们使用
+这时候名词来了，不能进行实例化微调化的类，叫做"静态类 static class"，函数们的行为是固定的。
+不能实例化的类，其实只是函数们的一个集合归纳，只是对函数进行了整理，功能的强大和编码的自由灵活度是不够的。
+
+能够进行实例化，变化出各种行为各自不大一样的实例的类，我们一般就把它们叫做"类class"了，因为最常见。
+
+-----------------
+Polymorphism 多态
+-----------------
+多态的概念: 多个不同的对象对同一消息作出响应。同一消息"根据不同的对象"而"采用各种不同的方法"。
+		  简单说就是一句话: 允许将子类类型的指针 赋值给 父类类型的指针
+多态的好处: 主要是"利于扩展"。
+
+Java 多态 		
+	多态指的是同一个事物等在不同情况下不同的表现, 体现在程序中 有三种
+	1.统一的接口不同的实现 (多态是为了接口的重用)
+
+		举个例子 List是接口 指向 list 这个对象 (父类引用指向子类对象), 该对象可以用不同的 实现类 来new出来
+			List<String> list = new ArrayList<>();
+			List<String> list = new LinkedList<>();
+
+	2. 子类 继承 父类 进行方法 重写/覆盖 Override
+	 	Runtime 运行时 决定
+		子类 中定义某方法与其父类"有相同的名称和参数", 我们说该方法被重写	
+		Overriding means having two methods with the same method name and parameters
+		One of the methods is in the Parent-class and the other is in the Child-class
+
+	3. 同一个类中进行方法重载 Overload
+		Compile 编译时 决定
+		在一个类(1 1 1 "一个类)中定义了多个同名的方法"),它们或有不同的参数个数或有不	同的	参数类型
+		Overloading occurs when two or more methods in One-class have the same method name but Different Parameters.
+
+
+--------------- 
+接口  Interfaces 
+--------------- 
 Java接口的作用
 	针对这个 很通俗的问题
 		例如我定义了一个接口, 但是我在继承这个接口的类中还要写接口的实现方法,
@@ -28,7 +139,7 @@ Java接口的作用
 		而且 如果有新的店卖炸鸡腿 我们也不可能知道 (不利于扩展)
 
 
-
+	书面的理解
 	Java 中, 接口类型可用来声明一个变量, 他们可以成为一个空指针, 或是被绑定在一个以此接口实现的对象
     
 	    比如
@@ -40,51 +151,74 @@ Java接口的作用
 		一个接口类型的引用reference 指向了 一个实现给接口的对象object 这是Java中多态现象的一种体现
 		Java中接口不能被实例化 但是可以通过接口引用 指向一个对象 这样通过接口来调用方法可以屏蔽掉具体的方法实现
 
-		接口是比抽象类更抽象的 
 
-		abstract class 就是 不允许被new出来的类 因为更加抽象 但是它可以作为 引用类型
+--------------------
+抽象类 abstract class
+--------------------
+abstract class 就是 不允许被new出来的类 因为更加抽象 但是它可以作为 引用类型
 
-			举个例子
-			abstract public class Canine extends Animal {	//犬类动物
-				public void roam();	//徘徊
-			}
+	举个例子
+	abstract public class Canine extends Animal {	//犬类动物
+		public void roam();	//徘徊
+	}
 
-			public class MakeCanine {
+	public class MakeCanine {
 
-				public void go () {
-					Canine c;
-					c = new Dog();		正确 ✅ 因为 可以 赋值子类对象(new Dog()) 给 父类的引用(c), 对象 都是new出来的
-					c = new Canine;		错误 ❌ 因为 抽象类不可以被new
-				}
-			}
+		public void go () {
+			Canine c;
+			c = new Dog();		正确 ✅ 因为 可以 赋值子类对象(new Dog()) 给 父类的引用(c), 对象 都是new出来的
+			c = new Canine;		错误 ❌ 因为 抽象类不可以被new
+		}
+	}
+
+----------------- 
+接口 和 抽象类 比较
+-----------------
+"接口"是比"抽象类"更抽象的
+
+相同点 
+	1. 都是 上层的抽象层 都实现了 java这门语言的 抽象功能
+		In java, abstraction is achieved by "interfaces" and "abstract classes"
+	2. 都不能被 实例化 即 都不能直接 new
+	3. 都能包含抽象方法 (这些抽象方法 仅仅 用来描述 类所具备的功能, 而不提供具体实现)
+
+不同
+	1. 抽象类 中 可以写 非抽象方法 从而避免 在子类中重复书写 ---> "提高了代码的复用性" 这是 抽象类的优势
+	   而 接口中 所有的方法 必须 都是抽象的 不能有任何具体的
+	2. 一个类只能继承一个直接父类, 这个父类可以是具体的类也可是抽象类
+	   而 一个类可以实现多个接口
+
+所以 有了下面的问题的答案
+---------------------- 
+Java支持多继承么
+
+绝不
+类单继承的原因: 当子类 重写Override 父类方法的时候 即 子类隐藏父类的成员变量以及静态方法的时候,"JVM使用不同的绑定规则".
+			如果一个类有多个直接的父类---> 那么会使绑定规则变得更复杂。
+			所以为了简化软件的体系结构和绑定机制,java语言禁止多继承.
+但是 java中
+接口 可以多继承 即一个类可以实现多个接口
+		是因为 接口中只有抽象方法 abtract method,没有静态方法 no static method 和 非常量的属性 no non-final attributes
+		而 只有接口的实现类才会 重写Override 接口中方法
+		因此一个类继承多个接口 也不会增加JVM的绑定机制和复杂度。
 
 
-------------
-Polymorphism
-------------
-Java 多态 		
-	多态指的是同一个事物等在不同情况下不同的表现, 体现在程序中 有三种
-	1.统一的接口不同的实现
+举例子: 如果Sparrow继承类Bird类, Boyin(波音)继承Airplane类
+		Sparrow 和Boyin想使用 同样的fly方法那么是没有办法实现的 ---> 因为类的继承是单继承。
+	   但是 如果Bird和Airplane是接口那么Sparrow和Boyin想使用同样的fly方法就很简单了
+	   	再写一个接口让Sparrow和Boyin实现这个接口就可以
 
-		举个例子 List是接口 指向 list 这个对象 (父类引用指向子类对象), 该对象可以用不同的 实现类 来new出来
-			List<String> list = new ArrayList<>();
-			List<String> list = new LinkedList<>();
+--------------------------------------------
+那 什么时候 用什么???  所以从 设计目的 区分
 
-	2. 子类 继承 父类 进行方法重写 Override
-		子类 中定义某方法与其父类有相同的名称和参数, 我们说该方法被重写	
-		Overriding means having two methods with the same method name and parameters
-		One of the methods is in the Parent-class and the other is in the Child-class
+接口的设计目的----->是"对类的行为进行约束"（更准确的说是一种"有"约束，因为接口不能规定类不可以有什么行为）
+	也就是提供一种机制，可以强制要求不同的类具有相同的行为。
+它只约束了行为的有无，但不对如何实现行为进行限制。对 接口为何是约束 的理解，配合泛型食用效果更佳。
 
-	3. 同一个类中进行方法重载 Overload
-		在一个类(1 1 1 一个类)中定义了多个同名的方法,它们或有不同的参数个数或有不	同的	参数类型
-		Overloading occurs when two or more methods in One-class have the same method name but Different Parameters.
-
---------------------------------
-Inheritance继承 Encapsulation封装
---------------------------------
-
-Java 继承 inheritance		Son extends Father 	||  Dog extends Animal
-	 封装 encapsulation		改变 可访问的权限  private 变量 public getter() & setter() 
+抽象类的设计目的----->是"代码复用"。
+	当不同的类具有某些相同的行为(记为行为集合A)，且其中一部分行为的实现方式一致时（A的非真子集，记为B），可以让这些类都派生于一个抽象类。
+	在这个抽象类中实现了B，避免让所有的子类来实现B，这就达到了代码复用的目的。
+	而A减B的部分，留给各个子类自己实现。正是因为A-B在这里没有实现，所以抽象类不允许实例化出来（否则当调用到A-B时，无法执行）。
 
 
 
