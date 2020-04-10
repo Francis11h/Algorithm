@@ -111,6 +111,7 @@ Arrays.sort(intervals, new Comparator<int[]>(){
 
 这里的 new Comparator 就是一个 匿名类。。。。。
 
+
 new Runnable() {
 	public void run() {
 			//.....
@@ -119,9 +120,13 @@ new Runnable() {
 new Runnable 也是 一个匿名类
 
 
+Runnable 接口是 函数式接口 java8 开始 函数式接口必须要用 "lambda 表达式"
+不用的话 匿名内部类 也行 但是 又丑又难看。。。
 
-
-
+() -> {}
+拷贝 小括号
+写死 右箭头
+落地 大括号
 
 
 
@@ -1148,6 +1153,60 @@ c2.signal();
 
 
 
+--------------- 
+CountDownLatch
+--------------- 
+
+火箭发射倒计时 之前 所有的准备工作 都做好了 才能发射
+就是 表示其他几个线程 都结束了 后面的 才能执行 
+
+CountDownLatch countDownLatch = new CountDownLatch(6); //要等 几个线程结束
+countDownLatch.countDown();		// 每次 减1
+countDownLatch.await();			// 只有countDownLatch中计数减为0 await()后面的才可以执行 否则阻塞
+
+
+
+--------------- 
+CyclicBarrier
+--------------- 
+与 CountDownLatch 相反
+表示 只有 集齐7科龙珠 才可以召唤神龙
+
+CyclicBarrier(int parties, Runnable barrierAction)
+
+CyclicBarrier cyclicBarrier = new CyclicBarrier(7, () -> {
+    System.out.println(Thread.currentThread().getName() + "\t ***召唤神龙");
+});
+.....
+for ( 1 -> 7 ) {
+	//前7个 都等着
+	cyclicBarrier.await();
+}
+
+
+
+--------------- 
+Semaphore
+--------------- 
+一句话: 抢车位
+
+它的作用: 1.用于 多个共享资源的互斥使用 (多对多)(6个车抢3个车位) 2.另一个用于 并发线程数的控制 
+
+与CountDownLatch(只能减), CyclicBarrier(只能加) 不同的是 semaphore 可以伸缩 到0再增 再到0...
+
+Semaphore semaphore = new Semaphore(3); // 模拟3个停车位
+semaphore.acquire();				// -1
+semaphore.release();				// +1
+
+他们三个 配上 线程池 可以打造功能很强的 高并发系统
+
+
+
+
+
+
+
+
 
 
 
@@ -1202,6 +1261,14 @@ try {
 
 
 
+
+
+
+
+
+
+杂项
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
