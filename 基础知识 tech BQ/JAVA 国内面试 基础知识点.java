@@ -208,6 +208,12 @@ Java支持多继承么
 	   但是 如果Bird和Airplane是接口那么Sparrow和Boyin想使用同样的fly方法就很简单了
 	   	再写一个接口让Sparrow和Boyin实现这个接口就可以
 
+java中的实例:
+		ArrayBlockingQueue由数组结构构成的有界阻塞队列  继承了 抽象队列 实现了 两个接口 阻塞队列接口 和 序列化接口
+
+	   	public class ArrayBlockingQueue<E> extends AbstractQueue<E>
+        implements BlockingQueue<E>, java.io.Serializable { ..... }
+
 --------------------------------------------
 那 什么时候 用什么???  所以从 设计目的 区分
 
