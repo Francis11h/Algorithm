@@ -1424,9 +1424,9 @@ ExecutorService  类比 List
 
 e.g.
 
-ExecutorService threadPool = Executors.newFixedThreadPool();		// 一池固定数线程
-ExecutorService threadPool = Executors.newSingleThreadExecutor()	// 一池一线程
-ExecutorService threadPool = Executors.newCachedThreadPool()		// 一池可变数线程
+ExecutorService threadPool = Executors.newFixedThreadPool();		// 一池固定数线程 　执行长期任务 性能好
+ExecutorService threadPool = Executors.newSingleThreadExecutor()	// 一池一线程		  一个任务一个任务执行的场景
+ExecutorService threadPool = Executors.newCachedThreadPool()		// 一池可变数线程	 执行很多短期异步的小程序 或者 负载较轻的服务器
 
 
 //  模拟 10个用户来办理业务 每来一个用户就是一个来自外部的请求线程  线程只有5个 可以复用
