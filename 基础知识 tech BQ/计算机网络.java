@@ -226,6 +226,17 @@ OSI layers
     Link                    ethernet                            //data transfer between neighboring network elements
     Physical                bits 'on the wire'
 
+
+
+    应用层         定义了用于在网络中进行通信和传输数据的接口
+        表示层         定义不同的系统中数据的传输格式，编码和解码规范等
+        会话层         管理用户的会话，控制用户间逻辑连接的建立和中断
+    传输层         管理着网络中的端到端的数据传输
+    网络层         定义网络设备间如何传输数据
+    链路层         将上面的网络层的数据包封装成"数据帧"，便于物理层传输
+    物理层         传输这些二进制数据
+
+
     layers make calls 每一层可以使用下层提供的服务并且向上层提供服务
 
     layers: each layer implements a service via its own internal-layer actions 
@@ -327,7 +338,7 @@ Http GET 与 POST 的区别
 
     POST : 请求会把提交的数据放在请求体中，不会在URL中显示出来
           (一般可以传输较大量的数据)
-        post 一般用于更新信息
+        post 一般用于"更新"信息
 
 -------
 Cookie
