@@ -98,6 +98,9 @@ bq.take();
 阻塞队列版
 ------------------
 
+https://github.com/Francis11h/Algorithm/blob/master/基础知识%20tech%20BQ/生产者%20消费者模式.java
+
+volatile/CAS/atomicInteger/BlockQueue/线程交互/原子引用
 
 
 
