@@ -1445,6 +1445,72 @@ try {
 
 
 
+----------------- 
+线程池的 7 大 参数
+----------------- 
+public ThreadPoolExecutor(int corePoolSize,
+                              int maximumPoolSize,
+                              long keepAliveTime,
+                              TimeUnit unit,
+                              BlockingQueue<Runnable> workQueue) {
+        this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
+             Executors.defaultThreadFactory(), defaultHandler);
+    }
+    
+public ThreadPoolExecutor(int corePoolSize,
+                          int maximumPoolSize,
+                          long keepAliveTime,
+                          TimeUnit unit,
+                          BlockingQueue<Runnable> workQueue,
+                          ThreadFactory threadFactory,
+                          RejectedExecutionHandler handler) {....}
+
+
+1. corePoolSize 
+	线程池中常住的核心线程数 (= 银行网点今天开了几个今日当值的柜台) 
+	当线程池中的线程数目达到 corePoolSize 之后 就会把 再新来的 放到缓存队列
+
+2. maximumPoolSize
+	线程池中 能够容纳同时执行的最大线程数 此值 >= 1
+	(= 银行网点最多可能同时开放的柜台数) 
+
+3. keepAliveTime
+	多余的空闲线程的存活时间
+	(当前线程池数量超过 corePoolSize时, 当空闲时间 达到 keepAliveTime时,
+		多余空闲线程会被销毁 知道剩下的线程数不大于corePoolSize为止)
+	即 把之前的加班窗口取消除
+
+4. unit
+	设置存活时间的单位  是 分钟/秒/毫秒
+
+5. workQueue
+	阻塞队列 (= 银行网点 的 候客等待区)
+	被提交但尚未被执行的任务在此等待
+
+6. threadFactory
+	表示 生成线程池中工作线程的 线程工厂,  用于创建线程 一般用默认的即可
+
+7. handler
+	拒绝策略 当所有能开的加班窗口都开了 侯客区都满了 之后 拒绝后面的全部请求 避免浪费时间
+
+
+
+
+
+--------------- 
+线程池的 底层原理
+--------------- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
