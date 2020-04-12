@@ -1513,7 +1513,43 @@ public ThreadPoolExecutor(int corePoolSize,
 线程池的 底层原理
 --------------- 
 
+1. 创建了线程池后 等待提交过来的任务请求
+2. 当 调用 execute() 方法 添加一个请求 线程池会做如下判断
+	2.1 	如果正在运行的线程数量 < corePoolSize, 则马上创建线程运行这个任务
+	2.2 	如果正在运行的线程数量 >= corePoolSize, 那么将这个任务放入阻塞队列
+	2.3		如果队列也满了 且正在运行的线程数量 < maximumPoolSize, 那么还是要创建 非核心线程(即 加班柜台) 立即运行这个任务
+	2.4 	如果队列也满了 且正在运行的线程数量 >= maximumPoolSize, 线程池用 包和拒绝策略来拒绝执行
+3. 当一个线程完成任务了之后, 它会从队列中取下一个
+4. 当一个线程无事可做 且等待时间超过 keepAliveTime, 则线程池会判断:
+	4.1		如果当前线程运行的数量 > corePoolSize 那么这个线程会被停掉
+	4.2		等线程池的所有任务完成后 线程数必然会收缩到 corePoolSize 大小
 
+
+
+--------------- 
+线程池的 4种 拒绝策略
+--------------- 
+AbortPolicy()  默认的 直接报异常  java.util.concurrent.RejectedExecutionException: 这生产环境中 可不敢用
+CallerRunsPolicy()	不会抛弃任务 不会报异常  而是将任务回退给 上一层 然后  等它下次再来
+DiscardOldestPolicy()	抛弃队列中等待时间最久的 然后把当前任务加入队列中再次尝试提交当前任务
+DiscardPolicy()			直接丢弃任务
+
+
+--------------- 
+线程池用哪个？ 超级大坑
+--------------- 
+结论是 三个JDK直接给的 一个都不用。。。
+要 手写改造
+要用 ThreadPoolExecutor 来创建 否则 会有很多的 OOM OutOfMemoryError
+
+ExecutorService threadPool = new ThreadPoolExecutor(
+                2,
+                5,
+                1L,
+                TimeUnit.SECONDS,
+                new LinkedBlockingDeque<Runnable>(3),
+                Executors.defaultThreadFactory(),
+                new ThreadPoolExecutor.CallerRunsPolicy());
 
 
 
