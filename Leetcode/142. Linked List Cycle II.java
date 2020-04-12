@@ -44,6 +44,25 @@ public class Solution {
 }
 
 
+证明:
+	当 slow 和 fast 第一次 相遇的时候
+	slow 走了 N 步,  N = D + K + n*L
+	fast 走了 2N 步, 2N = D - 1 + K + m*L
+
+	D是 head 到环入口的距离
+	K是从环入口顺时针到相遇点的位置
+	L是环的长度
+
+	--->
+	D = (m - 2n)*L - K - 1
+
+	而此时 head 到 入口 的距离 = D 
+	而 slow  再走 D步 则 slow.next = 入口
+
+	所以 当 第一次 head = slow.next 的时候 head处在的位置 就是 环的开始
+ 
+
+
 
 
 slow 和 fast 都从 head开始
