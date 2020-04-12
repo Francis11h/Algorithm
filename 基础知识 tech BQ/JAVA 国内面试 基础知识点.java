@@ -386,6 +386,18 @@ Static Variables. 类变量 = 全局变量
 
 如果一个类要被声明为static的，只有一种情况，就是静态内部类 "static-nested-class"		Only nested classes can be static.
 
+--------------
+static 的底层原理 
+
+JVM 的方法区 Method Area
+
+
+我们的方法在调用的时候，是从方法区调用的，
+但是堆内存不一样，堆内存中的成员变量 是随着对象的产生而产生。随着对象的消失而消失。
+静态变量是所有线程共享的，所以不会消失。
+这也就能解释上面static关键字的真正原因。
+
+
 
 ------------
 Nested class
@@ -1456,7 +1468,7 @@ public ThreadPoolExecutor(int corePoolSize,
         this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
              Executors.defaultThreadFactory(), defaultHandler);
     }
-    
+
 public ThreadPoolExecutor(int corePoolSize,
                           int maximumPoolSize,
                           long keepAliveTime,
