@@ -176,6 +176,47 @@ Dead Lock
 
 
 
+
+
+java deadlock 实例
+
+@Override
+public void run() {
+    "synchronized (lockA)" {
+        System.out.println(Thread.currentThread().getName() + "\t 自己持有: " + lockA + "\t 尝试获得: " + lockB);
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        "synchronized (lockB) "{
+            System.out.println(Thread.currentThread().getName() + "\t 自己持有: " + lockB + "\t 尝试获得: " + lockA);
+        }
+    }
+}
+
+
+new Thread(new HoldLockThread(lockA, lockB), "ThreadAAA").start();
+new Thread(new HoldLockThread(lockB, lockA), "ThreadBBB").start();
+
+
+怎么解决？
+
+1.  jps -l 命令 查看当前进程的进程号 
+    (linux 里 ps -ef|grep XXX    ls -l)
+    (jps = java ps)
+2.  jstack + 该进程号 找死锁查看
+
+
+
+
+
+
+
+
+
+
 ---------------------------------------------
 用户态和内核态的区别? 为什么要有用户态内核态区别?
 ---------------------------------------------
