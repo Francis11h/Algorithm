@@ -491,6 +491,7 @@ ribbon 实现软负载均衡 核心有三点
 然后 通过 ServerListFilter 过滤掉一部分地址
 最后 通过 IRule 选择出一个实例
 
+@LoadBalanced 这个注解
 
 
 -----------------
