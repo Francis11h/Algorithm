@@ -250,14 +250,14 @@ Spring Cloud 微服务
 
 服务开发									SpringBoot Spring SpringMVC
 服务的配置与管理							Netflix公司的archaius, 阿里的Diamond
-服务注册与发现								Eureka, Zookeeper, Consul
+服务注册与发现								"Eureka", Zookeeper, Consul
 服务调用									Rest, RPC, gRPC
 服务熔断器								Hystrix, Envoy
-负载均衡									Ribbon, Nginx
-服务接口调用（客户端调用服务的简化工具）		Fegin
-消息队列									Kafka, RabbitMQ, ActiveMQ
+负载均衡									"Ribbon", Nginx
+服务接口调用（客户端调用服务的简化工具）		"Fegin"
+消息队列									Kafka, "RabbitMQ", ActiveMQ
 服务配置中心管理							SpringCloudConfig, Chef
-服务路由 即API网关							Zuul
+服务路由 即API网关							"Zuul"
 服务监控									Zabbix, Nagios, Metrics, Spectator
 全链路追踪								ZipKin, Brave, Dapper
 服务部署									Docker, OpenStack. Kubernetes
@@ -314,7 +314,7 @@ REST 相比 RPC 更加灵活, 服务提供方和调用方的依赖只靠一纸�
 
 
 对比 				Dubbo 			SpringCloud
-服务注册中心		 Zookeeper 			SpringCloud Netflix Eureka
+服务注册中心		 Zookeeper 			SpringCloud Netflix "Eureka"
 服务调用方式		 RPC 				Rest API
 服务监控 			Dubbo-monitor		SpringBoot Admin
 断路器			不完善				SpringCloud Netflix Hystrix
@@ -451,6 +451,7 @@ eureka 和 zookeeper 都可以提供服务注册与发现的功能 请说说两�
 
 
 
+
 -----------------
 Cloud技术的五大神兽
 -----------------
@@ -471,10 +472,24 @@ Rest 微服务构建案例工程模块
 Eureka服务注册与发现
 -----------------
 
+Eureka 属于 客户端发现
+
+
 
 -----------------
 Ribbon 负载均衡
 -----------------
+是 SpringCloud 中 "客户端"负载均衡器
+RestTemplate, Feign, Zuul 都使用到了 ribbon
+ribbon 实现软负载均衡 核心有三点
+
+1. 服务发现   	发现依赖服务的列表  即 依据服务的名字 把该服务下 所有的实例都找出来
+2. 服务选择规则   如何从多个服务中选择一个有效的
+3. 服务监听      即  检测失效的服务 做到高效剔除
+
+首先通过 ServerList 来获取所有的可用服务列表
+然后 通过 ServerListFilter 过滤掉一部分地址
+最后 通过 IRule 选择出一个实例
 
 
 
